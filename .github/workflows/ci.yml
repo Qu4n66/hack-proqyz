@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    name: Lint + Unit Tests + Fixture Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate fixtures
+        run: node scripts/validate-fixtures.js
+
+      - name: Syntax-check all source files
+        run: |
+          set -e
+          for f in $(find src bin scripts tests/unit -name "*.js"); do
+            node --check "$f"
+          done
+
+      - name: Run unit tests
+        run: node --test tests/unit/schemas.test.js
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+        continue-on-error: true

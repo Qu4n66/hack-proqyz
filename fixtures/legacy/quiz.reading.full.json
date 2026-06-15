@@ -1,0 +1,999 @@
+{
+  "type": "reading",
+  "title": "MVP-1 Full Reading Test",
+  "description": "Three passages, 40 questions. Acceptance test fixture for the production-ready single-quiz path.",
+  "timeLimit": 60,
+  "status": "draft",
+  "passages": [
+    {
+      "title": "The History of Papermaking",
+      "content": "<p>Paper, a thin sheet of material produced by processing cellulose fibers from wood, rags, grasses, or other vegetable sources, has a history that spans nearly two thousand years. The invention of paper is credited to Cai Lun, a Chinese court official, around 105 AD, although earlier forms of paper-like materials existed in China as far back as the 2nd century BC.</p>\n<p>From China, papermaking spread slowly westward. The technology reached the Islamic world by the 8th century, where it was refined and adapted. Baghdadi papermakers developed methods for producing paper from linen and hemp, which produced a stronger and more durable sheet than Chinese paper, which was typically made from mulberry bark.</p>\n<p>Paper arrived in Europe through Islamic Spain, with the first paper mill established in Xàtiva, near Valencia, in 1151. By the 14th century, paper mills existed in Italy, France, and Germany. The invention of the printing press by Johannes Gutenberg in the mid-15th century created an enormous demand for paper, accelerating the construction of mills across Europe.</p>\n<p>The Industrial Revolution transformed papermaking from a craft into an industry. In 1798, Frenchman Nicolas-Louis Robert invented a machine that could produce paper in continuous rolls. The Fourdrinier brothers improved on this design, and by the mid-19th century, paper was being mass-produced from wood pulp. The introduction of chemical pulping processes in the late 19th century further expanded production.</p>\n<p>Modern papermaking is a highly technical process. Wood chips are cooked in chemical solutions to break down lignin, then washed, bleached, and refined into a pulp slurry. The slurry is spread onto a moving wire mesh where water drains away, leaving a mat of fibers. This mat is pressed, dried, and calendared to produce the final sheet.</p>\n<p>Despite the rise of digital media, global paper consumption continues to grow, driven primarily by packaging and sanitary applications. The environmental impact of papermaking, particularly deforestation and water pollution from chemical pulping, has prompted the development of recycled and sustainably-sourced paper products.</p>"
+    },
+    {
+      "title": "Urban Bird Navigation",
+      "content": "<p>Birds have long fascinated scientists with their remarkable navigational abilities, but recent research has focused on how these abilities are affected by urbanization. Cities present unique challenges to migrating and resident birds alike, including artificial light, glass surfaces, and altered magnetic fields from buildings and infrastructure.</p>\n<p>A study published in 2023 tracked the flight paths of European robins (Erithacus rubecula) released in both rural and urban environments. Researchers found that robins released in cities showed significantly more disorientation in the first hour of flight, often circling repeatedly before establishing a heading. The same birds, when re-tested in rural conditions, performed comparably to control birds released in the field.</p>\n<p>One key finding concerns the disruption of magnetic compass orientation. Many songbirds are believed to use cryptochrome proteins in their retinas to detect the Earth's magnetic field. Laboratory experiments have shown that radiofrequency electromagnetic noise, such as that emitted by mobile phone towers and Wi-Fi routers, can disrupt this sense. Urban environments are saturated with such noise, which may explain the navigational difficulties observed in city birds.</p>\n<p>Light pollution, another feature of urban areas, also affects bird behavior. Nocturnal migrants often use star patterns for orientation, but artificial light can overwhelm these celestial cues. The \"drifting\" behavior observed in some urban migrants, where birds fly perpendicular to their intended course, is thought to result from light pollution drawing them toward brightly-lit areas such as city centers and stadium complexes.</p>\n<p>Some bird species, however, appear to be adapting. Great tits (Parus major) in European cities have been observed to adjust their singing pitch to overcome the low-frequency masking of traffic noise. Black-capped chickadees in North America have shown similar adaptations, suggesting that behavioral plasticity may help some species thrive in urban environments.</p>\n<p>Conservation biologists argue that mitigating urban hazards could substantially reduce bird mortality. Bird-safe glass, which incorporates ultraviolet-reflective patterns, has been shown to reduce collision rates. Turning off unnecessary outdoor lighting during peak migration periods can also help. Whether these measures are widely adopted will depend on public awareness and policy support.</p>"
+    },
+    {
+      "title": "The Economics of Renewable Energy",
+      "content": "<p>The global energy landscape is undergoing a fundamental transformation. Driven by climate concerns, technological progress, and falling costs, renewable energy sources have moved from the periphery to the mainstream of energy policy. The International Energy Agency reported in 2024 that renewables accounted for over 30% of global electricity generation for the first time, surpassing coal as the largest single source of installed power capacity.</p>\n<p>Solar photovoltaic (PV) technology has been the most striking example of cost reduction. The levelized cost of electricity (LCOE) for utility-scale solar PV has fallen by more than 90% since 2010, making it the cheapest source of new electricity generation in most regions of the world. This dramatic cost decline is the result of improvements in cell efficiency, manufacturing scale, and balance-of-system components.</p>\n<p>Wind power, both onshore and offshore, has followed a similar but slightly less steep trajectory. Onshore wind LCOE has fallen by around 70% over the same period, while offshore wind, which started from a much higher base, has seen reductions of approximately 60%. The development of larger turbines, with rotors exceeding 250 meters in diameter, has driven much of this improvement, allowing each installation to capture more energy per unit of capital cost.</p>\n<p>Energy storage has emerged as the critical enabler of high renewable penetration. Lithium-ion batteries, dominant in the consumer electronics and electric vehicle markets, have been deployed at grid scale at unprecedented rates. The cost of grid-scale battery storage has fallen by roughly 85% over the past decade, and analysts expect further reductions as new chemistries, such as sodium-ion and iron-air, reach commercial maturity.</p>\n<p>Critics point to several challenges. Renewables are intermittent, requiring either storage, transmission, or backup capacity to ensure reliability. The geographic distribution of solar and wind resources often does not match population centers, necessitating significant investment in long-distance transmission. Mining the materials required for batteries and solar panels carries environmental and social costs, particularly for cobalt, lithium, and rare earth elements.</p>\n<p>Despite these challenges, the economic case for renewables continues to strengthen. The cost trajectories of solar, wind, and storage have consistently outpaced analyst predictions, and the social cost of carbon — once considered a fringe concept — is now incorporated into mainstream energy planning. Whether the transition will proceed quickly enough to avert the worst effects of climate change remains the central question of the coming decade.</p>"
+    }
+  ],
+  "questions": [
+    {
+      "number": 1,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 1, Question 1: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "To introduce a new theory"
+        },
+        {
+          "label": "B",
+          "text": "To compare two research methods"
+        },
+        {
+          "label": "C",
+          "text": "To present a historical overview"
+        },
+        {
+          "label": "D",
+          "text": "To argue against a popular belief"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 0
+    },
+    {
+      "number": 2,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 1, Question 2: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "1990"
+        },
+        {
+          "label": "B",
+          "text": "1995"
+        },
+        {
+          "label": "C",
+          "text": "2000"
+        },
+        {
+          "label": "D",
+          "text": "2005"
+        }
+      ],
+      "answer": "C",
+      "passageIndex": 0
+    },
+    {
+      "number": 3,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 1, Question 3: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "increased dramatically"
+        },
+        {
+          "label": "B",
+          "text": "decreased steadily"
+        },
+        {
+          "label": "C",
+          "text": "remained constant"
+        },
+        {
+          "label": "D",
+          "text": "fluctuated unpredictably"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 0
+    },
+    {
+      "number": 4,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 1, Question 4: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "urban areas"
+        },
+        {
+          "label": "B",
+          "text": "rural areas"
+        },
+        {
+          "label": "C",
+          "text": "coastal regions"
+        },
+        {
+          "label": "D",
+          "text": "mountainous zones"
+        }
+      ],
+      "answer": "C",
+      "passageIndex": 0
+    },
+    {
+      "number": 5,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 1, Question 5: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "To introduce a new theory"
+        },
+        {
+          "label": "B",
+          "text": "To compare two research methods"
+        },
+        {
+          "label": "C",
+          "text": "To present a historical overview"
+        },
+        {
+          "label": "D",
+          "text": "To argue against a popular belief"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 0
+    },
+    {
+      "number": 6,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 1, Question 6: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "1990"
+        },
+        {
+          "label": "B",
+          "text": "1995"
+        },
+        {
+          "label": "C",
+          "text": "2000"
+        },
+        {
+          "label": "D",
+          "text": "2005"
+        }
+      ],
+      "answer": "C",
+      "passageIndex": 0
+    },
+    {
+      "number": 7,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 1, Question 7: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "increased dramatically"
+        },
+        {
+          "label": "B",
+          "text": "decreased steadily"
+        },
+        {
+          "label": "C",
+          "text": "remained constant"
+        },
+        {
+          "label": "D",
+          "text": "fluctuated unpredictably"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 0
+    },
+    {
+      "number": 8,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 1, Question 8: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "urban areas"
+        },
+        {
+          "label": "B",
+          "text": "rural areas"
+        },
+        {
+          "label": "C",
+          "text": "coastal regions"
+        },
+        {
+          "label": "D",
+          "text": "mountainous zones"
+        }
+      ],
+      "answer": "D",
+      "passageIndex": 0
+    },
+    {
+      "number": 9,
+      "type": "true_false_not_given",
+      "instruction": "Do the following statements agree with the information in the passage? Write TRUE / FALSE / NOT GIVEN.",
+      "prompt": "Passage 1, Statement 1: The passage provides specific dates mentioned in the text.",
+      "options": [
+        {
+          "label": "A",
+          "text": "TRUE"
+        },
+        {
+          "label": "B",
+          "text": "FALSE"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 0
+    },
+    {
+      "number": 10,
+      "type": "true_false_not_given",
+      "instruction": "Do the following statements agree with the information in the passage? Write TRUE / FALSE / NOT GIVEN.",
+      "prompt": "Passage 1, Statement 2: The author expresses a personal opinion about the topic.",
+      "options": [
+        {
+          "label": "A",
+          "text": "TRUE"
+        },
+        {
+          "label": "B",
+          "text": "FALSE"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 0
+    },
+    {
+      "number": 11,
+      "type": "true_false_not_given",
+      "instruction": "Do the following statements agree with the information in the passage? Write TRUE / FALSE / NOT GIVEN.",
+      "prompt": "Passage 1, Statement 3: A specific claim in the passage can be verified.",
+      "options": [
+        {
+          "label": "A",
+          "text": "TRUE"
+        },
+        {
+          "label": "B",
+          "text": "FALSE"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 0
+    },
+    {
+      "number": 12,
+      "type": "yes_no_not_given",
+      "instruction": "Do the following statements agree with the views of the passage? Write YES / NO / NOT GIVEN.",
+      "prompt": "Passage 1, View 1: The author would agree that this is an important area for future research.",
+      "options": [
+        {
+          "label": "A",
+          "text": "YES"
+        },
+        {
+          "label": "B",
+          "text": "NO"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 0
+    },
+    {
+      "number": 13,
+      "type": "yes_no_not_given",
+      "instruction": "Do the following statements agree with the views of the passage? Write YES / NO / NOT GIVEN.",
+      "prompt": "Passage 1, View 2: The author would agree that this is an important area for future research.",
+      "options": [
+        {
+          "label": "A",
+          "text": "YES"
+        },
+        {
+          "label": "B",
+          "text": "NO"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 0
+    },
+    {
+      "number": 14,
+      "type": "yes_no_not_given",
+      "instruction": "Do the following statements agree with the views of the passage? Write YES / NO / NOT GIVEN.",
+      "prompt": "Passage 1, View 3: The author would agree that this is an important area for future research.",
+      "options": [
+        {
+          "label": "A",
+          "text": "YES"
+        },
+        {
+          "label": "B",
+          "text": "NO"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 0
+    },
+    {
+      "number": 15,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 2, Question 1: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "To introduce a new theory"
+        },
+        {
+          "label": "B",
+          "text": "To compare two research methods"
+        },
+        {
+          "label": "C",
+          "text": "To present a historical overview"
+        },
+        {
+          "label": "D",
+          "text": "To argue against a popular belief"
+        }
+      ],
+      "answer": "D",
+      "passageIndex": 1
+    },
+    {
+      "number": 16,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 2, Question 2: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "1990"
+        },
+        {
+          "label": "B",
+          "text": "1995"
+        },
+        {
+          "label": "C",
+          "text": "2000"
+        },
+        {
+          "label": "D",
+          "text": "2005"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 1
+    },
+    {
+      "number": 17,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 2, Question 3: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "increased dramatically"
+        },
+        {
+          "label": "B",
+          "text": "decreased steadily"
+        },
+        {
+          "label": "C",
+          "text": "remained constant"
+        },
+        {
+          "label": "D",
+          "text": "fluctuated unpredictably"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 1
+    },
+    {
+      "number": 18,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 2, Question 4: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "urban areas"
+        },
+        {
+          "label": "B",
+          "text": "rural areas"
+        },
+        {
+          "label": "C",
+          "text": "coastal regions"
+        },
+        {
+          "label": "D",
+          "text": "mountainous zones"
+        }
+      ],
+      "answer": "C",
+      "passageIndex": 1
+    },
+    {
+      "number": 19,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 2, Question 5: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "To introduce a new theory"
+        },
+        {
+          "label": "B",
+          "text": "To compare two research methods"
+        },
+        {
+          "label": "C",
+          "text": "To present a historical overview"
+        },
+        {
+          "label": "D",
+          "text": "To argue against a popular belief"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 1
+    },
+    {
+      "number": 20,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 2, Question 6: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "1990"
+        },
+        {
+          "label": "B",
+          "text": "1995"
+        },
+        {
+          "label": "C",
+          "text": "2000"
+        },
+        {
+          "label": "D",
+          "text": "2005"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 1
+    },
+    {
+      "number": 21,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 2, Question 7: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "increased dramatically"
+        },
+        {
+          "label": "B",
+          "text": "decreased steadily"
+        },
+        {
+          "label": "C",
+          "text": "remained constant"
+        },
+        {
+          "label": "D",
+          "text": "fluctuated unpredictably"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 1
+    },
+    {
+      "number": 22,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 2, Question 8: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "urban areas"
+        },
+        {
+          "label": "B",
+          "text": "rural areas"
+        },
+        {
+          "label": "C",
+          "text": "coastal regions"
+        },
+        {
+          "label": "D",
+          "text": "mountainous zones"
+        }
+      ],
+      "answer": "D",
+      "passageIndex": 1
+    },
+    {
+      "number": 23,
+      "type": "true_false_not_given",
+      "instruction": "Do the following statements agree with the information in the passage? Write TRUE / FALSE / NOT GIVEN.",
+      "prompt": "Passage 2, Statement 1: The passage provides specific dates mentioned in the text.",
+      "options": [
+        {
+          "label": "A",
+          "text": "TRUE"
+        },
+        {
+          "label": "B",
+          "text": "FALSE"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 1
+    },
+    {
+      "number": 24,
+      "type": "true_false_not_given",
+      "instruction": "Do the following statements agree with the information in the passage? Write TRUE / FALSE / NOT GIVEN.",
+      "prompt": "Passage 2, Statement 2: The author expresses a personal opinion about the topic.",
+      "options": [
+        {
+          "label": "A",
+          "text": "TRUE"
+        },
+        {
+          "label": "B",
+          "text": "FALSE"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "C",
+      "passageIndex": 1
+    },
+    {
+      "number": 25,
+      "type": "true_false_not_given",
+      "instruction": "Do the following statements agree with the information in the passage? Write TRUE / FALSE / NOT GIVEN.",
+      "prompt": "Passage 2, Statement 3: A specific claim in the passage can be verified.",
+      "options": [
+        {
+          "label": "A",
+          "text": "TRUE"
+        },
+        {
+          "label": "B",
+          "text": "FALSE"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "C",
+      "passageIndex": 1
+    },
+    {
+      "number": 26,
+      "type": "yes_no_not_given",
+      "instruction": "Do the following statements agree with the views of the passage? Write YES / NO / NOT GIVEN.",
+      "prompt": "Passage 2, View 1: The author would agree that this is an important area for future research.",
+      "options": [
+        {
+          "label": "A",
+          "text": "YES"
+        },
+        {
+          "label": "B",
+          "text": "NO"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 1
+    },
+    {
+      "number": 27,
+      "type": "yes_no_not_given",
+      "instruction": "Do the following statements agree with the views of the passage? Write YES / NO / NOT GIVEN.",
+      "prompt": "Passage 2, View 2: The author would agree that this is an important area for future research.",
+      "options": [
+        {
+          "label": "A",
+          "text": "YES"
+        },
+        {
+          "label": "B",
+          "text": "NO"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 1
+    },
+    {
+      "number": 28,
+      "type": "yes_no_not_given",
+      "instruction": "Do the following statements agree with the views of the passage? Write YES / NO / NOT GIVEN.",
+      "prompt": "Passage 2, View 3: The author would agree that this is an important area for future research.",
+      "options": [
+        {
+          "label": "A",
+          "text": "YES"
+        },
+        {
+          "label": "B",
+          "text": "NO"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 1
+    },
+    {
+      "number": 29,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 3, Question 1: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "To introduce a new theory"
+        },
+        {
+          "label": "B",
+          "text": "To compare two research methods"
+        },
+        {
+          "label": "C",
+          "text": "To present a historical overview"
+        },
+        {
+          "label": "D",
+          "text": "To argue against a popular belief"
+        }
+      ],
+      "answer": "C",
+      "passageIndex": 2
+    },
+    {
+      "number": 30,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 3, Question 2: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "1990"
+        },
+        {
+          "label": "B",
+          "text": "1995"
+        },
+        {
+          "label": "C",
+          "text": "2000"
+        },
+        {
+          "label": "D",
+          "text": "2005"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 2
+    },
+    {
+      "number": 31,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 3, Question 3: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "increased dramatically"
+        },
+        {
+          "label": "B",
+          "text": "decreased steadily"
+        },
+        {
+          "label": "C",
+          "text": "remained constant"
+        },
+        {
+          "label": "D",
+          "text": "fluctuated unpredictably"
+        }
+      ],
+      "answer": "D",
+      "passageIndex": 2
+    },
+    {
+      "number": 32,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 3, Question 4: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "urban areas"
+        },
+        {
+          "label": "B",
+          "text": "rural areas"
+        },
+        {
+          "label": "C",
+          "text": "coastal regions"
+        },
+        {
+          "label": "D",
+          "text": "mountainous zones"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 2
+    },
+    {
+      "number": 33,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 3, Question 5: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "To introduce a new theory"
+        },
+        {
+          "label": "B",
+          "text": "To compare two research methods"
+        },
+        {
+          "label": "C",
+          "text": "To present a historical overview"
+        },
+        {
+          "label": "D",
+          "text": "To argue against a popular belief"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 2
+    },
+    {
+      "number": 34,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 3, Question 6: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "1990"
+        },
+        {
+          "label": "B",
+          "text": "1995"
+        },
+        {
+          "label": "C",
+          "text": "2000"
+        },
+        {
+          "label": "D",
+          "text": "2005"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 2
+    },
+    {
+      "number": 35,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 3, Question 7: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "increased dramatically"
+        },
+        {
+          "label": "B",
+          "text": "decreased steadily"
+        },
+        {
+          "label": "C",
+          "text": "remained constant"
+        },
+        {
+          "label": "D",
+          "text": "fluctuated unpredictably"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 2
+    },
+    {
+      "number": 36,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Passage 3, Question 8: Which of the following statements is most accurate based on the passage?",
+      "options": [
+        {
+          "label": "A",
+          "text": "urban areas"
+        },
+        {
+          "label": "B",
+          "text": "rural areas"
+        },
+        {
+          "label": "C",
+          "text": "coastal regions"
+        },
+        {
+          "label": "D",
+          "text": "mountainous zones"
+        }
+      ],
+      "answer": "D",
+      "passageIndex": 2
+    },
+    {
+      "number": 37,
+      "type": "true_false_not_given",
+      "instruction": "Do the following statements agree with the information in the passage? Write TRUE / FALSE / NOT GIVEN.",
+      "prompt": "Passage 3, Statement 1: The passage provides specific dates mentioned in the text.",
+      "options": [
+        {
+          "label": "A",
+          "text": "TRUE"
+        },
+        {
+          "label": "B",
+          "text": "FALSE"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 2
+    },
+    {
+      "number": 38,
+      "type": "true_false_not_given",
+      "instruction": "Do the following statements agree with the information in the passage? Write TRUE / FALSE / NOT GIVEN.",
+      "prompt": "Passage 3, Statement 2: The author expresses a personal opinion about the topic.",
+      "options": [
+        {
+          "label": "A",
+          "text": "TRUE"
+        },
+        {
+          "label": "B",
+          "text": "FALSE"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "B",
+      "passageIndex": 2
+    },
+    {
+      "number": 39,
+      "type": "true_false_not_given",
+      "instruction": "Do the following statements agree with the information in the passage? Write TRUE / FALSE / NOT GIVEN.",
+      "prompt": "Passage 3, Statement 3: A specific claim in the passage can be verified.",
+      "options": [
+        {
+          "label": "A",
+          "text": "TRUE"
+        },
+        {
+          "label": "B",
+          "text": "FALSE"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 2
+    },
+    {
+      "number": 40,
+      "type": "yes_no_not_given",
+      "instruction": "Do the following statements agree with the views of the passage? Write YES / NO / NOT GIVEN.",
+      "prompt": "Passage 3, View 1: The author would agree that this is an important area for future research.",
+      "options": [
+        {
+          "label": "A",
+          "text": "YES"
+        },
+        {
+          "label": "B",
+          "text": "NO"
+        },
+        {
+          "label": "C",
+          "text": "NOT GIVEN"
+        }
+      ],
+      "answer": "A",
+      "passageIndex": 2
+    }
+  ]
+}

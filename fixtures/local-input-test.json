@@ -1,0 +1,77 @@
+{
+  "quizTitle": "Local Input Smoke Test (questionsOnly)",
+  "quizType": "reading",
+  "time": 60,
+  "status": "draft",
+  "source": {
+    "name": "Local Input",
+    "url": "https://example.com/local"
+  },
+  "mode": "questionsOnly",
+  "existingQuizUrl": "https://app.proqyz.com/dashboard/@customer/pro-qyz/edit/00000000-0000-0000-0000-000000000000",
+  "passages": [
+    {
+      "title": "Reading Passage 1",
+      "content": "The History of the Tortoise\n\nSlow though they are, tortoises have outlived the dinosaurs. They have been around for over 200 million years, and during that time they have changed very little. There are around 50 different species of tortoise, and they vary greatly in size, from the tiny Egyptian tortoise, which is only about 10 centimetres long, to the enormous Galapagos tortoise, which can grow to over 1.5 metres in length and weigh more than 250 kilograms.",
+      "questions": [
+        {
+          "number": 1,
+          "numberStart": 1,
+          "numberEnd": 2,
+          "displayTitle": "Questions 1-2",
+          "ieltsType": "note_completion",
+          "proqyzType": "fill_up",
+          "questionTypeIndex": 0,
+          "instruction": "Questions 1-2\n\nComplete the notes below.\n\nChoose ONE WORD ONLY from the passage for each answer.",
+          "content": "The History of the Tortoise\n\n• Tortoises have been around for over {200 million} years\n• There are around {50} different species of tortoise",
+          "answers": ["200 million", "50"]
+        },
+        {
+          "number": 3,
+          "numberStart": 3,
+          "numberEnd": 4,
+          "displayTitle": "Questions 3-4",
+          "ieltsType": "multiple_choice_single",
+          "proqyzType": "radio",
+          "questionTypeIndex": 1,
+          "instruction": "Questions 3-4\n\nChoose the correct letter, A, B, C or D.",
+          "content": "Questions 3-4\n\nChoose the correct letter, A, B, C or D.",
+          "subQuestions": [
+            {
+              "number": 3,
+              "text": "What is the longest-living tortoise mentioned?",
+              "options": [
+                { "label": "A", "text": "Adwaita" },
+                { "label": "B", "text": "Galapagos" },
+                { "label": "C", "text": "Egyptian" },
+                { "label": "D", "text": "Kolkata" }
+              ],
+              "answer": "A"
+            },
+            {
+              "number": 4,
+              "text": "How many years did Adwaita reportedly live?",
+              "options": [
+                { "label": "A", "text": "100" },
+                { "label": "B", "text": "150" },
+                { "label": "C", "text": "200" },
+                { "label": "D", "text": "255" }
+              ],
+              "answer": "D"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "questionTypeIndex": 2,
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Do the following statements agree with the information in the passage?",
+          "content": "5 Tortoises are warm-blooded reptiles.",
+          "answer": "FALSE"
+        }
+      ]
+    }
+  ]
+}

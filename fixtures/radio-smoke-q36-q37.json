@@ -1,0 +1,53 @@
+{
+  "quizTitle": "Radio MCQ Smoke Q36-37",
+  "quizType": "reading",
+  "time": 60,
+  "status": "draft",
+  "source": {
+    "name": "IELTS Radio MCQ Smoke",
+    "url": "https://ieltstrainingonline.com/"
+  },
+  "passages": [
+    {
+      "title": "Reading Passage 1",
+      "content": "The History of the Tortoise\n\nSlow though they are, tortoises have outlived the dinosaurs. They have been around for over 200 million years, and during that time they have changed very little. There are around 50 different species of tortoise, and they vary greatly in size, from the tiny Egyptian tortoise, which is only about 10 centimetres long, to the enormous Galapagos tortoise, which can grow to over 1.5 metres in length and weigh more than 250 kilograms.\n\nTortoises are reptiles, which means that they are cold-blooded. They rely on the warmth of the sun to regulate their body temperature, and so they are most active during the day. In the early morning, they often bask in the sun to warm up before they start to look for food. They eat a variety of plants, including grasses, leaves, and flowers, and they also eat fruit and vegetables.\n\nTortoises are well known for their long lifespans. Many species can live for over 100 years, and some have been known to live for more than 200 years. The oldest known tortoise, named Adwaita, is believed to have lived to be 255 years old. He lived in the Alipore Zoo in Kolkata, India, until his death in 2006.\n\nDespite their long lifespans, tortoises face a number of threats in the wild. Their habitats are being destroyed by human activity, and they are also hunted for their meat and their shells. Many species of tortoise are now endangered, and conservationists are working hard to protect them.",
+      "questions": [
+        {
+          "number": 36,
+          "numberStart": 36,
+          "numberEnd": 37,
+          "displayTitle": "Questions 36-37",
+          "ieltsType": "multiple_choice_single",
+          "proqyzType": "radio",
+          "questionTypeIndex": 1,
+          "instruction": "Questions 36-37\n\nChoose the correct letter, A, B, C or D.\n\nWrite the correct letter in boxes 36-37 on your answer sheet.",
+          "content": "Questions 36-37\n\nChoose the correct letter, A, B, C or D.\n\nWrite the correct letter in boxes 36-37 on your answer sheet.",
+          "subQuestions": [
+            {
+              "number": 36,
+              "text": "What is the reviewer's main purpose in the first paragraph?",
+              "options": [
+                { "label": "A", "text": "to describe what happened during the Battle of Worcester" },
+                { "label": "B", "text": "to give an account of the circumstances leading to Charles II's escape" },
+                { "label": "C", "text": "to provide details of the Parliamentarians' political views" },
+                { "label": "D", "text": "to compare Charles II's beliefs with those of his father" }
+              ],
+              "answer": "B"
+            },
+            {
+              "number": 37,
+              "text": "Why does the reviewer include examples of the fugitives' behaviour in the third paragraph?",
+              "options": [
+                { "label": "A", "text": "to explain how close Charles II came to losing his life" },
+                { "label": "B", "text": "to suggest that Charles II's supporters were badly prepared" },
+                { "label": "C", "text": "to illustrate how the events of the six weeks are brought to life" },
+                { "label": "D", "text": "to argue that certain aspects are not as well known as they should be" }
+              ],
+              "answer": "A"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

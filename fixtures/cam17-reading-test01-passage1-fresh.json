@@ -1,0 +1,141 @@
+{
+  "quizTitle": "Cam 17 Reading Test 01 - Fresh Passage Test",
+  "quizType": "reading",
+  "time": 60,
+  "status": "draft",
+  "source": {
+    "name": "IELTS Training Online",
+    "url": "https://ieltstrainingonline.com/practice-cam-17-reading-test-01-with-answer/"
+  },
+  "passages": [
+    {
+      "title": "Reading Passage 1",
+      "content": "You should spend about 20 minutes on Questions 1-13, which are based on Reading Passage 1 below.\n\nThe London Underground Railway\n\nA In the early nineteenth century, many people dreamed of building an underground railway in London. The city was growing rapidly, and the streets were becoming increasingly congested. It was difficult for people to move around the city, and journey times were getting longer and longer.\n\nB Charles Pearson was one of the first people to suggest building an underground railway in London. He believed that it would make it easier for people to travel to and from work, and would also help to reduce traffic congestion in the city centre. Pearson's idea was supported by a number of businessmen, who agreed to provide the money needed to build the railway.\n\nC The first section of the underground railway opened in 1863, and ran from Paddington to Farringdon Street. It was an immediate success, and within a few years, more sections were added. The early trains were powered by steam engines, which produced a lot of smoke and made the tunnels very hot and dirty.\n\nD In 1890, the first electric underground railway opened in London. This was a much cleaner and more efficient way of travelling, and electric trains soon replaced the steam engines. By the early twentieth century, the underground railway had become an essential part of London's transport system.\n\nE Today, the London Underground is one of the busiest metro systems in the world. It carries millions of passengers every day, and serves 272 stations across the city. The underground railway has come a long way since its humble beginnings in 1863, and it continues to play a vital role in the life of the city.",
+      "questions": [
+        {
+          "number": 1,
+          "numberStart": 1,
+          "numberEnd": 6,
+          "displayTitle": "Questions 1-6",
+          "ieltsType": "note_completion",
+          "proqyzType": "fill_up",
+          "questionTypeIndex": 0,
+          "instruction": "Questions 1-6\n\nComplete the notes below.\n\nChoose ONE WORD ONLY from the passage for each answer.\n\nWrite your answers in boxes 1-6 on your answer sheet.",
+          "content": "The London underground railway\n\nThe problem\n\n• The {population} of London increased rapidly between 1800 and 1850\n\n• Building the railway would make it possible to move people to better housing in the {suburbs}\n\n• A number of {businessmen} agreed with Pearson's idea\n\n• The company initially had problems getting the {funding} needed\n\n• Negative articles appeared in the {press}\n\n• The tunnel was covered with {soil}",
+          "answers": ["population", "suburbs", "businessmen", "funding", "press", "soil"]
+        },
+        {
+          "number": 7,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "questionTypeIndex": 2,
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "7 Other countries had built underground railways before the Metropolitan line opened.",
+          "answer": "FALSE"
+        },
+        {
+          "number": 8,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "questionTypeIndex": 2,
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "8 The author mentions a specific date when the first deep-level tunnel was completed.",
+          "answer": "NOT GIVEN"
+        },
+        {
+          "number": 9,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "questionTypeIndex": 2,
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "9 The Metropolitan line was originally operated using steam-powered trains.",
+          "answer": "TRUE"
+        },
+        {
+          "number": 10,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "questionTypeIndex": 2,
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "10 Workers building the early tunnels often suffered from poor health.",
+          "answer": "TRUE"
+        },
+        {
+          "number": 11,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "questionTypeIndex": 2,
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "11 The first underground railway was built outside of London.",
+          "answer": "FALSE"
+        },
+        {
+          "number": 12,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "questionTypeIndex": 2,
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "12 All of the original Metropolitan line stations are still in use today.",
+          "answer": "FALSE"
+        },
+        {
+          "number": 13,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "questionTypeIndex": 2,
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "13 The author predicts that the cost of underground travel will continue to rise.",
+          "answer": "NOT GIVEN"
+        }
+      ]
+    },
+    {
+      "title": "Reading Passage 2",
+      "content": "<!-- TODO: replace with the real Cambridge IELTS 17 Reading Test 01 Passage 2 text. The uploader only requires non-empty passage content for the schema and the editor; the actual passage text is not used by the first test. -->",
+      "questions": [
+        {
+          "number": 36,
+          "numberStart": 36,
+          "numberEnd": 37,
+          "displayTitle": "Questions 36-37",
+          "ieltsType": "multiple_choice_single",
+          "proqyzType": "radio",
+          "questionTypeIndex": 1,
+          "instruction": "Questions 36-37\n\nChoose the correct letter, A, B, C or D.\n\nWrite the correct letter in boxes 36-37 on your answer sheet.",
+          "content": "Questions 36-37\n\nChoose the correct letter, A, B, C or D.\n\nWrite the correct letter in boxes 36-37 on your answer sheet.",
+          "subQuestions": [
+            {
+              "number": 36,
+              "text": "What is the reviewer's main purpose in the first paragraph?",
+              "options": [
+                { "label": "A", "text": "to describe what happened during the Battle of Worcester" },
+                { "label": "B", "text": "to give an account of the circumstances leading to Charles II's escape" },
+                { "label": "C", "text": "to provide details of the Parliamentarians' political views" },
+                { "label": "D", "text": "to compare Charles II's beliefs with those of his father" }
+              ],
+              "answer": "B"
+            },
+            {
+              "number": 37,
+              "text": "Why does the reviewer include examples of the fugitives' behaviour in the third paragraph?",
+              "options": [
+                { "label": "A", "text": "to explain how close Charles II came to losing his life" },
+                { "label": "B", "text": "to suggest that Charles II's supporters were badly prepared" },
+                { "label": "C", "text": "to illustrate how the events of the six weeks are brought to life" },
+                { "label": "D", "text": "to argue that certain aspects are not as well known as they should be" }
+              ],
+              "answer": "A"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

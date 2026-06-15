@@ -1,0 +1,56 @@
+{
+  "type": "reading",
+  "title": "MVP-0 Smoke Test",
+  "description": "Single passage, three multiple-choice questions. Used for the first end-to-end check.",
+  "timeLimit": 60,
+  "status": "draft",
+  "passages": [
+    {
+      "title": "The Science of Sleep",
+      "content": "<p>Sleep is a naturally recurring state of mind and body, characterized by altered consciousness, relatively inhibited sensory activity, reduced muscle activity and inhibition of nearly all voluntary muscles during rapid eye movement (REM) sleep, and reduced interactions with surroundings. It is distinguished from wakefulness by a decreased ability to react to stimuli, and is more easily reversed than the state of hibernation or of being comatose.</p><p>During sleep, most of the body's systems are in an anabolic state, helping to restore the immune, nervous, skeletal, and muscular systems. These restorative processes are the main reason why sleep is considered essential for survival.</p>"
+    }
+  ],
+  "questions": [
+    {
+      "number": 1,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "What is the main idea of the passage?",
+      "options": [
+        { "label": "A", "text": "Sleep is a state similar to hibernation." },
+        { "label": "B", "text": "Sleep is essential for the body to restore its systems." },
+        { "label": "C", "text": "REM sleep is more important than non-REM sleep." },
+        { "label": "D", "text": "Sleep is not necessary for human survival." }
+      ],
+      "answer": "B",
+      "passageIndex": 0
+    },
+    {
+      "number": 2,
+      "type": "multiple_choice",
+      "instruction": "Choose the correct letter, A, B, C or D.",
+      "prompt": "Which of the following is NOT mentioned as a system restored during sleep?",
+      "options": [
+        { "label": "A", "text": "The immune system" },
+        { "label": "B", "text": "The nervous system" },
+        { "label": "C", "text": "The digestive system" },
+        { "label": "D", "text": "The muscular system" }
+      ],
+      "answer": "C",
+      "passageIndex": 0
+    },
+    {
+      "number": 3,
+      "type": "true_false_not_given",
+      "instruction": "Do the following statements agree with the information in the passage? Write TRUE / FALSE / NOT GIVEN.",
+      "prompt": "Sleep is harder to reverse than the state of hibernation.",
+      "options": [
+        { "label": "TRUE", "text": "TRUE" },
+        { "label": "FALSE", "text": "FALSE" },
+        { "label": "NOT GIVEN", "text": "NOT GIVEN" }
+      ],
+      "answer": "FALSE",
+      "passageIndex": 0
+    }
+  ]
+}

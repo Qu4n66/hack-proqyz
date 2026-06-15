@@ -1,0 +1,48 @@
+{
+  "quizTitle": "Example: Radio (Multiple Choice, Single Answer)",
+  "quizType": "reading",
+  "time": 60,
+  "status": "draft",
+  "source": {
+    "name": "ProQyz Example Fixtures",
+    "url": "https://example.com/proqyz-examples/radio"
+  },
+  "passages": [
+    {
+      "title": "Reading Passage A",
+      "content": "<!-- Example passage body. The uploader only requires non-empty content for the schema and the editor; the actual prose is not used by these example fixtures. Replace with real IELTS passage text when running the uploader end-to-end. -->",
+      "questions": [
+        {
+          "number": 1,
+          "ieltsType": "multiple_choice_single",
+          "proqyzType": "radio",
+          "questionTypeIndex": 1,
+          "instruction": "Question 1. Choose the correct answer, A, B, C or D.",
+          "content": "<strong>1</strong> What is the writer's main point in the passage?",
+          "options": [
+            { "label": "A", "text": "Underground railways were inevitable once steam engines were invented." },
+            { "label": "B", "text": "London's growth in the 19th century created a transport problem that the Metropolitan line solved." },
+            { "label": "C", "text": "The author argues that private investment was the only reason the network expanded." },
+            { "label": "D", "text": "Tunnelling technology had matured before the Metropolitan line was proposed." }
+          ],
+          "answer": "B"
+        },
+        {
+          "number": 2,
+          "ieltsType": "multiple_choice_single",
+          "proqyzType": "radio",
+          "questionTypeIndex": 1,
+          "instruction": "Question 2. Choose the correct answer, A, B, C or D.",
+          "content": "<strong>2</strong> Which of the following is mentioned in the passage as a difficulty faced by early tunnel engineers?",
+          "options": [
+            { "label": "A", "text": "Lack of public funding" },
+            { "label": "B", "text": "Unstable soil conditions" },
+            { "label": "C", "text": "Shortage of skilled workers" },
+            { "label": "D", "text": "Competition from surface railways" }
+          ],
+          "answer": "B"
+        }
+      ]
+    }
+  ]
+}

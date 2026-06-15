@@ -1,0 +1,26 @@
+{
+  "mode": "explanation",
+  "testTitle": "Cam 17 Reading Test 01",
+  "passages": [
+    {
+      "passage": 1,
+      "questionGroups": [
+        {
+          "range": "36-37",
+          "questionNumberStart": 36,
+          "questionNumberEnd": 37,
+          "explanations": [
+            {
+              "questionNumber": 36,
+              "content": "<p>The answer is <b>population</b> because the passage states that the city's population grew rapidly between 1800 and 1850.</p>"
+            },
+            {
+              "questionNumber": 37,
+              "content": "<p>The answer is <b>suburbs</b> because the text mentions expansion into surrounding areas beyond the city centre.</p>"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

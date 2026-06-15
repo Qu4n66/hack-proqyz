@@ -1,0 +1,38 @@
+{
+  "quizTitle": "Example: Select (True / False / Not Given)",
+  "quizType": "reading",
+  "time": 60,
+  "status": "draft",
+  "source": {
+    "name": "ProQyz Example Fixtures",
+    "url": "https://example.com/proqyz-examples/select"
+  },
+  "passages": [
+    {
+      "title": "Reading Passage B",
+      "content": "<!-- Example passage body. The uploader only requires non-empty content for the schema and the editor; the actual prose is not used by these example fixtures. Replace with real IELTS passage text when running the uploader end-to-end. -->",
+      "questions": [
+        {
+          "number": 1,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "questionTypeIndex": 2,
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 1-2. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "<strong>1</strong> Other countries had built underground railways before the Metropolitan line opened.",
+          "answer": "FALSE"
+        },
+        {
+          "number": 2,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "questionTypeIndex": 2,
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 1-2. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "<strong>2</strong> The author predicts that the cost of underground travel will continue to rise.",
+          "answer": "NOT GIVEN"
+        }
+      ]
+    }
+  ]
+}

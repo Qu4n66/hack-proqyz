@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>IELTS Local Input → ProQyz JSON</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --panel-2: #273449;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-2: #22d3ee;
+    --ok: #4ade80;
+    --warn: #facc15;
+    --err: #f87171;
+    --border: #334155;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px; line-height: 1.5; }
+  header { padding: 16px 24px; border-bottom: 1px solid var(--border);
+    background: linear-gradient(90deg, #0f172a, #1e293b); }
+  header h1 { margin: 0; font-size: 20px; }
+  header .sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 980px) { main { grid-template-columns: 1fr; } }
+  section.panel { background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px; }
+  section.panel h2 { margin: 0 0 12px; font-size: 16px; color: var(--accent); }
+  label { display: block; font-size: 12px; color: var(--muted);
+    margin-top: 10px; margin-bottom: 4px; }
+  input[type="text"], input[type="number"], textarea, select {
+    width: 100%; background: var(--panel-2); color: var(--text);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 6px 8px; font-family: inherit; font-size: 13px; }
+  textarea { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px;
+    line-height: 1.5; min-height: 80px; }
+  input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+    outline: 2px solid var(--accent); border-color: var(--accent); }
+  .row { display: flex; gap: 8px; align-items: center; }
+  .row > * { flex: 1; }
+  button { cursor: pointer; background: var(--accent); color: #0f172a;
+    border: 0; border-radius: 4px; padding: 6px 12px; font-weight: 600;
+    font-size: 13px; }
+  button.secondary { background: var(--panel-2); color: var(--text);
+    border: 1px solid var(--border); }
+  button.danger { background: var(--err); color: #0f172a; }
+  button.ghost { background: transparent; color: var(--muted);
+    border: 1px dashed var(--border); }
+  button:disabled { cursor: not-allowed; opacity: 0.5; }
+  button:hover:not(:disabled) { filter: brightness(1.1); }
+  .qblock { background: var(--panel-2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 12px; margin-top: 12px; }
+  .qblock header { background: transparent; border: 0; padding: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px; }
+  .qblock header h3 { margin: 0; font-size: 14px; color: var(--accent-2); }
+  .pill { display: inline-block; background: var(--panel-2); color: var(--muted);
+    padding: 2px 8px; border-radius: 10px; font-size: 11px;
+    border: 1px solid var(--border); }
+  pre.json { background: #0b1220; color: #a7f3d0; border-radius: 6px;
+    padding: 12px; overflow: auto; max-height: 70vh; font-size: 12px;
+    border: 1px solid var(--border); white-space: pre-wrap; word-break: break-word; }
+  pre.json .err-line { color: var(--err); font-weight: 600; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .meta { color: var(--muted); font-size: 12px; margin-top: 8px; }
+  .err { color: var(--err); font-size: 12px; margin-top: 6px; }
+  .ok { color: var(--ok); font-size: 12px; margin-top: 6px; }
+  .helper { color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .block-err { color: var(--err); font-size: 11px; margin-top: 4px; }
+  .toast { position: fixed; right: 16px; bottom: 16px;
+    background: var(--panel); border: 1px solid var(--ok); color: var(--ok);
+    padding: 8px 14px; border-radius: 6px; opacity: 0; pointer-events: none;
+    transition: opacity 200ms ease; }
+  .toast.show { opacity: 1; }
+  .toast.err { border-color: var(--err); color: var(--err); }
+  .hidden { display: none; }
+  code { background: var(--panel-2); padding: 1px 4px; border-radius: 3px; }
+  details { margin-top: 6px; }
+  details summary { cursor: pointer; color: var(--muted); font-size: 11px; }
+  details pre { background: #0b1220; padding: 8px; border-radius: 4px;
+    font-size: 11px; max-height: 220px; overflow: auto; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>IELTS Local Input → ProQyz JSON</h1>
+  <div class="sub">
+    Paste IELTS content here. The page normalizes your blocks into the
+    schema the uploader expects. Run
+    <code>node bin/upload.js &lt;file&gt;</code> or
+    <code>--from-localhost</code> when ready.
+  </div>
+</header>
+
+<main>
+
+  <!-- LEFT: form -->
+  <div>
+
+    <section class="panel">
+      <h2>1. Quiz info</h2>
+      <label>Quiz title</label>
+      <input id="quizTitle" type="text" placeholder="e.g. Cam 17 Reading Test 01" value="Cam 17 Reading Test 01" />
+      <div class="row">
+        <div>
+          <label>Time (minutes)</label>
+          <input id="quizTime" type="number" min="1" value="60" />
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="quizStatus">
+            <option value="draft" selected>draft</option>
+            <option value="published">published</option>
+          </select>
+        </div>
+      </div>
+      <label>Source name</label>
+      <input id="sourceName" type="text" placeholder="e.g. IELTS Training Online" value="IELTS Training Online" />
+      <label>Source URL</label>
+      <input id="sourceUrl" type="text" placeholder="https://..." value="https://ieltstrainingonline.com/practice-cam-17-reading-test-01-with-answer/" />
+    </section>
+
+    <section class="panel" style="margin-top:16px">
+      <h2>2. Passage</h2>
+      <label>Passage title</label>
+      <input id="passageTitle" type="text" value="Reading Passage 1" />
+      <label>Passage content (plain text — newlines are fine)</label>
+      <textarea id="passageContent" rows="6" placeholder="Paste the IELTS passage text here...">The London Underground Railway
+
+A In the early nineteenth century, many people dreamed of building an underground railway in London. The city was growing rapidly, and the streets were becoming increasingly congested. It was difficult for people to move around the city, and journey times were getting longer and longer.
+
+B Charles Pearson was one of the first people to suggest building an underground railway in London. He believed that it would make it easier for people to travel to and from work, and would also help to reduce traffic congestion in the city centre. Pearson's idea was supported by a number of businessmen, who agreed to provide the money needed to build the railway.
+
+C The first section of the underground railway opened in 1863, and ran from Paddington to Farringdon Street. It was an immediate success, and within a few years, more sections were added. The early trains were powered by steam engines, which produced a lot of smoke and made the tunnels very hot and dirty.
+
+D In 1890, the first electric underground railway opened in London. This was a much cleaner and more efficient way of travelling, and electric trains soon replaced the steam engines. By the early twentieth century, the underground railway had become an essential part of London's transport system.
+
+E Today, the London Underground is one of the busiest metro systems in the world. It carries millions of passengers every day, and serves 272 stations across the city. The underground railway has come a long way since its humble beginnings in 1863, and it continues to play a vital role in the life of the city.</textarea>
+    </section>
+
+    <section class="panel" style="margin-top:16px">
+      <h2>3. Question blocks</h2>
+      <div class="helper">
+        Each block has a <b>Type</b>, a <b>Block title</b>, and a
+        <b>JSON textarea</b>. The textarea is the source of truth — paste a
+        question-shaped JSON object and the page normalizes it to the
+        schema the uploader expects.
+      </div>
+      <div id="blocks"></div>
+      <div class="actions">
+        <button onclick="addBlock('fill-up')">+ Fill-up</button>
+        <button class="secondary" onclick="addBlock('radio')">+ Radio</button>
+        <button class="secondary" onclick="addBlock('select')" disabled>+ Select (coming soon)</button>
+        <button class="secondary" onclick="addBlock('checkbox')" disabled>+ Checkbox (coming soon)</button>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:16px">
+      <h2>4. Upload</h2>
+      <div class="row">
+        <div>
+          <label>Upload mode</label>
+          <select id="uploadMode" onchange="onUploadModeChange()">
+            <option value="ui-full" selected>ui-full — full quiz via Playwright UI</option>
+            <option value="api-questions">api-questions — questions via ProQyz API (Part 3 stub)</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" id="apiIdRow" style="display:none">
+        <div>
+          <label>Quiz ID</label>
+          <input id="quizId" type="text" placeholder="e.g. 67e8..." />
+        </div>
+        <div>
+          <label>Post ID</label>
+          <input id="postId" type="text" placeholder="e.g. 70a1..." />
+        </div>
+      </div>
+      <div class="actions">
+        <button id="uploadBtn" onclick="upload()">Upload to ProQyz</button>
+        <button class="ghost" id="clearLogBtn" onclick="clearLog()">Clear log</button>
+      </div>
+      <label>Server log</label>
+      <pre id="logOut" class="json" style="max-height: 240px">// Logs from the upload command appear here.</pre>
+      <div class="helper">
+        The server runs <code>node bin/upload.js generated/latest-quiz.json --fresh</code>
+        (plus <code>--api-questions --quiz-id &lt;id&gt; --post-id &lt;id&gt;</code> in API mode).
+        Start it with <code>node local-tool-server.js</code> on port 8000.
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:16px">
+      <h2>5. Generate</h2>
+      <div class="actions">
+        <button onclick="downloadJson()">Download .json</button>
+        <button class="secondary" onclick="copyJson()">Copy to clipboard</button>
+        <button class="ghost" onclick="prettify()">Prettify</button>
+      </div>
+      <div id="status" class="meta"></div>
+    </section>
+
+  </div>
+
+  <!-- RIGHT: live JSON preview + reference shapes -->
+  <div>
+    <section class="panel">
+      <h2>JSON output (live)</h2>
+      <pre id="jsonOut" class="json">// Fill in the form. The normalized ReadingQuizSchema
+// JSON appears here on every keystroke.</pre>
+      <div class="meta">
+        Schema source: <code>src/domain/schemas.js</code>. The uploader
+        accepts this exact shape. Per-block errors are reported on the
+        left under the textarea.
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:16px">
+      <h2>Reference: block shapes</h2>
+      <details>
+        <summary>Fill-up (grouped; one block per IELTS "Questions 1-6")</summary>
+<pre>{
+  "type": "fill-up",
+  "title": "Questions 1-6",
+  "instructions": "Complete the notes below. Choose ONE WORD ONLY from the passage.",
+  "content": "The {answer} of London increased between 1800 and 1850. The tunnel was covered with {answer}.",
+  "answers": ["population", "soil"]
+}</pre>
+      </details>
+      <details>
+        <summary>Radio (grouped MCQ; one block per IELTS "Questions 36-40")</summary>
+<pre>{
+  "type": "radio",
+  "title": "Questions 36-37",
+  "instructions": "Choose the correct letter, A, B, C or D.",
+  "questions": [
+    {
+      "number": 36,
+      "text": "What is the reviewer's main purpose?",
+      "options": [
+        { "label": "A", "text": "to describe what happened during the Battle of Worcester" },
+        { "label": "B", "text": "to give an account of the circumstances leading to Charles II's escape" }
+      ],
+      "answer": "B"
+    },
+    {
+      "number": 37,
+      "text": "Why does the reviewer include examples?",
+      "options": [
+        { "label": "A", "text": "to explain how close Charles II came to losing his life" },
+        { "label": "B", "text": "to suggest that Charles II's supporters were badly prepared" }
+      ],
+      "answer": "A"
+    }
+  ]
+}</pre>
+      </details>
+      <details>
+        <summary>Single-question radio (no range)</summary>
+<pre>{
+  "type": "radio",
+  "title": "Question 7",
+  "instructions": "Choose the correct answer.",
+  "questions": [
+    {
+      "number": 7,
+      "text": "What is the reviewer's main purpose?",
+      "options": [
+        { "label": "A", "text": "..." },
+        { "label": "B", "text": "..." }
+      ],
+      "answer": "B"
+    }
+  ]
+}</pre>
+      </details>
+      <div class="meta" style="margin-top:8px">
+        <b>How normalization works:</b>
+        <ul style="margin: 4px 0 0 16px; padding: 0;">
+          <li><code>type</code> → <code>proqyzType</code> (<code>fill-up</code>→<code>fill_up</code>, <code>radio</code>→<code>radio</code>)</li>
+          <li><code>instructions</code> → <code>instruction</code></li>
+          <li><code>title</code> → <code>displayTitle</code>; number range derived from <code>questions[].number</code> or <code>answers.length</code></li>
+          <li><code>questionTypeIndex</code> derived from <code>proqyzType</code></li>
+          <li>fill-up: only the <b>count</b> of <code>{answer}</code> placeholders is checked (must equal <code>answers.length</code>); the inner placeholder text is not required to match <code>answers[i]</code></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script>
+"use strict";
+
+// ---------------------------------------------------------------------
+// Block list (in-memory; rendered into the form on every change)
+// ---------------------------------------------------------------------
+/**
+ * Each block:
+ *   { id: string, type: "fill-up"|"radio"|"select"|"checkbox",
+ *     blockTitle: string, rawText: string, parsed: object|null,
+ *     error: string|null, normalized: object|null }
+ * @type {Array<object>}
+ */
+let blocks = [];
+
+// ---------------------------------------------------------------------
+// Type-specific configuration
+// ---------------------------------------------------------------------
+const TYPE_META = {
+  "fill-up": {
+    proqyzType: "fill_up",
+    questionTypeIndex: 0,
+    enabled: true,
+    placeholderKey: "answers[]",
+    defaultRaw: JSON.stringify({
+      type: "fill-up",
+      title: "Questions 1-6",
+      instructions: "Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
+      content: "The {answer} of London increased between 1800 and 1850. The tunnel was covered with {answer}.",
+      answers: ["population", "soil"],
+    }, null, 2),
+  },
+  "radio": {
+    proqyzType: "radio",
+    questionTypeIndex: 1,
+    enabled: true,
+    placeholderKey: "questions[]",
+    defaultRaw: JSON.stringify({
+      type: "radio",
+      title: "Questions 36-37",
+      instructions: "Choose the correct letter, A, B, C or D.",
+      questions: [
+        {
+          number: 36,
+          text: "What is the reviewer's main purpose?",
+          options: [
+            { label: "A", text: "to describe what happened during the Battle of Worcester" },
+            { label: "B", text: "to give an account of the circumstances leading to Charles II's escape" },
+          ],
+          answer: "B",
+        },
+        {
+          number: 37,
+          text: "Why does the reviewer include examples?",
+          options: [
+            { label: "A", text: "to explain how close Charles II came to losing his life" },
+            { label: "B", text: "to suggest that Charles II's supporters were badly prepared" },
+          ],
+          answer: "A",
+        },
+      ],
+    }, null, 2),
+  },
+  "select": {
+    proqyzType: "select",
+    questionTypeIndex: 2,
+    enabled: false,
+    placeholderKey: "answer",
+    defaultRaw: "// coming soon — not yet wired into the uploader",
+  },
+  "checkbox": {
+    proqyzType: "checkbox",
+    questionTypeIndex: 3,
+    enabled: false,
+    placeholderKey: "answers[]",
+    defaultRaw: "// coming soon — not yet wired into the uploader",
+  },
+};
+
+// ---------------------------------------------------------------------
+// Seed: one fill-up + one radio (Cambridge IELTS 17 sample)
+// ---------------------------------------------------------------------
+function seed() {
+  blocks = [
+    {
+      id: newId(),
+      type: "fill-up",
+      blockTitle: "Questions 1-6",
+      rawText: TYPE_META["fill-up"].defaultRaw,
+    },
+    {
+      id: newId(),
+      type: "radio",
+      blockTitle: "Questions 36-37",
+      rawText: TYPE_META["radio"].defaultRaw,
+    },
+  ];
+  render();
+}
+
+function newId() {
+  return "b" + Math.random().toString(36).slice(2, 10);
+}
+
+// ---------------------------------------------------------------------
+// Block operations
+// ---------------------------------------------------------------------
+function addBlock(type) {
+  const meta = TYPE_META[type];
+  if (!meta) {
+    toast("Unknown block type: " + type, true);
+    return;
+  }
+  if (!meta.enabled) {
+    toast(type + " is not supported yet", true);
+    return;
+  }
+  blocks.push({
+    id: newId(),
+    type: type,
+    blockTitle: "",
+    rawText: meta.defaultRaw,
+  });
+  render();
+}
+
+function removeBlock(id) {
+  const i = blocks.findIndex((b) => b.id === id);
+  if (i < 0) return;
+  blocks.splice(i, 1);
+  render();
+}
+
+function moveBlock(id, delta) {
+  const i = blocks.findIndex((b) => b.id === id);
+  const j = i + delta;
+  if (i < 0 || j < 0 || j >= blocks.length) return;
+  [blocks[i], blocks[j]] = [blocks[j], blocks[i]];
+  render();
+}
+
+function updateBlock(id, patch) {
+  const b = blocks.find((b) => b.id === id);
+  if (!b) return;
+  Object.assign(b, patch);
+  render();
+}
+
+// ---------------------------------------------------------------------
+// Render
+// ---------------------------------------------------------------------
+function render() {
+  const host = document.getElementById("blocks");
+  host.innerHTML = "";
+  blocks.forEach((b, idx) => {
+    const div = document.createElement("div");
+    div.className = "qblock";
+    div.appendChild(renderBlockHeader(b, idx));
+    div.appendChild(renderBlockBody(b, idx));
+    host.appendChild(div);
+  });
+  // Re-generate preview on every render.
+  generate();
+}
+
+function renderBlockHeader(b, idx) {
+  const h = document.createElement("header");
+  const title = document.createElement("h3");
+  const num = idx + 1;
+  const display = b.blockTitle || "(" + b.type + " — no title)";
+  title.textContent = "#" + num + "  " + display;
+  h.appendChild(title);
+  const tools = document.createElement("div");
+  tools.className = "row";
+  tools.style.flex = "0 0 auto";
+  if (idx > 0) {
+    const up = document.createElement("button");
+    up.className = "secondary"; up.textContent = "↑";
+    up.onclick = () => moveBlock(b.id, -1);
+    tools.appendChild(up);
+  }
+  if (idx < blocks.length - 1) {
+    const down = document.createElement("button");
+    down.className = "secondary"; down.textContent = "↓";
+    down.onclick = () => moveBlock(b.id, +1);
+    tools.appendChild(down);
+  }
+  const del = document.createElement("button");
+  del.className = "danger"; del.textContent = "✕";
+  del.onclick = () => removeBlock(b.id);
+  tools.appendChild(del);
+  h.appendChild(tools);
+  return h;
+}
+
+function renderBlockBody(b, idx) {
+  const wrap = document.createElement("div");
+
+  // Type + Block title row.
+  const row = document.createElement("div");
+  row.className = "row";
+  row.style.marginTop = "0";
+
+  const typeWrap = document.createElement("div");
+  const typeLabel = document.createElement("label");
+  typeLabel.textContent = "Type";
+  typeWrap.appendChild(typeLabel);
+  const typeSel = document.createElement("select");
+  ["fill-up", "radio", "select", "checkbox"].forEach((t) => {
+    const o = document.createElement("option");
+    o.value = t; o.textContent = t + (TYPE_META[t].enabled ? "" : "  (coming soon)");
+    if (b.type === t) o.selected = true;
+    if (!TYPE_META[t].enabled) o.disabled = true;
+    typeSel.appendChild(o);
+  });
+  typeSel.onchange = (e) => {
+    const newType = e.target.value;
+    const meta = TYPE_META[newType];
+    if (!meta.enabled) {
+      // Revert the dropdown visually.
+      e.target.value = b.type;
+      toast(newType + " is not supported yet", true);
+      return;
+    }
+    // Reset the textarea to the new type's template; keep blockTitle.
+    updateBlock(b.id, { type: newType, rawText: meta.defaultRaw });
+  };
+  typeWrap.appendChild(typeSel);
+  row.appendChild(typeWrap);
+
+  const titleWrap = document.createElement("div");
+  const titleLabel = document.createElement("label");
+  titleLabel.textContent = "Block title";
+  titleWrap.appendChild(titleLabel);
+  const titleInput = document.createElement("input");
+  titleInput.type = "text";
+  titleInput.placeholder = "e.g. Questions 1-6";
+  titleInput.value = b.blockTitle;
+  titleInput.oninput = (e) => {
+    b.blockTitle = e.target.value;
+    generate(); // re-render the header title; full re-render would steal focus
+    // We can't call render() here because it would wipe the input. So we
+    // update the header in place instead.
+    const header = wrap.parentNode.querySelector("header h3");
+    if (header) {
+      const num = blocks.findIndex((bb) => bb.id === b.id) + 1;
+      const display = b.blockTitle || "(" + b.type + " — no title)";
+      header.textContent = "#" + num + "  " + display;
+    }
+  };
+  titleWrap.appendChild(titleInput);
+  row.appendChild(titleWrap);
+
+  wrap.appendChild(row);
+
+  // JSON textarea.
+  const taLabel = document.createElement("label");
+  taLabel.textContent = "JSON (source of truth)";
+  wrap.appendChild(taLabel);
+  const ta = document.createElement("textarea");
+  ta.rows = 12;
+  ta.spellcheck = false;
+  ta.value = b.rawText;
+  ta.oninput = (e) => {
+    b.rawText = e.target.value;
+    // Update error display live; do NOT re-render to keep focus + cursor.
+    updateBlockError(b);
+    generate();
+  };
+  wrap.appendChild(ta);
+
+  // Error display.
+  const err = document.createElement("div");
+  err.className = "block-err";
+  err.id = "err-" + b.id;
+  wrap.appendChild(err);
+
+  // Defer error update until DOM is attached.
+  setTimeout(() => updateBlockError(b), 0);
+
+  return wrap;
+}
+
+function updateBlockError(b) {
+  const el = document.getElementById("err-" + b.id);
+  if (!el) return;
+  const { error, normalized } = parseAndNormalizeBlock(b);
+  if (error) {
+    el.textContent = "✕ " + error;
+    el.style.display = "block";
+  } else {
+    el.textContent = "✓ OK — question " + (normalized?.number ?? "?") +
+      (normalized?.numberEnd ? " (group " + normalized.numberStart + "-" + normalized.numberEnd + ")" : "");
+    el.style.color = "var(--ok)";
+  }
+}
+
+// ---------------------------------------------------------------------
+// Parser + normalizer (loose block → current ReadingQuizSchema shape)
+// ---------------------------------------------------------------------
+/**
+ * Try to parse the raw text as JSON. Returns { parsed, error }.
+ */
+function tryParseJson(text) {
+  const trimmed = (text || "").trim();
+  if (!trimmed) return { parsed: null, error: "empty" };
+  try {
+    return { parsed: JSON.parse(trimmed), error: null };
+  } catch (e) {
+    return { parsed: null, error: "JSON parse error: " + e.message };
+  }
+}
+
+/**
+ * Parse + normalize one block into the current ReadingQuizSchema shape.
+ * Returns { normalized, error }. On error, normalized is null.
+ */
+function parseAndNormalizeBlock(b) {
+  if (!TYPE_META[b.type]?.enabled) {
+    return { normalized: null, error: "type \"" + b.type + "\" is not yet supported" };
+  }
+  const { parsed, error } = tryParseJson(b.rawText);
+  if (error) return { normalized: null, error };
+  if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+    return { normalized: null, error: "block must be a JSON object" };
+  }
+  try {
+    if (b.type === "fill-up") return { normalized: normalizeFillUp(b, parsed), error: null };
+    if (b.type === "radio") return { normalized: normalizeRadio(b, parsed), error: null };
+    return { normalized: null, error: "no normalizer for type " + b.type };
+  } catch (e) {
+    return { normalized: null, error: e.message };
+  }
+}
+
+/**
+ * Normalize a fill-up block.
+ *
+ * Required loose fields:
+ *   - content: string with {answer} placeholders
+ *   - answers: string[] of correct answers, in order
+ *
+ * Optional loose fields:
+ *   - title, instructions, ieltsType
+ *
+ * Schema fields we add (so the uploader accepts the block unchanged):
+ *   - proqyzType: "fill_up"
+ *   - questionTypeIndex: 0
+ *   - instruction (singular, from instructions)
+ *   - displayTitle (from title)
+ *   - number, numberStart, numberEnd (derived from answers.length and
+ *     any explicit "number" hint)
+ */
+function normalizeFillUp(b, parsed) {
+  if (typeof parsed.content !== "string" || !parsed.content) {
+    throw new Error("fill-up block: missing or invalid `content`");
+  }
+  if (!Array.isArray(parsed.answers) || parsed.answers.length === 0) {
+    throw new Error("fill-up block: `answers` must be a non-empty array");
+  }
+  for (let i = 0; i < parsed.answers.length; i++) {
+    if (typeof parsed.answers[i] !== "string" || !parsed.answers[i]) {
+      throw new Error("fill-up block: `answers[" + i + "]` must be a non-empty string");
+    }
+  }
+  // Generic-{answer} placeholders only — the inner text is not required to
+  // match `answers[i]`. We only enforce that the brace count equals
+  // `answers.length`. The actual answer values flow from the `answers`
+  // array; the uploader writes those into the per-blank inputs.
+  const braces = parsed.content.match(/\{([^}]+)\}/g) ?? [];
+  if (braces.length !== parsed.answers.length) {
+    throw new Error(
+      "fill-up block: content has " + braces.length + " {answer} placeholder(s) " +
+        "but `answers` has " + parsed.answers.length + " entry/entries — counts must match",
+    );
+  }
+  const title = typeof parsed.title === "string" && parsed.title ? parsed.title : b.blockTitle || "Fill-up";
+  const instruction = typeof parsed.instructions === "string"
+    ? parsed.instructions
+    : (typeof parsed.instruction === "string" ? parsed.instruction : "");
+
+  // If the block's title looks like "Questions 1-6", use that to set the
+  // number range. Otherwise default to 1..N.
+  const range = parseRangeFromTitle(title) ?? { start: 1, end: parsed.answers.length };
+
+  const base = {
+    number: range.start,
+    ieltsType: typeof parsed.ieltsType === "string" ? parsed.ieltsType : "note_completion",
+    proqyzType: "fill_up",
+    questionTypeIndex: 0,
+    instruction: instruction,
+    content: parsed.content,
+    displayTitle: title,
+    answers: parsed.answers.slice(),
+  };
+  if (range.start !== range.end) {
+    base.numberStart = range.start;
+    base.numberEnd = range.end;
+  }
+  return base;
+}
+
+/**
+ * Normalize a radio block.
+ *
+ * Required loose fields:
+ *   - questions: array of { number, text, options: [{label,text}], answer }
+ *
+ * Optional loose fields:
+ *   - title, instructions
+ *
+ * Schema fields we add:
+ *   - proqyzType: "radio"
+ *   - questionTypeIndex: 1
+ *   - subQuestions[] (each with number/text/options/answer)
+ *   - displayTitle (from title)
+ *   - number, numberStart, numberEnd (derived from questions[].number)
+ */
+function normalizeRadio(b, parsed) {
+  if (!Array.isArray(parsed.questions) || parsed.questions.length === 0) {
+    throw new Error("radio block: `questions` must be a non-empty array");
+  }
+  const subQuestions = [];
+  for (let i = 0; i < parsed.questions.length; i++) {
+    const q = parsed.questions[i];
+    if (typeof q !== "object" || q === null) {
+      throw new Error("radio block: questions[" + i + "] must be an object");
+    }
+    if (typeof q.text !== "string" || !q.text) {
+      throw new Error("radio block: questions[" + i + "].text is required");
+    }
+    if (typeof q.number !== "number") {
+      throw new Error("radio block: questions[" + i + "].number is required");
+    }
+    if (!Array.isArray(q.options) || q.options.length < 2) {
+      throw new Error("radio block: questions[" + i + "].options must have at least 2 entries");
+    }
+    const labels = [];
+    for (let j = 0; j < q.options.length; j++) {
+      const o = q.options[j];
+      if (typeof o.label !== "string" || !o.label) {
+        throw new Error("radio block: questions[" + i + "].options[" + j + "].label is required");
+      }
+      if (typeof o.text !== "string" || !o.text) {
+        throw new Error("radio block: questions[" + i + "].options[" + j + "].text is required");
+      }
+      labels.push(o.label.trim().toUpperCase());
+    }
+    if (typeof q.answer !== "string" || !q.answer) {
+      throw new Error("radio block: questions[" + i + "].answer is required");
+    }
+    if (!labels.includes(q.answer.trim().toUpperCase())) {
+      throw new Error(
+        "radio block: questions[" + i + "].answer \"" + q.answer +
+          "\" must match one of the option labels ([" + labels.join(", ") + "])",
+      );
+    }
+    subQuestions.push({
+      number: q.number,
+      text: q.text,
+      options: q.options.map((o) => ({ label: o.label.trim(), text: o.text })),
+      answer: q.answer.trim().toUpperCase(),
+    });
+  }
+  const title = typeof parsed.title === "string" && parsed.title ? parsed.title : b.blockTitle || "Radio";
+  const instruction = typeof parsed.instructions === "string"
+    ? parsed.instructions
+    : (typeof parsed.instruction === "string" ? parsed.instruction : "");
+
+  // Derive number range from sub-question numbers.
+  const numbers = subQuestions.map((sq) => sq.number);
+  const minN = Math.min(...numbers);
+  const maxN = Math.max(...numbers);
+  const isGrouped = subQuestions.length > 1 || (maxN - minN + 1) > 1;
+
+  const base = {
+    number: minN,
+    ieltsType: "multiple_choice_single",
+    proqyzType: "radio",
+    questionTypeIndex: 1,
+    instruction: instruction,
+    content: title, // radio content = the question header; stems are in subQuestions
+    displayTitle: title,
+  };
+  if (isGrouped) {
+    base.numberStart = minN;
+    base.numberEnd = maxN;
+    base.subQuestions = subQuestions;
+  } else {
+    // Single-radio path: top-level options + answer.
+    const only = subQuestions[0];
+    base.options = only.options;
+    base.answer = only.answer;
+    base.subQuestions = undefined; // explicit: not used in single mode
+  }
+  return base;
+}
+
+/**
+ * Try to parse a title like "Questions 1-6" → { start: 1, end: 6 }.
+ * Returns null if the title doesn't match.
+ */
+function parseRangeFromTitle(title) {
+  if (typeof title !== "string") return null;
+  // Patterns we accept:
+  //   "Questions 1-6"      → 1-6
+  //   "Question 5"         → 5-5
+  //   "Questions 36-40"    → 36-40
+  const m = title.match(/Questions?\s+(\d+)(?:\s*[-–]\s*(\d+))?/i);
+  if (!m) return null;
+  const start = parseInt(m[1], 10);
+  const end = m[2] ? parseInt(m[2], 10) : start;
+  if (isNaN(start) || isNaN(end) || start < 1 || end < start) return null;
+  return { start, end };
+}
+
+// ---------------------------------------------------------------------
+// Build the final quiz JSON
+// ---------------------------------------------------------------------
+function buildQuiz() {
+  const title = (document.getElementById("quizTitle").value || "").trim();
+  const time = parseInt(document.getElementById("quizTime").value, 10) || 60;
+  const status = document.getElementById("quizStatus").value;
+  const sourceName = (document.getElementById("sourceName").value || "").trim();
+  const sourceUrl = (document.getElementById("sourceUrl").value || "").trim();
+  const passageTitle = (document.getElementById("passageTitle").value || "").trim();
+  const passageContent = document.getElementById("passageContent").value || "";
+
+  // Normalize every block; collect errors but still emit the JSON.
+  const questions = [];
+  const blockErrors = [];
+  for (let i = 0; i < blocks.length; i++) {
+    const b = blocks[i];
+    const { normalized, error } = parseAndNormalizeBlock(b);
+    if (error) {
+      blockErrors.push({ idx: i + 1, type: b.type, error });
+      continue;
+    }
+    questions.push(normalized);
+  }
+
+  const quiz = {
+    quizTitle: title || "Untitled",
+    quizType: "reading",
+    time: time,
+    status: status,
+    source: { name: sourceName || "manual", url: sourceUrl || "https://example.com/" },
+    passages: [
+      {
+        title: passageTitle || "Reading Passage 1",
+        content: passageContent.trim(),
+        questions: questions,
+      },
+    ],
+  };
+  return { quiz, blockErrors };
+}
+
+let lastJson = "";
+let lastErrors = [];
+function generate() {
+  const status = document.getElementById("status");
+  const out = document.getElementById("jsonOut");
+  const { quiz, blockErrors } = buildQuiz();
+  lastErrors = blockErrors;
+  const text = JSON.stringify(quiz, null, 2);
+  lastJson = text;
+  if (blockErrors.length === 0) {
+    const count = quiz.passages[0].questions.length;
+    out.textContent = text;
+    out.classList.remove("err-line");
+    status.className = "ok";
+    status.textContent = "OK — " + count + " question block(s) for passage \"" + quiz.passages[0].title + "\"";
+  } else {
+    out.textContent = text + "\n\n// ⚠ " + blockErrors.length + " block(s) have errors:\n" +
+      blockErrors.map((e) => "//   block #" + e.idx + " (" + e.type + "): " + e.error).join("\n");
+    status.className = "err";
+    status.textContent = "Errors in " + blockErrors.length + " block(s) — fix them before uploading";
+  }
+}
+
+// ---------------------------------------------------------------------
+// Buttons
+// ---------------------------------------------------------------------
+function downloadJson() {
+  generate();
+  if (lastErrors.length > 0) {
+    toast("Cannot download — " + lastErrors.length + " block(s) have errors", true);
+    return;
+  }
+  const title = (document.getElementById("quizTitle").value || "quiz")
+    .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "quiz";
+  const filename = title + ".json";
+  const blob = new Blob([lastJson], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast("Downloaded " + filename);
+}
+
+async function copyJson() {
+  generate();
+  if (lastErrors.length > 0) {
+    toast("Cannot copy — " + lastErrors.length + " block(s) have errors", true);
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(lastJson);
+    toast("Copied to clipboard");
+  } catch {
+    const range = document.createRange();
+    range.selectNodeContents(document.getElementById("jsonOut"));
+    const sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(range);
+    toast("Selected — press Cmd+C / Ctrl+C");
+  }
+}
+
+function prettify() {
+  try {
+    const obj = JSON.parse(lastJson);
+    lastJson = JSON.stringify(obj, null, 2);
+    document.getElementById("jsonOut").textContent = lastJson;
+  } catch (err) {
+    toast("JSON is invalid", true);
+  }
+}
+
+// ---------------------------------------------------------------------
+// Upload
+// ---------------------------------------------------------------------
+function onUploadModeChange() {
+  const mode = document.getElementById("uploadMode").value;
+  document.getElementById("apiIdRow").style.display = mode === "api-questions" ? "" : "none";
+}
+
+function setUploadBusy(busy) {
+  const btn = document.getElementById("uploadBtn");
+  btn.disabled = busy;
+  btn.textContent = busy ? "Uploading…" : "Upload to ProQyz";
+}
+
+function clearLog() {
+  const log = document.getElementById("logOut");
+  log.textContent = "// Logs from the upload command appear here.";
+}
+
+function appendLog(text) {
+  const log = document.getElementById("logOut");
+  log.textContent += text;
+  log.scrollTop = log.scrollHeight;
+}
+
+async function upload() {
+  // Always regenerate to make sure we're uploading the latest JSON.
+  generate();
+  if (lastErrors.length > 0) {
+    toast("Fix " + lastErrors.length + " block error(s) first", true);
+    return;
+  }
+  let quiz;
+  try {
+    quiz = JSON.parse(lastJson);
+  } catch (err) {
+    toast("JSON is invalid: " + err.message, true);
+    return;
+  }
+  const mode = document.getElementById("uploadMode").value;
+  const payload = { mode, json: quiz };
+  if (mode === "api-questions") {
+    payload.quizId = (document.getElementById("quizId").value || "").trim();
+    payload.postId = (document.getElementById("postId").value || "").trim();
+    if (!payload.quizId || !payload.postId) {
+      toast("API mode needs both quizId and postId", true);
+      return;
+    }
+  }
+  setUploadBusy(true);
+  clearLog();
+  appendLog("[client] POST /api/upload (mode=" + mode + ")\n");
+  try {
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      appendLog("[client] HTTP " + res.status + ":\n" + errText + "\n");
+      toast("Upload failed (HTTP " + res.status + ")", true);
+      return;
+    }
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      appendLog(decoder.decode(value, { stream: true }));
+    }
+    appendLog(decoder.decode());
+    appendLog("\n[client] upload complete\n");
+    toast("Upload complete");
+  } catch (err) {
+    appendLog("\n[client] network error: " + err.message + "\n");
+    toast("Network error — is local-tool-server.js running on :8000?", true);
+  } finally {
+    setUploadBusy(false);
+  }
+}
+
+function toast(msg, isErr) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isErr ? " err" : "");
+  setTimeout(() => { t.className = "toast" + (isErr ? " err" : ""); }, 1800);
+}
+
+// Initial paint
+seed();
+</script>
+
+</body>
+</html>

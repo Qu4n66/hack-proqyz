@@ -1,0 +1,414 @@
+<!doctype html>
+<!--
+  Local stub of the ProQyz My Quizzes + create modal + tab-based
+  Passages / Questions editor flow.
+
+  This is NOT the real ProQyz UI. It models the real flow:
+    - My Quizzes page with a "New quiz" button.
+    - Clicking it opens a TWO-STEP wizard:
+        step 1 = "Select Quiz Type" radio + Next,
+        step 2 = title/description + "Add Quiz".
+    - Edit page with Passages / Questions TABS.
+    - Passages tab: "+ Add Passage" → modal with title + content →
+      modal's "Add Passage" → passage appears in the list.
+    - Questions tab: passage dropdown + "+ Add Question" → per-question
+      editor (modal) with type/defaultOptions/content/options.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Stub ProQyz — My Quizzes</title>
+    <style>
+      body { font-family: system-ui; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+      .hidden { display: none !important; }
+      .card { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+      .option-row { display: flex; gap: 0.5rem; align-items: center; margin: 0.25rem 0; }
+      .option-label { font-weight: bold; min-width: 1.5rem; }
+      button { padding: 0.4rem 0.8rem; cursor: pointer; }
+      .modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000; }
+      .modal { position: fixed; z-index: 1001; top: 5%; left: 50%; transform: translateX(-50%);
+               background: #fff; border-radius: 8px; padding: 1.5rem; width: 480px; }
+      .btn-primary { background: #1a73e8; color: #fff; border: 0; }
+      .tabs { display: flex; gap: 0.5rem; border-bottom: 2px solid #ddd; margin: 1rem 0; }
+      .tab { padding: 0.5rem 1rem; cursor: pointer; }
+      .tab.active { border-bottom: 2px solid #1a73e8; color: #1a73e8; font-weight: bold; }
+      .tab-panel.hidden { display: none !important; }
+      .passage-row, .question-row {
+        border: 1px solid #ccc; border-radius: 4px; padding: 0.5rem; margin: 0.25rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- My Quizzes page -->
+    <div id="my-quizzes">
+      <h1>My Quizzes</h1>
+      <div class="controls" style="margin: 1rem 0;">
+        <button class="btn btn-primary btn-sm" type="button" id="new-quiz-btn">
+          <i class="fa fa-plus"></i> New quiz
+        </button>
+      </div>
+      <div id="quiz-list"></div>
+    </div>
+
+    <!-- Create-quiz modal. Two-step wizard. -->
+    <div id="create-modal-mask" class="modal-mask hidden"></div>
+    <div id="create-modal" class="modal hidden" role="dialog">
+      <h4 id="create-modal-title" style="margin: 0 0 0.75rem 0;">Select Quiz Type</h4>
+      <form id="create-form" onsubmit="event.preventDefault(); onCreateStep2();">
+        <div id="create-step-1" style="margin: 0.5rem 0;">
+          <label style="display:block; margin: 0.25rem 0;">
+            <input type="radio" name="category" value="reading" checked /> Reading
+          </label>
+          <label style="display:block; margin: 0.25rem 0;">
+            <input type="radio" name="category" value="listening" /> Listening
+          </label>
+          <label style="display:block; margin: 0.25rem 0;">
+            <input type="radio" name="category" value="writing" /> Writing
+          </label>
+          <label style="display:block; margin: 0.25rem 0;">
+            <input type="radio" name="category" value="speaking" /> Speaking
+          </label>
+          <label style="display:block; margin: 0.25rem 0;">
+            <input type="radio" name="category" value="gov" /> Government
+          </label>
+          <div style="margin-top: 1rem; text-align: right;">
+            <button type="button" id="create-cancel-step1">Cancel</button>
+            <button type="button" id="create-next-btn" class="btn-primary" onclick="onCreateStep1Next();">Next</button>
+          </div>
+        </div>
+        <div id="create-step-2" class="hidden" style="margin: 0.5rem 0;">
+          <label style="display:block; margin: 0.5rem 0;">
+            <div>Quiz title</div>
+            <input id="create-title" placeholder="Add title" style="width: 100%;" />
+          </label>
+          <label style="display:block; margin: 0.5rem 0;">
+            <div>Description</div>
+            <textarea id="create-description" placeholder="Description" style="width: 100%;"></textarea>
+          </label>
+          <div style="margin-top: 1rem; text-align: right;">
+            <button type="button" id="create-back-btn">Back</button>
+            <button type="submit" class="btn-primary">Add Quiz</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Edit page with TABS -->
+    <div id="edit-page" class="hidden">
+      <h2 id="edit-title">Edit quiz</h2>
+      <form id="quiz-form" onsubmit="event.preventDefault(); onSaveChanges();">
+        <label>Title <input name="title" /></label><br /><br />
+        <label>Description <textarea name="description"></textarea></label><br /><br />
+        <label>Quiz type
+          <select name="quiz_type">
+            <option value="reading">Reading</option>
+            <option value="listening">Listening</option>
+          </select>
+        </label><br /><br />
+        <label>Time limit (min) <input name="min" type="number" value="60" /></label><br /><br />
+        <label>Status
+          <select name="status">
+            <option value="draft">Draft</option>
+            <option value="published">Published</option>
+          </select>
+        </label><br /><br />
+        <button type="submit" class="btn-primary">Save changes</button>
+        <button type="button" id="discard-btn">Discard</button>
+        <span id="save-status"></span>
+      </form>
+
+      <!-- Tabs -->
+      <div class="tabs" style="margin-top: 2rem;">
+        <div class="tab active" data-tab="passages" onclick="switchTab('passages')">Passages</div>
+        <div class="tab" data-tab="questions" onclick="switchTab('questions')">Questions</div>
+      </div>
+
+      <!-- Passages tab -->
+      <section id="passages-tab" class="tab-panel card">
+        <h3>Passages</h3>
+        <div id="passages-list"></div>
+        <button id="add-passage-btn" type="button" onclick="openPassageModal()">+ Add Passage</button>
+      </section>
+
+      <!-- Questions tab -->
+      <section id="questions-tab" class="tab-panel hidden card">
+        <h3>Questions</h3>
+        <div>
+          <label>Passage
+            <select id="questions-passage-select" name="passage" data-testid="passage-select" onchange="onPassageSelectChange()">
+              <option value="">-- Select passage --</option>
+            </select>
+          </label>
+        </div>
+        <div id="questions-list" style="margin-top: 0.75rem;"></div>
+        <button id="add-question-btn" type="button" onclick="openQuestionEditor()">+ Add Question</button>
+      </section>
+    </div>
+
+    <!-- Add-Passage modal -->
+    <div id="passage-modal-mask" class="modal-mask hidden"></div>
+    <div id="passage-modal" class="modal hidden" role="dialog" data-testid="passage-modal">
+      <h4 style="margin: 0 0 0.75rem 0;">Add Passage</h4>
+      <form id="passage-form" onsubmit="event.preventDefault(); onPassageModalSave();">
+        <label style="display:block; margin: 0.5rem 0;">
+          <div>Title</div>
+          <input name="title" placeholder="Reading Passage 1" style="width: 100%;" />
+        </label>
+        <label style="display:block; margin: 0.5rem 0;">
+          <div>Content</div>
+          <div data-testid="passage-content">
+            <textarea name="content" placeholder="Passage content..." style="width: 100%; min-height: 120px;"></textarea>
+          </div>
+        </label>
+        <div style="margin-top: 1rem; text-align: right;">
+          <button type="button" onclick="closePassageModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Add Passage</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Per-question editor (modal) -->
+    <div id="question-modal-mask" class="modal-mask hidden"></div>
+    <div id="question-modal" class="modal hidden" role="dialog" data-testid="question-editor">
+      <h4 style="margin: 0 0 0.75rem 0;">Edit question</h4>
+      <form id="question-form" onsubmit="event.preventDefault(); onQuestionModalSave();">
+        <label style="display:block; margin: 0.5rem 0;">
+          <div>Type</div>
+          <select name="type">
+            <option value="fill_up">Fill-up</option>
+            <option value="select">Select</option>
+            <option value="radio">Radio</option>
+            <option value="checkbox">Checkbox</option>
+          </select>
+        </label>
+        <label style="display:block; margin: 0.5rem 0;">
+          <div>Default Options</div>
+          <select name="defaultOptions">
+            <option value="">(none)</option>
+            <option value="true_false_not_given">True False &amp; Not Given</option>
+            <option value="yes_no_not_given">Yes No &amp; Not Given</option>
+            <option value="i">i (Small Romans)</option>
+            <option value="A">A (Capital Alphabets)</option>
+            <option value="custom">--Custom--</option>
+          </select>
+        </label>
+        <label style="display:block; margin: 0.5rem 0;">
+          <div>Content</div>
+          <textarea name="content" placeholder="Question content. For fill_up / select, use {answer}." style="width: 100%; min-height: 100px;"></textarea>
+        </label>
+        <div class="options" data-options></div>
+        <button type="button" class="add-option-btn" onclick="addOption()">Add Option</button><br /><br />
+        <div style="text-align: right;">
+          <button type="button" onclick="closeQuestionModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      // -----------------------------------------------------------------
+      // Tiny in-memory state
+      // -----------------------------------------------------------------
+      const state = {
+        passages: [],          // [{id, title, content}]
+        questions: [],         // [{number, passageId, ...}]
+        nextPassageIdx: 0,
+        nextQuestionIdx: 0,
+        activeTab: "passages",
+        editingQuestion: null,
+        createdQuizId: null,
+      };
+      const OPTION_LABELS = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+      // -----------------------------------------------------------------
+      // Tab switching
+      // -----------------------------------------------------------------
+      function switchTab(name) {
+        state.activeTab = name;
+        document.querySelectorAll(".tab").forEach((t) => t.classList.toggle("active", t.dataset.tab === name));
+        document.getElementById("passages-tab").classList.toggle("hidden", name !== "passages");
+        document.getElementById("questions-tab").classList.toggle("hidden", name !== "questions");
+      }
+
+      // -----------------------------------------------------------------
+      // Create-quiz modal
+      // -----------------------------------------------------------------
+      function openCreateModal() {
+        document.getElementById("create-modal").classList.remove("hidden");
+        document.getElementById("create-modal-mask").classList.remove("hidden");
+        document.getElementById("create-modal").classList.add("show");
+        document.getElementById("create-modal-mask").classList.add("show");
+        document.getElementById("create-modal-title").textContent = "Select Quiz Type";
+        document.getElementById("create-step-1").classList.remove("hidden");
+        document.getElementById("create-step-2").classList.add("hidden");
+      }
+      function closeCreateModal() {
+        document.getElementById("create-modal").classList.add("hidden");
+        document.getElementById("create-modal-mask").classList.add("hidden");
+        document.getElementById("create-modal").classList.remove("show");
+        document.getElementById("create-modal-mask").classList.remove("show");
+      }
+      function onCreateStep1Next() {
+        document.getElementById("create-modal-title").textContent = "Create new quiz";
+        document.getElementById("create-step-1").classList.add("hidden");
+        document.getElementById("create-step-2").classList.remove("hidden");
+      }
+      function onCreateStep2() {
+        const title = document.getElementById("create-title").value;
+        if (!title) { alert("Title is required"); return; }
+        const fd = new FormData(document.getElementById("create-form"));
+        const cat = document.querySelector('input[name="category"]:checked');
+        state.createdQuizId = "stub-" + Math.random().toString(36).slice(2, 10);
+        closeCreateModal();
+        document.getElementById("my-quizzes").classList.add("hidden");
+        const edit = document.getElementById("edit-page");
+        edit.classList.remove("hidden");
+        document.getElementById("edit-title").textContent = "Edit: " + title;
+        const qf = document.getElementById("quiz-form");
+        qf.querySelector('[name="title"]').value = title;
+        qf.querySelector('[name="description"]').value = fd.get("description") || "";
+        qf.querySelector('[name="quiz_type"]').value = cat ? cat.value : "reading";
+        qf.querySelector('[name="min"]').value = 60;
+        history.replaceState(null, "", "/quizzes/" + state.createdQuizId + "/edit");
+      }
+      function onSaveChanges() {
+        document.getElementById("save-status").textContent = "Saved at " + new Date().toISOString();
+      }
+
+      // -----------------------------------------------------------------
+      // Passage modal
+      // -----------------------------------------------------------------
+      function openPassageModal() {
+        document.getElementById("passage-modal").classList.remove("hidden");
+        document.getElementById("passage-modal-mask").classList.remove("hidden");
+        document.getElementById("passage-modal").classList.add("show");
+        document.getElementById("passage-modal-mask").classList.add("show");
+        document.getElementById("passage-form").reset();
+      }
+      function closePassageModal() {
+        document.getElementById("passage-modal").classList.add("hidden");
+        document.getElementById("passage-modal-mask").classList.add("hidden");
+        document.getElementById("passage-modal").classList.remove("show");
+        document.getElementById("passage-modal-mask").classList.remove("show");
+      }
+      function onPassageModalSave() {
+        const fd = new FormData(document.getElementById("passage-form"));
+        const title = fd.get("title");
+        if (!title) { alert("Title is required"); return; }
+        const id = "p-" + (++state.nextPassageIdx);
+        state.passages.push({ id, title, content: fd.get("content") || "" });
+        renderPassages();
+        // Populate passage dropdown on Questions tab.
+        const sel = document.getElementById("questions-passage-select");
+        const opt = document.createElement("option");
+        opt.value = id;
+        opt.textContent = title;
+        sel.appendChild(opt);
+        closePassageModal();
+      }
+      function renderPassages() {
+        const list = document.getElementById("passages-list");
+        list.innerHTML = "";
+        for (const p of state.passages) {
+          const row = document.createElement("div");
+          row.className = "passage-row";
+          row.setAttribute("data-passage-id", p.id);
+          row.innerHTML =
+            '<div class="passage-title">' + escapeHtml(p.title) + "</div>" +
+            "<pre style='white-space: pre-wrap;'>" + escapeHtml(p.content) + "</pre>";
+          list.appendChild(row);
+        }
+      }
+
+      // -----------------------------------------------------------------
+      // Question editor modal
+      // -----------------------------------------------------------------
+      function openQuestionEditor() {
+        const sel = document.getElementById("questions-passage-select");
+        if (!sel.value) { alert("Pick a passage first"); return; }
+        document.getElementById("question-modal").classList.remove("hidden");
+        document.getElementById("question-modal-mask").classList.remove("hidden");
+        document.getElementById("question-modal").classList.add("show");
+        document.getElementById("question-modal-mask").classList.add("show");
+        document.getElementById("question-form").reset();
+        document.querySelector("#question-modal [data-options]").innerHTML = "";
+      }
+      function closeQuestionModal() {
+        document.getElementById("question-modal").classList.add("hidden");
+        document.getElementById("question-modal-mask").classList.add("hidden");
+        document.getElementById("question-modal").classList.remove("show");
+        document.getElementById("question-modal-mask").classList.remove("show");
+      }
+      function addOption() {
+        const optsEl = document.querySelector("#question-modal [data-options]");
+        const idx = optsEl.children.length;
+        const row = document.createElement("div");
+        row.className = "option-row";
+        row.setAttribute("data-testid", "option-row");
+        row.innerHTML =
+          '<span class="option-label" data-testid="option-label">' + OPTION_LABELS[idx] + "</span>" +
+          '<input name="optionText" data-field="optionText" />' +
+          '<input type="radio" name="correct" data-testid="option-correct-radio" />' +
+          '<input type="checkbox" name="correct" data-testid="option-correct-checkbox" />';
+        optsEl.appendChild(row);
+      }
+      function onQuestionModalSave() {
+        const sel = document.getElementById("questions-passage-select");
+        const passageId = sel.value;
+        const fd = new FormData(document.getElementById("question-form"));
+        const idx = ++state.nextQuestionIdx;
+        const q = {
+          number: idx,
+          passageId,
+          type: fd.get("type"),
+          defaultOptions: fd.get("defaultOptions") || null,
+          content: fd.get("content") || "",
+        };
+        // Capture options.
+        const optRows = document.querySelectorAll("#question-modal .option-row");
+        q.options = [];
+        for (const r of optRows) {
+          q.options.push({
+            label: r.querySelector("[data-testid='option-label']")?.textContent || "",
+            text: r.querySelector("[name='optionText']")?.value || "",
+            correct: r.querySelector("[name='correct']:checked") !== null,
+          });
+        }
+        state.questions.push(q);
+        renderQuestions();
+        closeQuestionModal();
+      }
+      function renderQuestions() {
+        const list = document.getElementById("questions-list");
+        const sel = document.getElementById("questions-passage-select").value;
+        const filtered = state.questions.filter((q) => q.passageId === sel);
+        list.innerHTML = "";
+        for (const q of filtered) {
+          const row = document.createElement("div");
+          row.className = "question-row";
+          row.setAttribute("data-question-id", "q-" + q.number);
+          row.textContent = "Q" + q.number + " (" + q.type + ")";
+          list.appendChild(row);
+        }
+      }
+      function onPassageSelectChange() {
+        renderQuestions();
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, (c) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+        }[c]));
+      }
+
+      // -----------------------------------------------------------------
+      // Wire up
+      // -----------------------------------------------------------------
+      document.getElementById("new-quiz-btn").addEventListener("click", openCreateModal);
+      const cancelBtn1 = document.getElementById("create-cancel-step1");
+      if (cancelBtn1) cancelBtn1.addEventListener("click", closeCreateModal);
+      const backBtn2 = document.getElementById("create-back-btn");
+      if (backBtn2) backBtn2.addEventListener("click", onCreateStep1Next);
+    </script>
+  </body>
+</html>

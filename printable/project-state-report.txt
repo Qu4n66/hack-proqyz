@@ -1,0 +1,433 @@
+================================================================================
+  PROJECT STATE REPORT — ProQyz IELTS Automation
+  Generated: 2026-06-11
+================================================================================
+
+1. WHAT THIS PROJECT IS
+================================================================================
+
+A Node.js + Playwright CLI that automates uploading IELTS Reading quizzes
+into ProQyz (app.proqyz.com). You provide structured JSON; the tool drives
+the ProQyz UI end-to-end.
+
+NOT a content generator — a content UPLOADER.
+
+Tech stack:
+  - Node.js >= 20, ES Modules
+  - Playwright (browser automation)
+  - Zod (schema validation)
+  - pino (structured logging)
+  - @inquirer/prompts (interactive CLI)
+
+Total codebase: ~11,400 lines of JavaScript across 21 source files.
+
+================================================================================
+2. ARCHITECTURE — 3-LAYER PIPELINE
+================================================================================
+
+  INPUT LAYER                 DOMAIN LAYER                 UPLOADER LAYER
+  ───────────                 ─────────────                ──────────────
+  jsonInput.js                schemas.js (Zod)             UiQuizUploader.js
+  rawTextParser.js (stub)     normalize.js                 (6,290 lines — the
+  listeningInput.js (stub)    invariants.js                 bulk of the project)
+                                                               │
+                              Pure, no I/O.               Playwright driver.
+                              Validates shape.            Only layer that
+                              Checks semantics.           touches ProQyz.
+
+  CLI entry: bin/upload.js
+  Orchestrator: src/pipeline/run.js
+  Bulk runner: src/pipeline/runBulk.js
+  Local server: local-tool-server.js (serves a web UI for JSON input)
+
+================================================================================
+3. FILE-BY-FILE STATUS
+================================================================================
+
+SOURCE FILES (src/):
+
+  File                                  Lines   Status
+  ──────────────────────────────────    ────    ──────────────────────────────
+  config.js                              58     Complete. .env loader, paths.
+  logger.js                              32     Complete. pino + child loggers.
+  domain/schemas.js                     640     Complete. Full Zod schema with
+                                                grouped fill_up, grouped radio
+                                                MCQ, backward compat for legacy.
+  domain/normalize.js                   183     Complete. Trim, sort, dedupe,
+                                                displayTitle derivation, grouped
+                                                radio subQ normalization.
+  domain/invariants.js                  101     Complete. Contiguous number range
+                                                check across grouped questions.
+  input/jsonInput.js                     81     Complete. Load, validate, normalize.
+  input/rawTextParser.js                 57     STUB — Phase 2 placeholder.
+  input/listeningInput.js                31     STUB — Phase 3 placeholder.
+  session/auth.js                       123     Complete. StorageState + manual
+                                                login flow.
+  session/profile.js                     22     Complete. Profile dir mgmt.
+  uploader/QuizUploader.js              57     Interface definition only.
+  uploader/ui/UiQuizUploader.js       6,290     MOSTLY COMPLETE but fragile.
+                                                fill_up: wired.
+                                                select: wired.
+                                                radio (single): wired.
+                                                radio (grouped): WIRED.
+                                                checkbox: THROWS "not supported".
+  uploader/ui/selectors.js             347     Complete. Central selector map.
+                                                Many fallback selectors.
+  uploader/ui/editorStrategies.js      383     Complete. TinyMCE/CKEditor/Quill/
+                                                plain textarea writers.
+  uploader/ui/radioStrategy.js         102     Complete. Correct answer selection.
+  uploader/ui/checkpoint.js            161     Complete. Resume from last question.
+  uploader/ui/screenshots.js            52     Complete. Failure capture.
+  uploader/ui/waitHelpers.js           134     Complete. Spinner/calm wait.
+  pipeline/run.js                      508     Complete. Full orchestration.
+  pipeline/runBulk.js                  110     Complete. Bulk folder mode.
+  pipeline/report.js                    53     Complete. Console output.
+  bin/upload.js                        374     Complete. CLI with arg parser.
+
+SCRIPTS:
+
+  File                                  Lines   Status
+  ──────────────────────────────────    ────    ──────────────────────────────
+  scripts/inspect-proqyz.js              -     Phase 0 recon tool (done).
+  scripts/validate-fixtures.js           -     Validates fixtures against schema.
+  scripts/validate-recon.js              -     Validates recon data.
+  scripts/_probe-cam17.js                -     Cam17-specific probe.
+
+TESTS:
+
+  File                                  Lines   Status
+  ──────────────────────────────────    ────    ──────────────────────────────
+  tests/unit/schemas.test.js            843     Good coverage. 20+ tests for
+                                                schema validation, normalization,
+                                                invariants, grouped radio MCQ.
+  tests/e2e/dry-run-smoke.spec.js       83     End-to-end against local stub.
+
+LOCAL SERVER:
+
+  File                                  Lines   Status
+  ──────────────────────────────────    ────    ──────────────────────────────
+  local-tool-server.js                 238     Complete. POST /api/upload endpoint
+                                                that writes JSON + spawns uploader.
+
+================================================================================
+4. WHAT IS WORKING
+================================================================================
+
+  [DONE] Schema validation (Zod) for all question types
+  [DONE] Grouped fill_up support (Q1-6 → one ProQyz question)
+  [DONE] Grouped radio MCQ support (Q36-37 → one ProQyz radio question)
+  [DONE] Legacy single-question backward compatibility
+  [DONE] Normalization (trim, sort, dedupe, displayTitle)
+  [DONE] Invariant checks (contiguous number ranges)
+  [DONE] Login + session persistence (storageState)
+  [DONE] Quiz creation (two-step wizard + single-step modal)
+  [DONE] Passage creation (TinyMCE content writing)
+  [DONE] Fill-up question creation (content + Finish tab)
+  [DONE] Select question creation (Default Options + content + answer)
+  [DONE] Radio question creation (single-blank, options, correct answer)
+  [DONE] Radio grouped MCQ creation (subQuestions iteration)
+  [DONE] Checkpoint / resume system
+  [DONE] Failure capture (screenshot + HTML dump)
+  [DONE] Dry-run mode
+  [DONE] Bulk folder upload
+  [DONE] --from-localhost mode (local tool server)
+  [DONE] questionsOnly mode (add questions to existing quiz)
+  [DONE] Unit tests (20+ cases)
+
+================================================================================
+5. WHAT IS NOT WORKING / BLOCKED
+================================================================================
+
+  [BLOCKED] Checkbox questions — uploader throws "not supported"
+            Code path exists for radio, but checkbox was "intentionally
+            deferred" per the addQuestion switch statement:
+              case "checkbox":
+                throw new Error("... checkbox intentionally deferred ...")
+
+  [FRAGILE] Radio MCQ upload — 46+ failure captures related to
+            "Radio-MCQ-Smoke-Q36-37". Recurring issues:
+              - radio-options-too-few-Q36-37 (options not appearing)
+              - radio-no-initial-option-row-Q36-37
+              - radio-dom-mismatch-Q36 (DOM structure mismatch)
+              - radio-row-not-created-Q36-37
+              - radio-radio-dom-mismatch-Q36-37
+            The radio strategy works sometimes but is brittle.
+
+  [FRAGILE] Cam17 full upload — 46 failure captures for the
+            "Cam-17-Reading-Test-01" fixture. Most failures occur
+            during passage content writing (TinyMCE) or question
+            type selection.
+
+  [FRAGILE] Select passage in Questions tab — multi-strategy probe
+            (native select → combobox → listbox → button → visible
+            text) is elaborate but still fails sometimes.
+
+  [NO TESTS] Grouped fill_up e2e test
+  [NO TESTS] Grouped radio MCQ e2e test
+  [NO TESTS] Radio single e2e test
+  [NO TESTS] Select e2e test
+  [NO TESTS] Checkbox e2e test (not even stub)
+
+================================================================================
+6. RECURRING FAILURE ANALYSIS (112 artifacts in failures/)
+================================================================================
+
+  Failure Category                  Count    Root Cause
+  ──────────────────────────────   ─────    ─────────────────────────────────
+  upload-Cam-17 (full upload)        46     TinyMCE content write timing,
+                                            passage verifyPassage false neg,
+                                            question modal tab detection.
+
+  upload-Radio-MCQ-Smoke              32     Options not rendering in ProQyz
+                                            radio editor, option rows too few,
+                                            DOM structure mismatches.
+
+  radio-* (specific radio issues)     15     Option row count mismatch,
+                                            dom-mismatch, row-not-created.
+
+  pick-failed-Q1-type-fill-up          4     Question type selection in
+                                            react-select didn't commit
+                                            (modal stuck on Basic tab).
+
+  answer-list-probe-Q1-6               2     Grouped fill_up answer badges
+                                            not appearing on Question tab.
+
+  before-passage-select                3     Diagnostic screenshots (not errors).
+
+  pre-questions-tab-modal-stuck         1     Stray modal blocking Questions
+                                            tab click.
+
+  select-passage-probe                  1     No passage picker found.
+
+  radio-preview                         1     Diagnostic screenshot.
+
+  upload-UI-Smoke                      2     E2E smoke test failures.
+
+  TOTAL                              112     (each has .png + .html pair)
+
+================================================================================
+7. KNOWN PROBLEMS AND WHY CERTAIN THINGS CAN'T BE IMPLEMENTED
+================================================================================
+
+Problem 1: UiQuizUploader.js is 6,290 lines
+─────────────────────────────────────────────
+This single file handles ALL ProQyz UI interaction: quiz creation, passage
+creation, 4 question types, tab navigation, modal management, passage
+selection, type picking, content writing, answer verification, checkpoint
+resume, failure capture, and diagnostic dumping. It is the biggest risk
+in the project.
+
+Impact: Any change risks regressions in unrelated flows. Debugging is
+slow because the failure surface is enormous. Adding a new question type
+requires threading through ~20 private methods.
+
+Why it's hard to fix: The file grew organically from each real ProQyz run
+discovering new UI behaviors. Every modal, tab, and form had different
+selector shapes and timing characteristics. The "fix it properly" path
+would require splitting into separate modules (QuizCreationDriver,
+PassageDriver, FillUpDriver, RadioDriver, etc.) — a significant refactor.
+
+
+Problem 2: Selector brittleness
+───────────────────────────────
+ProQyz's UI has no data-testid attributes. Every selector is a
+best-guess combination of CSS classes, ARIA roles, and visible text.
+When ProQyz updates its UI, selectors break silently.
+
+Impact: 46 of the Cam17 upload failures are from selectors not matching
+the current ProQyz DOM.
+
+Why it's hard to fix: Without stable test IDs, the only reliable
+approach is (a) a full recon pass after every ProQyz deploy, or
+(b) a more resilient multi-signal approach (which is already attempted
+but adds complexity and timing sensitivity).
+
+
+Problem 3: TinyMCE timing issues
+─────────────────────────────────
+The passage content and question content are written into TinyMCE editors.
+TinyMCE's iframe body is not immediately available after the editor loads,
+and the `setContent()` API fires events asynchronously. Multiple attempts
+have been made (API path, keyboard fallback, iframe body probe), but
+the timing remains fragile.
+
+Impact: Many Cam17 failures are from content not being "seen" in the
+editor even though it was written correctly — the iframe body probe
+reads from the wrong frame.
+
+Why it's hard to fix: TinyMCE's internal state management is opaque.
+The editor fires `change` and `save` events, but React's controlled
+component state may not have updated by the time we read back. There
+is no reliable way to force a synchronous state update.
+
+
+Problem 4: Checkbox upload not implemented
+──────────────────────────────────────────
+The addQuestion method has an explicit `throw` for checkbox. The domain
+schema fully supports checkbox (options + answers array). The
+radioStrategy.js already has `selectCorrectCheckboxes`. But the UI
+driver has no `_fillCheckboxQuestion` method.
+
+Why: The project prioritized fill_up → select → radio. Checkbox was
+"intentionally deferred" because the ProQyz checkbox editor has not
+been fully probed yet — the selector for checkbox correct-answer
+markers is best-guess only.
+
+What would be needed:
+  1. Create _fillCheckboxQuestion() in UiQuizUploader.js
+  2. It would be similar to _addOptionsQuestion(q, "checkbox")
+  3. Use selectCorrectCheckboxes from radioStrategy.js
+  4. Test against real ProQyz UI to verify selectors
+
+
+Problem 5: Grouped fill_up answer list verification
+───────────────────────────────────────────────────
+The _fillGroupedAnswerList method has 3 strategies:
+  1. Badge auto-extract (primary)
+  2. Per-blank inputs (fallback)
+  3. Newline-joined textarea (last resort)
+
+All 3 have been implemented but 2 failure captures show the badge
+count never reaching the expected number. The TinyMCE brace-scan may
+need a longer settle time, or the selector `.badge.bg-success` may
+not match the current ProQyz markup.
+
+
+Problem 6: No listening support (Phase 3)
+──────────────────────────────────────────
+The schema supports listening quizzes (ListeningQuizSchema), but:
+  - listeningInput.js is a stub
+  - The pipeline run.js explicitly throws for non-reading quizzes
+  - No audio file upload logic exists
+  - No section-based question flow
+
+Why deferred: Listening requires audio file upload via file input,
+which is a fundamentally different flow from the text-based
+Reading upload.
+
+
+Problem 7: Raw text parser not implemented (Phase 2)
+─────────────────────────────────────────────────────
+rawTextParser.js is a stub that throws "not implemented yet (Phase 2)".
+Currently, users must prepare JSON manually or via external AI/parser.
+
+Why deferred: The JSON input path works and the parser is a separate
+workstream. It was lower priority than getting the uploader reliable.
+
+================================================================================
+8. WHAT THE FAILURES TELL US
+================================================================================
+
+The 112 failure artifacts reveal a pattern:
+
+  Phase 1 (Jun 9, early):  Type-pick failures — the react-select
+  dropdown for question type wasn't committing the selection.
+  The modal stayed on the Basic tab. Fixed by adding Enter press
+  + click-outside commit.
+
+  Phase 1 (Jun 9, mid):    Answer-list probe failures — grouped
+  fill_up badges not appearing. The TinyMCE brace-scan needs a
+  blur event to fire. Fixed by adding Tab press after insertText.
+
+  Phase 1 (Jun 9, late):   Radio MCQ failures — option rows not
+  rendering, DOM mismatches. The radio editor has a different DOM
+  shape than fill_up/select. Partially fixed but still fragile.
+
+  Phase 2 (Jun 10):        Continued Radio MCQ + Cam17 failures.
+  The patterns repeat: options too few, dom-mismatch, row-not-created.
+  This suggests the radio editor's "Add Option" button behavior
+  differs from what the code expects.
+
+  Ongoing:                 Passage content verification false
+  negatives — the TinyMCE iframe probe reads from the wrong frame
+  or the body hasn't rendered yet. The code has multiple fallback
+  strategies but they all rely on timing.
+
+================================================================================
+9. WHAT CAN BE IMPLEMENTED NEXT
+================================================================================
+
+Priority 1: Fix Radio MCQ reliability
+  - The radio editor needs a full recon dump (current DOM structure)
+  - Fix the option row creation flow
+  - Verify the "Add Option" button selector
+  - Test with the radio-smoke-q36-q37.json fixture
+
+Priority 2: Implement Checkbox upload
+  - Create _fillCheckboxQuestion() method
+  - Wire it into the addQuestion switch statement
+  - Test against real ProQyz
+  - Update fixtures with checkbox examples
+
+Priority 3: Stabilize Cam17 full upload
+  - Fix TinyMCE timing (increase settle delays)
+  - Fix passage verification false negatives
+  - Fix question modal tab detection
+
+Priority 4: Refactor UiQuizUploader.js
+  - Extract question-type drivers into separate files
+  - Reduce the file from 6,290 lines to ~2,000 lines
+  - Make each question type independently testable
+
+Priority 5: Add more unit tests
+  - Grouped fill_up normalization
+  - Grouped radio MCQ normalization
+  - Checkpoint resume logic
+  - Pipeline orchestration
+
+================================================================================
+10. FIXTURES INVENTORY
+================================================================================
+
+  File                                    Questions    Types
+  ──────────────────────────────────     ─────────    ──────────────
+  cam17-reading-test01-passage1.json       13         fill_up(6) + select(7)
+  cam17-reading-test01-passage1-fresh.json 14         grouped fill_up(1) +
+                                                       select(7) +
+                                                       grouped radio(1)
+  radio-smoke-q36-q37.json                 2         grouped radio(1)
+  local-input-test.json                    varies     test fixture
+  examples/checkbox-multiple-answer.json    1         checkbox
+  examples/radio-single-mcq.json            1         radio
+  examples/select-true-false-not-given.json 1         select
+
+================================================================================
+11. SUMMARY
+================================================================================
+
+The project is a well-architected Playwright automation tool that has
+successfully implemented the core pipeline: JSON → validate → normalize →
+create quiz → add passages → add questions → save.
+
+WHAT WORKS:
+  - Schema validation (solid, 20+ unit tests)
+  - Fill-up upload (working)
+  - Select upload (working)
+  - Login/session management (working)
+  - Checkpoint/resume (working)
+  - Dry-run mode (working)
+
+WHAT'S FRAGILE:
+  - Radio MCQ upload (works sometimes, 46 failures)
+  - Cam17 full upload (timing-dependent, 46 failures)
+  - TinyMCE content verification (iframe timing)
+  - Passage selection (multi-strategy probe)
+
+WHAT'S MISSING:
+  - Checkbox upload (throws "not supported")
+  - Raw text parser (Phase 2 stub)
+  - Listening support (Phase 3 stub)
+  - E2E tests for all question types
+  - Modular file structure (everything in one 6,290-line file)
+
+WHY CERTAIN THINGS HAVEN'T BEEN DONE:
+  1. The ProQyz UI is a moving target — selectors break between deploys
+  2. TinyMCE's iframe timing is inherently unreliable for automation
+  3. The project prioritized making fill_up/select/radio work reliably
+     over adding checkbox support
+  4. The codebase grew from real-world debugging sessions, leading to
+     a monolithic uploader file that resists safe modification
+
+================================================================================
+  End of report
+================================================================================

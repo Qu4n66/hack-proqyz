@@ -1,0 +1,124 @@
+{
+  "url": "https://app.proqyz.com/dashboard/@customer/pro-qyz/quiz/edit/6a268463a6e2d07ec678a48d",
+  "title": "Edit Quiz | ProQyz. | Dashboard",
+  "inputs": [
+    {
+      "tag": "input",
+      "type": "text",
+      "id": "",
+      "name": "title",
+      "label": "",
+      "data-testid": null,
+      "data-field": null,
+      "aria-label": null,
+      "data-attr-count": 5
+    },
+    {
+      "tag": "textarea",
+      "type": "textarea",
+      "id": "",
+      "name": "description",
+      "label": "",
+      "data-testid": null,
+      "data-field": null,
+      "aria-label": null,
+      "data-attr-count": 3
+    },
+    {
+      "tag": "input",
+      "type": "number",
+      "id": "",
+      "name": "min",
+      "label": "MM",
+      "data-testid": null,
+      "data-field": null,
+      "aria-label": null,
+      "data-attr-count": 7
+    },
+    {
+      "tag": "select",
+      "type": "select",
+      "id": "",
+      "name": "score_type",
+      "label": "",
+      "data-testid": null,
+      "data-field": null,
+      "aria-label": null,
+      "data-attr-count": 2
+    },
+    {
+      "tag": "input",
+      "type": "checkbox",
+      "id": "shared",
+      "name": "locate_question",
+      "label": "",
+      "data-testid": null,
+      "data-field": null,
+      "aria-label": null,
+      "data-attr-count": 5
+    },
+    {
+      "tag": "select",
+      "type": "select",
+      "id": "",
+      "name": "status",
+      "label": "",
+      "data-testid": null,
+      "data-field": null,
+      "aria-label": null,
+      "data-attr-count": 2
+    }
+  ],
+  "buttons": [
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": null
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": null
+    },
+    {
+      "tag": "button",
+      "text": "Nguyễn Quân\nAccount Settings",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "Discard",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "Save changes",
+      "data-testid": null,
+      "type": "submit"
+    }
+  ],
+  "editors": {
+    "tinymce": 0,
+    "ckeditor5": 0,
+    "ckeditor4": 0,
+    "quill": 0,
+    "textarea": 1
+  },
+  "radios": []
+}

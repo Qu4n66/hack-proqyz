@@ -1,0 +1,51 @@
+{
+  "quizTitle": "Example: Checkbox (Multiple Choice, Multiple Answers)",
+  "quizType": "reading",
+  "time": 60,
+  "status": "draft",
+  "source": {
+    "name": "ProQyz Example Fixtures",
+    "url": "https://example.com/proqyz-examples/checkbox"
+  },
+  "passages": [
+    {
+      "title": "Reading Passage C",
+      "content": "<!-- Example passage body. The uploader only requires non-empty content for the schema and the editor; the actual prose is not used by these example fixtures. Replace with real IELTS passage text when running the uploader end-to-end. -->",
+      "questions": [
+        {
+          "number": 1,
+          "ieltsType": "multiple_choice_multiple",
+          "proqyzType": "checkbox",
+          "questionTypeIndex": 3,
+          "instruction": "Question 1. Choose TWO answers, A-E.",
+          "content": "<strong>1</strong> Which TWO of the following are mentioned in the passage as reasons the Metropolitan line was built?",
+          "options": [
+            { "label": "A", "text": "Congestion on London's roads" },
+            { "label": "B", "text": "A royal request to connect two palaces" },
+            { "label": "C", "text": "Pressure from commuters travelling long distances" },
+            { "label": "D", "text": "A desire to showcase new tunnelling technology" },
+            { "label": "E", "text": "A surplus in the city's transport budget" }
+          ],
+          "answers": ["A", "C"]
+        },
+        {
+          "number": 2,
+          "ieltsType": "multiple_choice_multiple",
+          "proqyzType": "checkbox",
+          "questionTypeIndex": 3,
+          "instruction": "Question 2. Choose THREE answers, A-F.",
+          "content": "<strong>2</strong> Which THREE of the following challenges did the early engineers face?",
+          "options": [
+            { "label": "A", "text": "Unstable soil" },
+            { "label": "B", "text": "Flooding from underground rivers" },
+            { "label": "C", "text": "Lack of experienced miners" },
+            { "label": "D", "text": "Frequent fires in the tunnel sections" },
+            { "label": "E", "text": "Opposition from property owners above the planned route" },
+            { "label": "F", "text": "Limited working space inside the shield" }
+          ],
+          "answers": ["A", "B", "F"]
+        }
+      ]
+    }
+  ]
+}

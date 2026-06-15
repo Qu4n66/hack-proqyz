@@ -1,0 +1,31 @@
+{
+  "mode": "explanation",
+  "testTitle": "Cam 18 - Reading 4",
+  "passages": [
+    {
+      "passage": 2,
+      "passageTitle": "Reading Passage 2",
+      "questionGroups": [
+        {
+          "range": "14-16",
+          "questionNumberStart": 14,
+          "questionNumberEnd": 16,
+          "explanations": [
+            {
+              "questionNumber": 14,
+              "content": "Then, in the early 20th century, progressive thinkers revolted against the notion that inherent ability is destiny."
+            },
+            {
+              "questionNumber": 15,
+              "content": "A major focus of the growth mindset in schools is coaxing students away from seeing failure as an indication of their ability, and towards seeing it as a chance to improve that ability."
+            },
+            {
+              "questionNumber": 16,
+              "content": "Meanwhile, the former took on only those tasks that would not risk their sense of self worth. This group had inferred that success or failure is due to innate ability, and this ‘fixed mindset’ had led them to fear of failure and lack of effort."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

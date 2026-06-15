@@ -1,0 +1,129 @@
+{
+  "quizTitle": "Cam 17 Reading Test 01",
+  "quizType": "reading",
+  "time": 60,
+  "status": "draft",
+  "source": {
+    "name": "IELTS Training Online",
+    "url": "https://ieltstrainingonline.com/practice-cam-17-reading-test-01-with-answer/"
+  },
+  "passages": [
+    {
+      "title": "Reading Passage 1",
+      "content": "<!-- TODO: replace with the real Cambridge IELTS 17 Reading Test 01 Passage 1 text. The uploader only requires non-empty passage content for the schema and the editor; the actual passage text is not used by the first test. -->",
+      "questions": [
+        {
+          "number": 1,
+          "ieltsType": "note_completion",
+          "proqyzType": "fill_up",
+          "instruction": "Questions 1-6. Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
+          "content": "<strong>1</strong> The {population} of London increased rapidly between 1800 and 1850.",
+          "answer": "population"
+        },
+        {
+          "number": 2,
+          "ieltsType": "note_completion",
+          "proqyzType": "fill_up",
+          "instruction": "Questions 1-6. Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
+          "content": "<strong>2</strong> Many people moved out to the {suburbs} in search of better housing.",
+          "answer": "suburbs"
+        },
+        {
+          "number": 3,
+          "ieltsType": "note_completion",
+          "proqyzType": "fill_up",
+          "instruction": "Questions 1-6. Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
+          "content": "<strong>3</strong> The expansion was driven by {businessmen} investing in property.",
+          "answer": "businessmen"
+        },
+        {
+          "number": 4,
+          "ieltsType": "note_completion",
+          "proqyzType": "fill_up",
+          "instruction": "Questions 1-6. Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
+          "content": "<strong>4</strong> The growth of the railways was supported by private {funding}.",
+          "answer": "funding"
+        },
+        {
+          "number": 5,
+          "ieltsType": "note_completion",
+          "proqyzType": "fill_up",
+          "instruction": "Questions 1-6. Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
+          "content": "<strong>5</strong> Stories about life underground were popular in the {press}.",
+          "answer": "press"
+        },
+        {
+          "number": 6,
+          "ieltsType": "note_completion",
+          "proqyzType": "fill_up",
+          "instruction": "Questions 1-6. Complete the notes below. Choose ONE WORD ONLY from the passage for each answer.",
+          "content": "<strong>6</strong> Engineers had to take into account the type of {soil} when building the tunnels.",
+          "answer": "soil"
+        },
+        {
+          "number": 7,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "<strong>7</strong> Other countries had built underground railways before the Metropolitan line opened.",
+          "answer": "FALSE"
+        },
+        {
+          "number": 8,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "<strong>8</strong> The author mentions a specific date when the first deep-level tunnel was completed.",
+          "answer": "NOT GIVEN"
+        },
+        {
+          "number": 9,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "<strong>9</strong> The Metropolitan line was originally operated using steam-powered trains.",
+          "answer": "TRUE"
+        },
+        {
+          "number": 10,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "<strong>10</strong> Workers building the early tunnels often suffered from poor health.",
+          "answer": "TRUE"
+        },
+        {
+          "number": 11,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "<strong>11</strong> The first underground railway was built outside of London.",
+          "answer": "FALSE"
+        },
+        {
+          "number": 12,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "<strong>12</strong> All of the original Metropolitan line stations are still in use today.",
+          "answer": "FALSE"
+        },
+        {
+          "number": 13,
+          "ieltsType": "true_false_not_given",
+          "proqyzType": "select",
+          "defaultOptions": "true_false_not_given",
+          "instruction": "Questions 7-13. Do the following statements agree with the information in the passage? Write TRUE, FALSE or NOT GIVEN.",
+          "content": "<strong>13</strong> The author predicts that the cost of underground travel will continue to rise.",
+          "answer": "NOT GIVEN"
+        }
+      ]
+    }
+  ]
+}

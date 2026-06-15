@@ -1,0 +1,99 @@
+{
+  "url": "https://app.proqyz.com/dashboard/@customer/pro-qyz/quiz/edit/6a266e1ca6e2d07ec678a47f",
+  "title": "Edit Quiz | ProQyz. | Dashboard",
+  "inputs": [
+    {
+      "tag": "select",
+      "type": "select",
+      "id": "",
+      "name": null,
+      "label": "",
+      "data-testid": null,
+      "data-field": null,
+      "aria-label": null,
+      "data-attr-count": 2
+    }
+  ],
+  "buttons": [
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": null
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": null
+    },
+    {
+      "tag": "button",
+      "text": "Nguyễn Quân\nAccount Settings",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "Add Question",
+      "data-testid": null,
+      "type": null
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": "button"
+    },
+    {
+      "tag": "button",
+      "text": "",
+      "data-testid": null,
+      "type": "button"
+    }
+  ],
+  "editors": {
+    "tinymce": 0,
+    "ckeditor5": 0,
+    "ckeditor4": 0,
+    "quill": 0,
+    "textarea": 0
+  },
+  "radios": []
+}

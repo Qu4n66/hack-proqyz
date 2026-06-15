@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ProQyz — Explanation Upload</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --panel-2: #273449;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-2: #22d3ee;
+    --ok: #4ade80;
+    --warn: #facc15;
+    --err: #f87171;
+    --border: #334155;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px; line-height: 1.5; }
+  header { padding: 16px 24px; border-bottom: 1px solid var(--border);
+    background: linear-gradient(90deg, #0f172a, #1e293b); }
+  header h1 { margin: 0; font-size: 20px; }
+  header .sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  main { max-width: 1400px; margin: 0 auto; padding: 24px; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 24px; min-height: calc(100vh - 80px); }
+  @media (max-width: 980px) { main { grid-template-columns: 1fr; } }
+  section.panel { background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px; display: flex; flex-direction: column; }
+  section.panel h2 { margin: 0 0 12px; font-size: 16px; color: var(--accent); }
+  label { display: block; font-size: 12px; color: var(--muted);
+    margin-top: 10px; margin-bottom: 4px; }
+  input[type="text"], textarea {
+    width: 100%; background: var(--panel-2); color: var(--text);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 6px 8px; font-family: inherit; font-size: 13px; }
+  textarea {
+    font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 12px;
+    line-height: 1.5; min-height: 400px; resize: vertical; flex: 1; }
+  input[type="text"]:focus, textarea:focus {
+    outline: 2px solid var(--accent); border-color: var(--accent); }
+  .row { display: flex; gap: 8px; align-items: center; }
+  .row > * { flex: 1; }
+  button { cursor: pointer; background: var(--accent); color: #0f172a;
+    border: 0; border-radius: 4px; padding: 6px 12px; font-weight: 600;
+    font-size: 13px; }
+  button.secondary { background: var(--panel-2); color: var(--text);
+    border: 1px solid var(--border); }
+  button.ghost { background: transparent; color: var(--muted);
+    border: 1px dashed var(--border); }
+  button:disabled { cursor: not-allowed; opacity: 0.5; }
+  button:hover:not(:disabled) { filter: brightness(1.1); }
+  pre.json { background: #0b1220; color: #a7f3d0; border-radius: 6px;
+    padding: 12px; overflow: auto; max-height: 70vh; font-size: 12px;
+    border: 1px solid var(--border); white-space: pre-wrap; word-break: break-word;
+    flex: 1; min-height: 200px; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .meta { color: var(--muted); font-size: 12px; margin-top: 8px; }
+  .err { color: var(--err); font-size: 12px; margin-top: 6px; }
+  .ok { color: var(--ok); font-size: 12px; margin-top: 6px; }
+  .helper { color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .toast { position: fixed; right: 16px; bottom: 16px;
+    background: var(--panel); border: 1px solid var(--ok); color: var(--ok);
+    padding: 8px 14px; border-radius: 6px; opacity: 0; pointer-events: none;
+    transition: opacity 200ms ease; }
+  .toast.show { opacity: 1; }
+  .toast.err { border-color: var(--err); color: var(--err); }
+  code { background: var(--panel-2); padding: 1px 4px; border-radius: 3px; }
+  details { margin-top: 6px; }
+  details summary { cursor: pointer; color: var(--muted); font-size: 11px; }
+  details pre { background: #0b1220; padding: 8px; border-radius: 4px;
+    font-size: 11px; max-height: 300px; overflow: auto; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ProQyz — Explanation Upload</h1>
+  <div class="sub">
+    Paste explanation JSON for existing questions. This edits questions
+    via the Explanation tab — it does NOT create quizzes, passages, or questions.
+    Run <code>node bin/upload.js &lt;file&gt; --explanation</code> or use
+    the Upload button below.
+  </div>
+</header>
+
+<main>
+
+  <!-- LEFT: JSON input + Upload -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+
+    <section class="panel" style="flex:1;">
+      <h2>1. Explanation JSON</h2>
+      <label>Quiz title (for search)</label>
+      <input id="testTitle" type="text" placeholder="e.g. Cam 17 Reading Test 01" value="Cam 17 Reading Test 01" />
+      <label>Existing quiz URL (optional — skip search if provided)</label>
+      <input id="existingQuizUrl" type="text" placeholder="https://proqyz.com/.../quiz/edit/..." />
+
+      <div style="margin-top:12px;padding:8px;border:1px dashed var(--border);border-radius:4px;">
+        <label style="margin-top:0;display:flex;align-items:center;gap:6px;">
+          <input id="useAutoLogin" type="checkbox" />
+          Use Auto Login
+        </label>
+        <label>Email / Username</label>
+        <input id="loginEmail" type="text" placeholder="email@example.com" disabled />
+        <label>Password</label>
+        <input id="loginPassword" type="password" placeholder="Password" disabled />
+        <div class="helper">Credentials are kept in memory only. Never saved to disk or logs.</div>
+      </div>
+
+      <label>Paste explanation JSON below</label>
+      <textarea id="jsonInput" spellcheck="false" placeholder='Paste explanation JSON here...'></textarea>
+      <div id="validationStatus" class="meta"></div>
+      <div class="actions">
+        <button id="validateBtn" onclick="validateJson()">Validate</button>
+        <button class="secondary" onclick="loadExample()">Load example</button>
+        <button class="ghost" onclick="clearInput()">Clear</button>
+      </div>
+    </section>
+
+    <section class="panel" style="flex:1;">
+      <h2>2. Upload</h2>
+      <div class="actions">
+        <button id="uploadBtn" onclick="upload()">Upload Explanations</button>
+        <button class="ghost" onclick="clearLog()">Clear log</button>
+        <button class="secondary" onclick="copyLog()">Copy all logs</button>
+      </div>
+      <label>Server log</label>
+      <pre id="logOut" class="json">// Logs from the upload command appear here.</pre>
+      <div class="helper">
+        The server runs <code>node bin/upload.js generated/latest-quiz.json --explanation</code>.
+        Start it with <code>node local-tool-server.js</code> on port 8000.
+      </div>
+    </section>
+
+  </div>
+
+  <!-- RIGHT: live preview + reference -->
+  <div style="display:flex;flex-direction:column;gap:16px;">
+
+    <section class="panel" style="flex:1;">
+      <h2>JSON output (live)</h2>
+      <pre id="jsonOut" class="json">// Paste JSON on the left. The normalized output
+// appears here on every keystroke.</pre>
+      <div class="meta">
+        Schema: <code>src/domain/explanationSchema.js</code>. The uploader
+        accepts this exact shape with <code>mode: "explanation"</code>.
+      </div>
+    </section>
+
+    <section class="panel" style="flex:1;">
+      <h2>Reference: explanation JSON shape</h2>
+      <details open>
+        <summary>Full example — Cam 17 Reading Test 01, Passage 1, Questions 36-37</summary>
+<pre>{
+  "mode": "explanation",
+  "testTitle": "Cam 17 Reading Test 01",
+  "existingQuizUrl": null,
+  "passages": [
+    {
+      "passage": 1,
+      "questionGroups": [
+        {
+          "range": "36-37",
+          "questionNumberStart": 36,
+          "questionNumberEnd": 37,
+          "explanations": [
+            {
+              "questionNumber": 36,
+              "content": "&lt;p&gt;The answer is &lt;b&gt;population&lt;/b&gt; because the passage states that the city's population grew rapidly.&lt;/p&gt;"
+            },
+            {
+              "questionNumber": 37,
+              "content": "&lt;p&gt;The answer is &lt;b&gt;suburbs&lt;/b&gt; because the text mentions expansion into surrounding areas.&lt;/p&gt;"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}</pre>
+      </details>
+      <details>
+        <summary>Field reference</summary>
+<pre>
+mode            "explanation" (required)
+testTitle       Quiz title as shown in ProQyz (required)
+existingQuizUrl Direct URL to quiz edit page (optional)
+passages[]      Array of passages to process (required)
+  passage       1-based passage number (required)
+  questionGroups[]  Array of question groups (required)
+    range               "36-37" label (required)
+    questionNumberStart Start of range (required)
+    questionNumberEnd   End of range (required)
+    explanations[]      Array of explanation slots (required)
+      questionNumber  IELTS question number (required)
+      content         Explanation HTML/text (required)
+      slot            Auto-calculated if omitted
+                      slot = questionNumber - questionNumberStart + 1
+</pre>
+      </details>
+      <div class="meta" style="margin-top:8px">
+        <b>Slot mapping:</b>
+        For "Questions 36-37", Q36 maps to slot 1 and Q37 maps to slot 2.
+        Slot numbers are auto-calculated from <code>questionNumber - questionNumberStart + 1</code>.
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script>
+"use strict";
+
+const EXAMPLE_JSON = {
+  mode: "explanation",
+  testTitle: "Cam 17 Reading Test 01",
+  passages: [
+    {
+      passage: 1,
+      questionGroups: [
+        {
+          range: "36-37",
+          questionNumberStart: 36,
+          questionNumberEnd: 37,
+          explanations: [
+            {
+              questionNumber: 36,
+              content: "<p>The answer is <b>population</b> because the passage states that the city's population grew rapidly between 1800 and 1850.</p>",
+            },
+            {
+              questionNumber: 37,
+              content: "<p>The answer is <b>suburbs</b> because the text mentions expansion into surrounding areas beyond the city centre.</p>",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+// -------------------------------------------------------------------
+// JSON validation (client-side schema check)
+// -------------------------------------------------------------------
+
+function validateJson() {
+  const raw = document.getElementById("jsonInput").value.trim();
+  const status = document.getElementById("validationStatus");
+  if (!raw) {
+    status.className = "err";
+    status.textContent = "No JSON to validate";
+    return false;
+  }
+
+  let obj;
+  try {
+    obj = JSON.parse(raw);
+  } catch (e) {
+    status.className = "err";
+    status.textContent = "JSON parse error: " + e.message;
+    return false;
+  }
+
+  // Basic shape checks (mirrors ExplanationDataSchema)
+  const errors = [];
+
+  if (obj.mode !== "explanation") {
+    errors.push('mode must be "explanation", got "' + obj.mode + '"');
+  }
+  if (typeof obj.testTitle !== "string" || !obj.testTitle) {
+    errors.push("testTitle is required");
+  }
+  if (!Array.isArray(obj.passages) || obj.passages.length === 0) {
+    errors.push("passages must be a non-empty array");
+  } else {
+    obj.passages.forEach((p, pi) => {
+      if (typeof p.passage !== "number" || p.passage < 1) {
+        errors.push("passages[" + pi + "].passage must be a positive integer");
+      }
+      if (!Array.isArray(p.questionGroups) || p.questionGroups.length === 0) {
+        errors.push("passages[" + pi + "].questionGroups must be a non-empty array");
+      } else {
+        p.questionGroups.forEach((g, gi) => {
+          const prefix = "passages[" + pi + "].questionGroups[" + gi + "]";
+          if (typeof g.range !== "string" || !g.range) {
+            errors.push(prefix + ".range is required");
+          }
+          if (typeof g.questionNumberStart !== "number") {
+            errors.push(prefix + ".questionNumberStart is required");
+          }
+          if (typeof g.questionNumberEnd !== "number") {
+            errors.push(prefix + ".questionNumberEnd is required");
+          }
+          if (typeof g.questionNumberStart === "number" && typeof g.questionNumberEnd === "number") {
+            if (g.questionNumberStart > g.questionNumberEnd) {
+              errors.push(prefix + ".questionNumberEnd must be >= questionNumberStart");
+            }
+          }
+          if (!Array.isArray(g.explanations) || g.explanations.length === 0) {
+            errors.push(prefix + ".explanations must be a non-empty array");
+          } else {
+            g.explanations.forEach((e, ei) => {
+              const ep = prefix + ".explanations[" + ei + "]";
+              if (typeof e.questionNumber !== "number") {
+                errors.push(ep + ".questionNumber is required");
+              }
+              // blank=true means no explanation needed — content is optional
+              if (e.blank !== true) {
+                if (typeof e.content !== "string" || !e.content.trim()) {
+                  errors.push(ep + ".content is required (or set blank: true)");
+                }
+              }
+              if (typeof g.questionNumberStart === "number" && typeof g.questionNumberEnd === "number" && typeof e.questionNumber === "number") {
+                if (e.questionNumber < g.questionNumberStart || e.questionNumber > g.questionNumberEnd) {
+                  errors.push(ep + ".questionNumber " + e.questionNumber + " must be within " + g.questionNumberStart + ".." + g.questionNumberEnd);
+                }
+              }
+            });
+          }
+        });
+      }
+    });
+  }
+
+  if (errors.length === 0) {
+    const totalSlots = obj.passages.reduce(
+      (acc, p) => acc + p.questionGroups.reduce((a, g) => a + g.explanations.length, 0), 0
+    );
+    const totalGroups = obj.passages.reduce((acc, p) => acc + p.questionGroups.length, 0);
+    status.className = "ok";
+    status.textContent = "OK — " + obj.passages.length + " passage(s), " + totalGroups + " group(s), " + totalSlots + " explanation slot(s)";
+    return true;
+  } else {
+    status.className = "err";
+    status.textContent = "Errors: " + errors.join("; ");
+    return false;
+  }
+}
+
+// -------------------------------------------------------------------
+// Live preview
+// -------------------------------------------------------------------
+
+let lastJson = "";
+let lastErrors = [];
+
+function buildOutputJson() {
+  // Read the JSON input (user provides the full shape including mode).
+  const raw = document.getElementById("jsonInput").value.trim();
+  if (!raw) {
+    return { json: null, error: "empty" };
+  }
+  try {
+    const obj = JSON.parse(raw);
+    // If user didn't include testTitle/existingQuizUrl, inject from inputs.
+    if (!obj.testTitle) {
+      obj.testTitle = document.getElementById("testTitle").value.trim() || undefined;
+    }
+    if (!obj.existingQuizUrl) {
+      const url = document.getElementById("existingQuizUrl").value.trim();
+      obj.existingQuizUrl = url || undefined;
+    }
+    // Force mode
+    obj.mode = "explanation";
+    return { json: obj, error: null };
+  } catch (e) {
+    return { json: null, error: "JSON parse error: " + e.message };
+  }
+}
+
+function refreshPreview() {
+  const out = document.getElementById("jsonOut");
+  const { json, error } = buildOutputJson();
+  if (error) {
+    out.textContent = "// " + error;
+    out.classList.add("err-line");
+  } else {
+    lastJson = JSON.stringify(json, null, 2);
+    out.textContent = lastJson;
+    out.classList.remove("err-line");
+  }
+}
+
+document.getElementById("jsonInput").addEventListener("input", refreshPreview);
+
+// Auto-login checkbox toggle: enable/disable credential fields
+document.getElementById("useAutoLogin").addEventListener("change", function() {
+  const enabled = this.checked;
+  document.getElementById("loginEmail").disabled = !enabled;
+  document.getElementById("loginPassword").disabled = !enabled;
+  if (!enabled) {
+    document.getElementById("loginEmail").value = "";
+    document.getElementById("loginPassword").value = "";
+  }
+});
+
+// -------------------------------------------------------------------
+// Buttons
+// -------------------------------------------------------------------
+
+function loadExample() {
+  document.getElementById("testTitle").value = EXAMPLE_JSON.testTitle;
+  document.getElementById("existingQuizUrl").value = "";
+  document.getElementById("jsonInput").value = JSON.stringify(EXAMPLE_JSON, null, 2);
+  refreshPreview();
+  toast("Loaded example JSON");
+}
+
+function clearInput() {
+  document.getElementById("jsonInput").value = "";
+  document.getElementById("testTitle").value = "";
+  document.getElementById("existingQuizUrl").value = "";
+  document.getElementById("validationStatus").textContent = "";
+  document.getElementById("validationStatus").className = "meta";
+  refreshPreview();
+}
+
+// -------------------------------------------------------------------
+// Upload
+// -------------------------------------------------------------------
+
+function setUploadBusy(busy) {
+  const btn = document.getElementById("uploadBtn");
+  btn.disabled = busy;
+  btn.textContent = busy ? "Uploading…" : "Upload Explanations";
+}
+
+function clearLog() {
+  document.getElementById("logOut").textContent = "// Logs from the upload command appear here.";
+}
+
+function copyLog() {
+  const log = document.getElementById("logOut").textContent;
+  navigator.clipboard.writeText(log).then(() => {
+    toast("Logs copied to clipboard");
+  }, () => {
+    toast("Copy failed", true);
+  });
+}
+
+function appendLog(text) {
+  const log = document.getElementById("logOut");
+  log.textContent += text;
+  log.scrollTop = log.scrollHeight;
+}
+
+async function upload() {
+  // Build the output JSON from the textarea + input fields.
+  const { json, error: buildError } = buildOutputJson();
+  if (buildError) {
+    toast("Cannot upload: " + buildError, true);
+    return;
+  }
+  if (!json || json.mode !== "explanation") {
+    toast("JSON must have mode: \"explanation\"", true);
+    return;
+  }
+  if (!json.testTitle) {
+    toast("testTitle is required", true);
+    return;
+  }
+
+  // Also run validation.
+  if (!validateJson()) {
+    toast("Fix validation errors first", true);
+    return;
+  }
+
+  // Include auto-login credentials — inject into the JSON so the pipeline
+  // reads them from the file (bypasses server→spawn→env chain).
+  const useAutoLogin = document.getElementById("useAutoLogin").checked;
+  const loginEmail = useAutoLogin ? (document.getElementById("loginEmail").value || "").trim() : "";
+  const loginPassword = useAutoLogin ? (document.getElementById("loginPassword").value || "") : "";
+
+  // Inject auto-login config into the json object AND top-level payload.
+  // Top-level is needed because the server reads body.useAutoLogin etc.
+  // json._autoLogin is kept as a backup in case env vars are lost.
+  let _autoLogin = null;
+  if (useAutoLogin && loginEmail && loginPassword) {
+    _autoLogin = { useAutoLogin: true, email: loginEmail, password: loginPassword };
+    json._autoLogin = _autoLogin;
+  }
+
+  const payload = {
+    mode: "explanation",
+    json,
+    useAutoLogin: !!_autoLogin,
+    loginEmail: loginEmail || "",
+    loginPassword: loginPassword || "",
+  };
+
+  console.log("[upload] auto login payload", {
+    useAutoLogin,
+    email: loginEmail || "(none)",
+    hasPassword: !!loginPassword,
+  });
+
+  setUploadBusy(true);
+  clearLog();
+  appendLog("[client] POST /api/upload (mode=explanation)\n");
+  appendLog("[client] auto-login: " + useAutoLogin + ", email: " + (loginEmail || "(none)") + "\n");
+  try {
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      appendLog("[client] HTTP " + res.status + ":\n" + errText + "\n");
+      toast("Upload failed (HTTP " + res.status + ")", true);
+      return;
+    }
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      appendLog(decoder.decode(value, { stream: true }));
+    }
+    appendLog(decoder.decode());
+    appendLog("\n[client] upload complete\n");
+    toast("Upload complete");
+  } catch (err) {
+    appendLog("\n[client] network error: " + err.message + "\n");
+    toast("Network error — is local-tool-server.js running on :8000?", true);
+  } finally {
+    setUploadBusy(false);
+  }
+}
+
+// -------------------------------------------------------------------
+// Toast
+// -------------------------------------------------------------------
+
+function toast(msg, isErr) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isErr ? " err" : "");
+  setTimeout(() => { t.className = "toast" + (isErr ? " err" : ""); }, 1800);
+}
+
+</script>
+
+</body>
+</html>

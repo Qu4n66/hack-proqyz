@@ -1,0 +1,849 @@
+================================================================================
+   PROQYZ IELTS AUTOMATION — ARCHITECTURE & ROADMAP (v2)
+   Printable plain-text version
+================================================================================
+
+CONTEXT/
+-------
+
+You manually create IELTS Reading and Listening quizzes inside ProQyz. The
+content already exists; the bottleneck is repetitive UI data entry: creating a
+quiz, adding passages/sections, adding questions, adding answer options, and
+clicking the correct-answer radio button — repeated dozens of times per test,
+hundreds of times across your catalog.
+
+The goal is a CONTENT UPLOADER, not a content generator. A Node.js + Playwright
+CLI that consumes a JSON file (Phase 1), a raw-text parser (Phase 2), and
+listening content with audio (Phase 3) and reliably drives ProQyz's UI. The
+first version targets IELTS Reading only and is invoked as:
+
+    node upload.js quiz.json
+    # or
+    npm run upload -- ./data/test-1.json
+    # future bulk:
+    node upload.js ./quizzes/
+
+The architecture is designed to be reliable, maintainable, and safe to re-run —
+including the ability to RESUME FROM THE LAST SUCCESSFULLY UPLOADED QUESTION
+if a 40-question upload fails halfway.
+
+================================================================================
+1. FEASIBILITY ANALYSIS
+================================================================================
+
+  Concern                                       | Verdict       | Notes
+  ----------------------------------------------|---------------|----------------------------
+  Automate the multi-step "create quiz" flow    | Feasible      | Standard CRUD form, just long.
+  Add passages                                  | Feasible      | Treated as a sub-resource.
+  Add N questions x M options + correct answer  | Feasible, but | Repeated "Add Option" is
+                                                |  risky        |  the most fragile part.
+  Correct-answer radio button                   | Feasible      | Always scoped to question's
+                                                |               |  option row, never global
+                                                |               |  index.
+  Rich text editor (passage, options)           | Feasible      | Strategy depends on editor
+                                                |               |  type (TinyMCE/Quill/CK/
+                                                |               |  plain). Auto-detect.
+  Login persistence                             | Feasible      | Playwright storageState +
+                                                |               |  manual login first run.
+  Resume from a failed question                 | Feasible      | Lightweight JSON checkpoint
+                                                |               |  per quiz; see section 6.
+  Bulk folder upload                            | Feasible      | Per-quiz try/catch,
+                                                |               |  isolated failures.
+  Reliable on hundreds of quizzes               | Feasible      | If selectors are centralized,
+                                                |               |  retries bounded, every
+                                                |               |  step has post-condition
+                                                |               |  assertion.
+  Listening + audio upload                      | Feasible      | Phase 3. Audio via file
+                                                |               |  input.
+
+Overall: Feasible. Two real risks: (a) selector brittleness when ProQyz UI
+changes, and (b) correct-answer radio button semantics (does clicking save
+immediately, or only on parent save?). Both addressed by the design.
+
+================================================================================
+2. RECOMMENDED ARCHITECTURE
+================================================================================
+
+A 3-layer pipeline, each layer independently testable and replaceable. Phase 1
+ships ONLY the UI driver — no API stub. An API path is mentioned only as a
+future option.
+
+  +-------------------------------------------------------------+
+  | Layer 1: INPUT                                             |
+  |   * JSON file (Phase 1)                                    |
+  |   * Raw-text parser (Phase 2)                              |
+  |   * Listening audio + JSON (Phase 3)                       |
+  +----------------------------+--------------------------------+
+                               | Validated, normalized Quiz object
+                               v
+  +-------------------------------------------------------------+
+  | Layer 2: DOMAIN (pure, no I/O)                              |
+  |   * Zod schemas for validation                             |
+  |   * Normalized types: Quiz, Passage, Question, Option      |
+  |   * Business invariants (e.g. answer IN options)            |
+  |   * Checkpoint state model                                 |
+  +----------------------------+--------------------------------+
+                               | Stream of "upload actions" (declarative)
+                               v
+  +-------------------------------------------------------------+
+  | Layer 3: UPLOADER (the only layer that touches ProQyz)     |
+  |   Interface: QuizUploader                                  |
+  |     - createQuiz(meta)                                      |
+  |     - addPassage(p)                                         |
+  |     - addQuestion(q)                                        |
+  |     - addOption(questionHandle, opt)                        |
+  |     - setCorrectAnswer(questionHandle, optionLabel)         |
+  |     - save()                                                |
+  |                                                             |
+  |   Implementation (Phase 1):                                 |
+  |     - UiQuizUploader  (Playwright)                          |
+  |                                                             |
+  |   Future option (NOT in Phase 1):                           |
+  |     - ApiQuizUploader (fetch)                               |
+  +-------------------------------------------------------------+
+
+Why this shape:
+  - The parser, schemas, and CLI never change when ProQyz UI changes.
+  - The uploader is the only thing that needs touching when a selector breaks.
+  - Phase 1 stays simple: one interface, one implementation, no stubs.
+  - We can DRY-RUN by recording all upload actions into a log without
+    actually clicking — useful for debugging.
+
+================================================================================
+3. FOLDER STRUCTURE
+================================================================================
+
+  proqyz-ielts-automation/
+  +-- package.json
+  +-- jsconfig.json              # JS-first MVP (see section 4)
+  +-- playwright.config.js
+  +-- .env.example               # PROQYZ_BASE_URL, etc.
+  +-- README.md
+  |
+  +-- bin/
+  |   +-- upload.js              # CLI entry
+  |
+  +-- src/
+  |   +-- domain/
+  |   |   +-- schemas.js         # Zod schemas
+  |   |   +-- invariants.js      # answer IN options, unique numbers
+  |   |   +-- normalize.js       # Trim, dedupe, sort, defaults
+  |   |
+  |   +-- input/
+  |   |   +-- jsonInput.js       # Phase 1
+  |   |   +-- rawTextParser.js   # Phase 2
+  |   |   +-- listeningInput.js  # Phase 3
+  |   |
+  |   +-- uploader/
+  |   |   +-- QuizUploader.js    # Interface
+  |   |   +-- ui/
+  |   |       +-- UiQuizUploader.js     # The real Playwright driver
+  |   |       +-- selectors.js          # *** CENTRAL SELECTOR MAP ***
+  |   |       +-- editorStrategies.js   # RTE auto-detect
+  |   |       +-- radioStrategy.js      # Correct-answer radio handling
+  |   |       +-- waitHelpers.js        # network-idle, modal checks
+  |   |       +-- checkpoint.js         # Per-quiz resume state
+  |   |       +-- screenshots.js        # On-failure capture
+  |   |
+  |   +-- session/
+  |   |   +-- auth.js            # Login flow + storageState
+  |   |   +-- profile.js         # Persistent Chromium profile dir
+  |   |
+  |   +-- pipeline/
+  |   |   +-- run.js             # Orchestrator
+  |   |   +-- report.js          # Per-quiz summary
+  |   |
+  |   +-- config.js              # Base URL, timeouts, paths
+  |   +-- logger.js              # pino, structured logs
+  |
+  +-- fixtures/
+  |   +-- cam17-reading-test01-passage1.json  # MVP-0 (new model)
+  |   +-- raw.cambridge-1.txt                # Phase 2 parser test
+  |   +-- legacy/                            # pre-recon historical fixtures
+  |
+  +-- scripts/
+  |   +-- inspect-proqyz.js      # Phase 0: dumps selector candidates
+  |   +-- record-selectors.js    # Half-automated selector capture
+  |
+  +-- checkpoints/               # .gitignored; per-quiz resume state
+  +-- failures/                  # .gitignored; screenshots + HTML dumps
+  |
+  +-- tests/
+      +-- unit/
+      |   +-- schemas.test.js
+      |   +-- normalize.test.js
+      |   +-- rawTextParser.test.js
+      +-- e2e/
+          +-- upload.reading.tiny.spec.js
+          +-- auth.persist.spec.js
+
+================================================================================
+4. LANGUAGE CHOICE — JAVASCRIPT FIRST, TYPESCRIPT LATER
+================================================================================
+
+RECOMMENDATION FOR MVP: plain JavaScript (Node 20+), with a clear TS
+migration path.
+
+WHY JS FOR MVP
+--------------
+  - TIME-TO-FIRST-UPLOAD is the bottleneck. You want to stop doing manual
+    data entry as soon as possible. Every TS ceremony — tsconfig, ts-node/
+    tsx, type-only files, build step — adds friction that doesn't pay off
+    until the codebase exceeds ~3-5k lines.
+  - ZOD gives us the safety net without types. Zod schemas validate inputs
+    at runtime and produce inferred types if/when we want them. The "shape
+    is correct" guarantee that TS gives statically, Zod gives at the
+    boundary.
+  - Playwright is JS-native. No impedance mismatch, no .d.ts hunting.
+  - Easier to hand off. A future contributor can read the code top to
+    bottom without learning the project's type system.
+
+WHEN TO INTRODUCE TYPESCRIPT
+-----------------------------
+The threshold: codebase reaches >=3 maintainers, OR domain types become hard
+to keep straight without compiler help (e.g. Phase 3 with 10+ question types
+and a parser). At that point:
+  1. Rename src/**/*.js -> .ts (one bulk commit; works because Zod already
+     enforces the shapes).
+  2. Add tsconfig.json (strict mode, NodeNext modules).
+  3. Add tsx for running TS directly (no build step needed).
+  4. Zod schemas become the single source of truth — z.infer<typeof
+     QuestionSchema> gives us the types for free.
+
+This is a LOW-RISK migration because the runtime contract is already enforced
+by Zod from day one.
+
+WHAT WE KEEP REGARDLESS OF LANGUAGE
+-----------------------------------
+  - JSDoc on every public function.
+  - Zod schemas as the input contract.
+  - selectors.js as the single source of truth for ProQyz UI hooks.
+  - The QuizUploader interface as the only thing outside layers touch.
+
+================================================================================
+5. JSON SCHEMA DESIGN (Zod, in JS) — POST-RECON DUAL-TYPE MODEL
+================================================================================
+
+Strict, normalized, fail-loud. Wrong shapes are caught BEFORE the browser
+opens. The real ProQyz editor exposes only 4 question types (fill_up,
+select, radio, checkbox), so the schema carries both the IELTS type
+(provenance / parser) and the ProQyz type (upload strategy).
+
+  // src/domain/schemas.js
+  import { z } from "zod";
+
+  export const OptionSchema = z.object({
+    label: z.string().min(1),    // "A" / "B" / "TRUE" / "FALSE"
+    text:  z.string().min(1),    // "Option A"
+  });
+
+  // The original IELTS Reading question type. 13 values.
+  export const IeltsQuestionTypeSchema = z.enum([
+    "note_completion", "sentence_completion", "summary_completion",
+    "table_completion", "flow_chart_completion", "short_answer",
+    "true_false_not_given", "yes_no_not_given",
+    "matching_headings", "matching_information", "matching_features",
+    "multiple_choice_single", "multiple_choice_multiple",
+  ]);
+
+  // The ProQyz editor type. 4 values.
+  export const ProqyzTypeSchema = z.enum([
+    "fill_up", "select", "radio", "checkbox",
+  ]);
+
+  // Default-options codes for proqyzType=select.
+  export const DefaultOptionsSchema = z.enum([
+    "i", "I", "A", "a", "1",
+    "true_false_not_given", "yes_no_not_given", "custom",
+  ]);
+
+  export const QuestionSchema = z.object({
+    number:         z.number().int().positive(),
+    ieltsType:      IeltsQuestionTypeSchema,
+    proqyzType:     ProqyzTypeSchema,
+    defaultOptions: DefaultOptionsSchema.optional(),
+    instruction:    z.string().optional(),
+    content:        z.string().min(1),         // HTML; {answer} for fill_up/select
+    options:        z.array(OptionSchema).optional(),   // required for radio/checkbox
+    answer:         z.string().min(1),         // label for radio/checkbox; placeholder text for fill_up/select
+    passageIndex:   z.number().int().nonnegative().optional(),
+  }).superRefine((q, ctx) => {
+    // radio/checkbox: require options, answer must be a label.
+    // fill_up/select: content must contain exactly one {answer} matching answer.
+    // select: requires defaultOptions.
+  });
+
+  export const PassageSchema = z.object({
+    title:   z.string().min(1),
+    content: z.string().min(1),
+    images:  z.array(z.string().url()).optional(),
+  });
+
+  export const ReadingQuizSchema = z.object({
+    type:        z.literal("reading"),
+    quizType:    z.enum(["reading", "listening"]).default("reading"),
+    title:       z.string().min(1),
+    description: z.string().default(""),
+    timeLimit:   z.number().int().positive().default(60),
+    status:      z.enum(["draft", "published"]).default("draft"),
+    passages:    z.array(PassageSchema).min(1),
+    questions:   z.array(QuestionSchema).min(1),
+  }).superRefine((q, ctx) => {
+    // passageIndex range check
+  });
+
+  // QuizSchema = z.discriminatedUnion("type", [ReadingQuizSchema._def.schema, ...])
+
+KEY DESIGN CHOICES (POST-RECON)
+--------------------------------
+  - DUAL TYPE FIELD: ieltsType (provenance) + proqyzType (upload strategy).
+    The 13 IELTS types map onto 4 ProQyz types; the mapping is documented
+    in the README. fill_up and select are the workhorses — they cover 9
+    of 13 IELTS types and use the {answer} placeholder in `content`.
+  - For radio/checkbox, `options[]` and `answer` (a label or
+    comma-separated labels) follow the classic pattern.
+  - For fill_up/select, the schema REQUIRES the `content` field to
+    contain exactly one `{answer}` placeholder matching the `answer`
+    field. This catches author typos before they reach ProQyz.
+  - proqyzType=select requires `defaultOptions`.
+  - `quizType` on the quiz (separate from `type` which is the Zod
+    discriminator) carries the user's real ProQyz choice — Reading
+    or Listening.
+  - PassageIndex is still optional, defaults to "no passage" (useful
+    for Listening).
+
+================================================================================
+6. MVP SCOPE (PHASE 1) — WITH MVP-0 / MVP-1 STAGING
+================================================================================
+
+To reduce risk and validate early, Phase 1 has two acceptance gates.
+
+MVP-0 (FIRST WORKING VERSION) — POST-RECON
+---------------------------------------------
+Successfully upload via the CLI:
+  - 1 quiz titled "Cam 17 Reading Test 01"
+  - quizType = reading, timeLimit = 60, status = draft
+  - 1 passage (placeholder text, refilled by user)
+  - 13 questions:
+      Q1-6: note_completion → fill_up with {answer} placeholder
+      Q7-13: true_false_not_given → select with defaultOptions
+  - Quiz created as DRAFT
+  - Tool pauses and prints a review URL for human verification
+
+MVP-1 (PRODUCTION-READY SINGLE-QUIZ)
+------------------------------------
+  - 1 full IELTS Reading quiz
+  - 3 passages
+  - 40 questions, mixed fill_up / select / radio / checkbox
+  - Correct answers set
+  - 5 CONSECUTIVE SUCCESSFUL RUNS on the same fixture with no flake
+  - Resume-from-checkpoint working: kill mid-upload, re-run, finishes from
+    the last completed question
+
+OUT OF SCOPE FOR PHASE 1
+------------------------
+  - Listening (Phase 3).
+  - Raw-text parser (Phase 2).
+  - Headless mode (added after MVP-1 reliability is proven).
+  - API mode (mentioned as future option only; no stub file).
+  - Bulk folder upload (mentioned as future option only; architecture
+    supports it).
+
+FEATURES SHIPPED IN PHASE 1
+---------------------------
+  - CLI: node upload.js path/to/quiz.json.
+  - Visible (headed) Chromium for transparency during development.
+  - Manual login on first run; storageState on subsequent runs.
+  - Screenshots + HTML dump on every failure.
+  - --dry-run flag (records intended actions, no clicks).
+  - --on-duplicate=skip|update|fail flag.
+  - CHECKPOINT / RESUME (see 6.1).
+  - DRAFT-ONLY default; pause for human review (see section 13).
+
+--------------------------------------------------------------------------------
+6.1 CHECKPOINT / RESUME STRATEGY
+--------------------------------------------------------------------------------
+
+A 40-question upload that fails at question 27 is unacceptable if it restarts
+from 0. Lightweight, file-based checkpointing:
+
+  - After each successfully uploaded question, append to
+    checkpoints/<quiz-title-slug>.json:
+    {
+      "title": "IELTS Reading Practice Test 1",
+      "quizHandle": { "url": "...", "id": "..." },
+      "passages":     [ { "index": 0, "id": "..." }, ... ],
+      "questions":    [ { "number": 1, "id": "...", "uploadedAt": "..." }, ... ],
+      "lastCompleted": { "passageIndex": 0, "questionNumber": 27 },
+      "updatedAt":     "2026-06-08T10:23:14Z"
+    }
+
+  - On startup, checkpoint.js looks for an existing checkpoint by quiz
+    title. If found, the orchestrator:
+    1. Loads it.
+    2. Verifies the quiz still exists in ProQyz (open URL, assert title).
+    3. Asks the user (CLI prompt, default Y): "Resume from question 28? [Y/n]".
+    4. Skips questions 1-27 and continues from 28.
+
+  - On every successful question, the checkpoint is rewritten atomically
+    (write to *.tmp, then rename) to survive mid-write crashes.
+
+  - On explicit --fresh, the checkpoint is deleted and we start from 0.
+
+  - This is NOT transactional. If the upload fails AFTER writing a question
+    to ProQyz but BEFORE updating the checkpoint, the next run may double-
+    write that question. The --on-duplicate flag handles that gracefully:
+    skip is the safe default.
+
+This is intentionally simple — no DB, no queue, no resume-with-rollback. Good
+enough for "the user kicked off a 40-question batch and the network blipped
+on question 28".
+
+================================================================================
+7. DEVELOPMENT ROADMAP
+================================================================================
+
+Sequenced so each phase produces a runnable artifact. No phase is "done" until
+its acceptance test passes.
+
+PHASE 0 — RECON (BEFORE ANY CODE)
+----------------------------------
+Acceptance: a working selector map skeleton + base URL.
+
+  1. You share the 3 screenshots: login, create-quiz form, question-editor
+     with options + radio.
+  2. I write scripts/inspect-proqyz.js that opens ProQyz with Playwright,
+     lets you log in, and dumps: every form input's accessible name, every
+     button's text + data-testid, and the DOM around the correct-answer
+     radio. Output goes to proqyz-inspection.json.
+  3. From that we hand-author src/uploader/ui/selectors.js.
+
+IMPORTANT: We do NOT build the full uploader in Phase 0. We only build the
+inspection script and selector discovery process. Wiring up real Playwright
+actions is Phase 1.
+
+PHASE 1 — READING MVP (UI ONLY — NO API STUB)
+----------------------------------------------
+   1. Skeleton + config: package.json, Playwright, Zod, pino.
+   2. Domain layer: schemas, normalization, invariant checks.
+   3. Session layer: login flow + storageState persistence.
+   4. Uploader interface + UiQuizUploader skeleton (no real selectors yet).
+   5. Selector map populated from Phase 0 recon.
+   6. RTE auto-detect for passage content + option text.
+   7. Radio-by-container strategy (see section 10).
+   8. Checkpoint / resume (see 6.1).
+   9. Draft-only default; pause for human review (see section 13).
+  10. End-to-end MVP-0 happy path with cam17-reading-test01-passage1.json.
+  11. End-to-end MVP-1 happy path with a 40-question cam17 fixture x 5 runs.
+  12. Failure capture: screenshot + DOM dump on every error.
+  13. Polish: --dry-run, structured logs, README with troubleshooting.
+
+PHASE 2 — RAW-TEXT PARSER (ALL IELTS READING TYPES)
+----------------------------------------------------
+  1. Hand-author 3 sample raw texts (Cambridge book 1, 7, 14).
+  2. Write parser that handles: PASSAGE 1, QUESTIONS 1-4, instruction
+     lines, A./B./C./D. options, Answer: B lines.
+  3. Extend to ALL IELTS Reading question types from the schema enum
+     (T/F/NG, Y/N/NG, matching headings/information/features, sentence
+     completion, summary completion, table completion, flow-chart completion,
+     short answer). Each type has its own parsing rule; the schema already
+     accepts all of them.
+  4. Strict mode: when confidence is low, emit a needs_human_review.json
+     alongside the parsed file rather than guessing.
+  5. Phase 1's UI driver is unchanged — the parser just produces the same
+     JSON the JSON-input path consumes.
+
+PHASE 3 — LISTENING + BULK FOLDER UPLOAD
+----------------------------------------
+  1. Add ListeningQuizSchema and audio sub-resource.
+  2. Detect and use ProQyz's audio file input.
+  3. Listening-specific question types (form completion, map labelling,
+     etc.).
+  4. BULK FOLDER MODE: node upload.js ./quizzes/ runs each quiz
+     independently. One failed quiz lands in failures/ and does not block
+     the rest. Summary report at the end: 47 success, 2 failed.
+
+PHASE 4 — FUTURE (OUT OF SCOPE, LISTED FOR AWARENESS)
+-----------------------------------------------------
+  - API mode uploader (only if ProQyz exposes endpoints we can confirm).
+  - Headless mode after MVP-1 reliability is proven.
+  - Local web UI for browsing queued/failed uploads.
+
+================================================================================
+8. RISK ANALYSIS
+================================================================================
+
+  Risk                                                | Like | Imp  | Mitigation
+  ----------------------------------------------------|------|------|--------------------------
+  ProQyz UI changes break selectors                   | High | High | All selectors in ONE file
+                                                       |      |      |  with version stamp. CI
+                                                       |      |      |  runs e2e on every change.
+  Correct-answer radio semantic differs from          | Med  | High | radioStrategy.js supports
+   expectation                                         |      |      |  3 modes. Detect via probe.
+  RTE has hidden validation that strips content       | Med  | High | After typing, READ BACK
+                                                       |      |      |  and assert.
+  ProQyz rate-limits or has anti-bot                  | Low  | High | Reasonable delays, single
+                                                       |      |      |  browser, no concurrency.
+  Login session expires mid-run                       | Med  | Med  | Detect via redirect-to-
+                                                       |      |      |  login sentinel, re-auth
+                                                       |      |      |  and resume.
+  Long passages hit a max-length limit                | Low  | Med  | Validate client-side,
+                                                       |      |      |  warn before upload.
+  Modal/overlay blocks clicks                         | Med  | Med  | waitHelpers.js waits for
+                                                       |      |      |  networkidle + no modal.
+  Form fails to save, we leave a half-quiz            | Med  | High | Always draft. Re-read
+                                                       |      |      |  count after save. Pause
+                                                       |      |      |  for human review.
+  40-question upload fails halfway, restarts from 0   | Med  | High | CHECKPOINT / RESUME.
+  ProQyz has a CAPTCHA                                | Low  | High | Phase 0 reveals this; if
+                                                       |      |      |  present, persistent
+                                                       |      |      |  profile + --headed.
+
+================================================================================
+9. SELECTOR STRATEGY
+================================================================================
+
+ONE FILE TO RULE THEM ALL. Every selector in the project lives in
+src/uploader/ui/selectors.js. When ProQyz UI changes, this is the only file
+you usually need to touch.
+
+  // src/uploader/ui/selectors.js
+  export const Selectors = {
+    version: "2026-06-08",                  // bump when you update
+
+    // Auth
+    login: {
+      emailInput:    'input[name="email"]',
+      passwordInput: 'input[name="password"]',
+      submitButton:  'button[type="submit"]',
+      postLoginUrl:  /\/dashboard/,
+    },
+
+    // Quiz form
+    quizForm: {
+      titleInput:       'input[name="title"]',
+      descriptionInput: 'textarea[name="description"]',
+      timeLimitInput:   'input[name="timeLimit"]',
+      statusSelect:     'select[name="status"]',
+      saveButton:       'button:has-text("Save")',
+      addPassageButton: 'button:has-text("Add Passage")',
+    },
+
+    // Question editor — keyed off the question container, not indices
+    question: {
+      container:        '[data-testid="question-card"]',
+      addOptionButton:  'button:has-text("Add Option")',
+      optionRow:        '[data-testid="option-row"]',
+      optionTextInput:  '[data-testid="option-text"]',
+      correctRadio:     'input[type="radio"][name="correctOption"]',
+    },
+
+    // RTE — auto-detected at runtime
+    editor: {
+      tinymce:  { api: 'tinymce',  selector: '.tox-edit-area iframe' },
+      ckeditor: { api: 'CKEDITOR', selector: '.ck-editor__editable' },
+      quill:    { api: 'Quill',    selector: '.ql-editor' },
+      textarea: { api: null,       selector: 'textarea' },
+    },
+  };
+
+SELECTOR PRINCIPLES (NON-NEGOTIABLE)
+------------------------------------
+  1. PREFER data-testid. If ProQyz doesn't expose them, Phase 0 will
+     suggest adding them or fall back to ARIA labels.
+  2. ALWAYS SCOPE BY CONTAINER. "Click the 2nd option" is FORBIDDEN.
+     "Click the correct radio inside the question card whose prompt text
+     matches" is the only allowed pattern.
+  3. NEVER USE nth-child(N) as the sole selector. If we must, wrap it in
+     a semantic ancestor first.
+  4. VISIBLE-TEXT SELECTORS (button:has-text("Save")) are OK for stable
+     copy, but we keep a data-testid fallback for every such selector.
+
+================================================================================
+10. RADIO-BUTTON HANDLING STRATEGY
+================================================================================
+
+This is the SINGLE MOST FRAGILE INTERACTION. The non-negotiable principle:
+NEVER click radio buttons by global index. ALWAYS scope inside the specific
+question/option container, and select by the answer's text or letter inside
+that block.
+
+  // CORRECT — scoped to a specific question block
+  const questionBlock = page.locator(Selectors.question.container, {
+    hasText: q.prompt.slice(0, 40),    // disambiguate by prompt
+  });
+  const optionRow = questionBlock
+    .locator(Selectors.question.optionRow, { hasText: optionText });
+  await optionRow.locator(Selectors.question.correctRadio).check();
+
+  // FORBIDDEN — global index
+  await page.locator('input[type="radio"]').nth(1).check();
+
+THREE EXECUTION MODES (detected at Phase 0 recon):
+  - MODE A — CLICK-TO-SAVE: the radio writes through immediately
+    (AJAX/PUT). Detect by: click radio, refresh, verify still selected.
+  - MODE B — CLICK-AND-PARENT-SAVES: the radio is a UI hint and only
+    persists on the question's Save button. Click all radios, then click
+    question's Save once.
+  - MODE C — DROPDOWN: "correct answer" is a <select> per question, not
+    a radio group. Same idea, different element.
+
+VERIFICATION STEP AFTER EVERY QUESTION: re-read the question's rendered
+"correct answer" indicator. If it doesn't match, abort with a clear error
+pointing to the question number.
+
+================================================================================
+11. RICH TEXT EDITOR HANDLING STRATEGY
+================================================================================
+
+Passages and option text often live in an RTE. The strategy:
+
+  1. DETECT ONCE PER SESSION in editorStrategies.js:
+     async function detectEditor(page, container) {
+       if (await page.locator('.tox-edit-area').count())      return 'tinymce';
+       if (await page.locator('.ck-editor__editable').count()) return 'ckeditor';
+       if (await page.locator('.ql-editor').count())          return 'quill';
+       return 'textarea';
+     }
+
+  2. PER-KIND WRITERS (only the writer that matches is used):
+     - TinyMCE:  switch to the editor's iframe, set content via
+                 tinymce.activeEditor.setContent(html). Verify by reading back.
+     - CKEditor 5: use the CKEDITOR global's setData, scoped to the editor
+                   instance whose element is inside our container.
+     - Quill:    new Quill(el).clipboard.dangerouslyPasteHTML(html). Verify.
+     - Plain textarea / contenteditable: locator.fill() with HTML allowed,
+                   or type + blur. Verify.
+
+  3. READ-BACK VERIFICATION IS MANDATORY for RTE — paste 200 chars, then
+     assert the first 50 chars are visible.
+
+  4. IMAGES INSIDE PASSAGES are out of MVP scope. If a passage has images,
+     we warn and skip the image, keeping the text content.
+
+================================================================================
+12. LOGIN / SESSION STRATEGY
+================================================================================
+
+GOAL: zero-friction re-runs after the first login. No credentials in code, no
+hardcoded passwords.
+
+APPROACH:
+  - Persistent Chromium user data dir at ~/.proqyz-automation/profile/.
+  - On first run: launch headed, navigate to login, WAIT UP TO 2 MINUTES for
+    the user to log in manually, then snapshot the cookies into
+    storageState.json.
+  - On subsequent runs: load storageState.json into a fresh context. If
+    ProQyz redirects to login, fall back to the manual-login flow.
+  - auth.js exposes a single getAuthenticatedContext(browser) function.
+  - Token storage: NEVER in code; NEVER in env. The browser profile is the
+    source of truth.
+
+WHY NOT A HARDCODED LOGIN FLOW?
+Many apps (SSO, MFA, captchas) make scripted login fragile. Manual-once-
+then-storageState is the standard Playwright pattern and survives most auth
+changes.
+
+================================================================================
+13. HUMAN REVIEW PAUSE (DEFAULT BEHAVIOR)
+================================================================================
+
+To reduce the risk of publishing broken quizzes, the default flow is:
+
+  1. Create the quiz as DRAFT status.
+  2. Upload all passages, questions, options, and correct answers.
+  3. Save.
+  4. PAUSE AND PRINT the review URL:
+       [OK] Quiz created in Draft status.
+       Open this URL to review:
+          https://app.proqyz.com/quizzes/<id>/edit
+       Press Enter when reviewed (or Ctrl+C to abort).
+  5. The user inspects the quiz in their browser.
+  6. Pressing Enter exits cleanly. Publishing is a SEPARATE EXPLICIT
+     COMMAND:
+       node upload.js quiz.json --publish
+       # or for a previously-uploaded quiz:
+       node upload.js --publish-existing <quiz-id>
+     The default mode NEVER publishes.
+
+This makes it safe to run the tool against a real ProQyz instance without
+fear of contaminating production-visible content.
+
+================================================================================
+14. ERROR HANDLING STRATEGY
+================================================================================
+
+DEFAULT POLICY: STOP LOUD, never silently corrupt.
+
+  - Every action returns a result. On failure:
+    1. Capture a full-page screenshot to ./failures/<timestamp>-<step>.png.
+    2. Capture the page's outerHTML to ./failures/<timestamp>-<step>.html.
+    3. Log the current URL, last action, and a snippet of the console.
+    4. Throw a typed error (UploadError) with a recoverable: boolean flag.
+  - IDEMPOTENCY: every "Add X" click is preceded by a "does this already
+    exist?" check. Re-running on an already-uploaded quiz must not create
+    duplicates — controlled by --on-duplicate=skip|update|fail.
+    Default: skip.
+  - All work happens in DRAFT status. Promote to published only via
+    --publish.
+  - Long-running operations (uploading 40 questions) emit a HEARTBEAT LOG
+    LINE every 5 questions so you can see progress and abort cleanly.
+  - CHECKPOINT is rewritten after every successful question, so a crash
+    at Q27 lets the next run resume from Q28.
+
+================================================================================
+15. TESTING STRATEGY
+================================================================================
+
+THREE LAYERS, with strict scope:
+
+  1. UNIT TESTS (no browser): schemas, normalization, invariants, raw-text
+     parser, checkpoint serialization. Run on every save, no flake possible.
+  2. COMPONENT TESTS (browser, no real ProQyz): stub ProQyz pages with a
+     local HTML fixture that mirrors the real DOM. Test the radio strategy,
+     the RTE strategy, the wait helpers, and the failure capture.
+  3. END-TO-END (real ProQyz): two tests — upload.reading.tiny.spec.js
+     (MVP-0) and upload.reading.full.spec.js (MVP-1, 5x consecutive).
+     Tagged @e2e — run on demand, not on every save.
+
+COVERAGE TARGETS:
+  - Domain layer: >90%.
+  - Uploader interface: 100% (it's the only thing the world sees).
+  - UI driver: realistic-but-not-obsessive; the e2e test is the real
+    safety net.
+
+================================================================================
+16. FUTURE SCALABILITY STRATEGY
+================================================================================
+
+The architecture is deliberately boring and modular so the next 10 things
+are obvious:
+
+  - BULK FOLDER UPLOAD (Phase 3): node upload.js ./quizzes/ runs each
+    quiz independently. Per-quiz try/catch; failures land in failures/
+    with a per-quiz checkpoint preserved for retry.
+  - OPTIONAL API FAST-PATH (post-Phase 3, only if confirmed): an
+    ApiQuizUploader implementing the same QuizUploader interface. The
+    CLI gets a --mode=ui|api flag. NOT BUILT SPECULATIVELY.
+  - LOCAL WEB UI: a tiny web app that lists queued uploads, shows
+    failures, and lets you retry. Reuses the same pipeline/run.js.
+  - AI-ASSISTED AUTHORING (optional, not generating questions): given a
+    PDF, extract passages and questions into the same JSON shape, then
+    hand off to the uploader. EXPLICITLY OUT OF SCOPE for the core
+    system — this is a separate tool that produces inputs the uploader
+    consumes.
+  - OBSERVABILITY: pino logs in JSON, optional --otel flag for
+    OpenTelemetry export.
+
+================================================================================
+17. SCREENSHOTS & INFORMATION NEEDED BEFORE IMPLEMENTATION
+================================================================================
+
+Please share:
+
+  1. LOGIN PAGE SCREENSHOT — to confirm the input names, button text,
+     and base URL.
+  2. CREATE-QUIZ FORM SCREENSHOT — full-page if possible. We need to see
+     every field and button on the "create quiz" screen, including the
+     area for passages and the "Add Passage" / "Save" / "Add Question"
+     buttons.
+  3. QUESTION EDITOR SCREENSHOT — specifically the area where you add
+     answer options and select the correct answer with the radio button.
+     This is the most important one.
+  4. BASE URL OF PROQYZ (e.g. https://app.proqyz.com or your self-hosted
+     URL) — goes into .env.example as PROQYZ_BASE_URL.
+
+If any of those are awkward to share, we can proceed and refine selectors
+in Phase 0 by running the inspect-proqyz.js script together — but the
+screenshots let me write the plan in a way that's already 80% accurate.
+
+================================================================================
+OPEN QUESTIONS (will resolve during Phase 0 recon, not blocking)
+================================================================================
+
+These are intentionally not blocking — the architecture is robust to any
+answer — but they shape implementation details:
+
+  - Does the correct-answer selection save immediately, or only on the
+    question Save button? (Resolved by Phase 0 recon probe.)
+  - Does ProQyz have rate-limiting? (Resolved by trying.)
+  - Are there any anti-bot mechanisms? (Resolved by manual login attempt.)
+  - Does ProQyz expose any public/developer API? (Not building
+    speculatively; would be a separate post-MVP effort.)
+
+================================================================================
+CRITICAL FILES TO BE CREATED (PHASE 1)
+================================================================================
+
+  File                                          | Purpose
+  ----------------------------------------------|---------------------------
+  package.json, jsconfig.json                   | Project setup (JS-first)
+  src/config.js                                 | Base URL, timeouts, paths
+  src/logger.js                                 | pino structured logging
+  src/domain/schemas.js                         | Zod schemas (the contract)
+  src/domain/normalize.js                       | Trim, dedupe, defaults
+  src/input/jsonInput.js                        | Load + validate JSON
+  src/uploader/QuizUploader.js                  | Interface (the only one)
+  src/uploader/ui/UiQuizUploader.js             | The Playwright driver
+  src/uploader/ui/selectors.js                  | SINGLE SOURCE OF TRUTH for selectors
+  src/uploader/ui/editorStrategies.js           | RTE auto-detect + writers
+  src/uploader/ui/radioStrategy.js              | Correct-answer radio logic
+  src/uploader/ui/waitHelpers.js                | network-idle, modal checks
+  src/uploader/ui/checkpoint.js                 | Per-quiz resume state
+  src/uploader/ui/screenshots.js                | Failure capture
+  src/session/auth.js                           | Login + storageState
+  src/pipeline/run.js                           | Orchestrator
+  bin/upload.js                                 | CLI entry
+  fixtures/cam17-reading-test01-passage1.json  | MVP-0 fixture
+  fixtures/legacy/                             | Pre-recon MVP-0/MVP-1 fixtures (historical)
+  tests/e2e/upload.reading.tiny.spec.js         | MVP-0 e2e
+  tests/e2e/upload.reading.full.spec.js         | MVP-1 e2e x 5
+
+================================================================================
+VERIFICATION (HOW WE'LL KNOW IT WORKS)
+================================================================================
+
+MVP-0 ACCEPTANCE
+----------------
+  node upload.js fixtures/cam17-reading-test01-passage1.json
+
+Pass: 1 quiz, 1 passage, 13 questions (6 fill_up with {answer} placeholders,
+7 select/true_false_not_given) created in Draft. Tool prints review URL
+and waits for Enter. All 13 correct answers verified in ProQyz.
+
+MVP-1 ACCEPTANCE
+----------------
+  # 5 consecutive green runs
+  for i in 1..5; do node upload.js fixtures/cam17-reading-test01-full.json; done
+
+Pass: 5/5 runs finish with 40/40 questions, all correct answers, no console
+errors, no manual intervention after first login.
+
+RESUME ACCEPTANCE
+-----------------
+  # Start a 40-question run, kill at Q15
+  node upload.js fixtures/cam17-reading-test01-full.json &
+  PID=$!
+  sleep 30
+  kill -9 $PID
+  # Re-run — should resume from Q16
+  node upload.js fixtures/cam17-reading-test01-full.json
+
+Pass: second run starts at Q16, completes Q16-Q40, total quiz has 40
+questions, no duplicates.
+
+DRY-RUN ACCEPTANCE
+------------------
+  node upload.js fixtures/cam17-reading-test01-full.json --dry-run
+
+Pass: finishes in <5 seconds, logs all intended actions, makes zero network
+writes to ProQyz.
+
+FAILURE ACCEPTANCE
+------------------
+Pass: any thrown error lands a .png + .html in ./failures/ with a human-
+readable name and the relevant selectors.js version stamp.
+
+================================================================================
+END OF PLAN
+================================================================================
