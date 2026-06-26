@@ -6569,8 +6569,15 @@ export class UiQuizUploader {
       }
 
       // --- Non-blank slot: write content ---
-      // 4b: Insert content via targeted TinyMCE API
-      const writeOk = await this._setExplanationContent(page, modal, card, exp.content);
+      // 4b: Choose write path — content with \n needs line-by-line keyboard
+      //     insertion because setContent(html) collapses newlines in TinyMCE.
+      const hasNewlines = /\r?\n/.test(exp.content);
+      let writeOk;
+      if (hasNewlines) {
+        writeOk = await this._insertTextWithNewlines(page, card, exp.content);
+      } else {
+        writeOk = await this._setExplanationContent(page, modal, card, exp.content);
+      }
       if (!writeOk) {
         log.uploader.error({ slot: exp.slot, cardId: card.id }, "write failed for slot");
         await captureFailure(page, `slot-write-fail-${exp.slot}`).catch(() => {});
@@ -6891,6 +6898,102 @@ export class UiQuizUploader {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Insert plain text into a TinyMCE editor one line at a time, pressing
+   * Shift+Enter between lines so the editor renders a real line break.
+   *
+   * Used as the newline-aware replacement for `_setExplanationContent` when
+   * `content` contains `\n`. The TinyMCE setContent path collapses newlines
+   * into spaces, so we drive keyboard insertion directly to preserve breaks.
+   *
+   * Flow:
+   *   1. Focus the targeted TinyMCE editor via `tinymce.get(textareaId)`
+   *   2. Clear existing content with Ctrl+A + Delete (via keyboard)
+   *   3. For each line: `page.keyboard.type(line)` then Shift+Enter
+   *      (except after the last line)
+   *
+   * @param {import("playwright").Page} page
+   * @param {{textareaId: string, index: number}} card
+   * @param {string} content  raw plain text (may contain `\n`)
+   * @returns {Promise<boolean>} true if the editor accepted the content
+   */
+  async _insertTextWithNewlines(page, card, content) {
+    if (!card.textareaId) {
+      log.uploader.warn({ cardId: card.id }, "_insertTextWithNewlines: no textareaId");
+      return false;
+    }
+    const text = String(content ?? "");
+    if (!text) return false;
+
+    const lines = text.split(/\r?\n/);
+
+    // Step 1: focus + clear the targeted editor
+    const focused = await page.evaluate((textareaId) => {
+      if (typeof tinymce === "undefined") return false;
+      const ed = tinymce.get(textareaId);
+      if (!ed) return false;
+      ed.focus();
+      ed.setContent("");
+      return true;
+    }, card.textareaId).catch(() => false);
+
+    if (!focused) {
+      log.uploader.warn({ textareaId: card.textareaId }, "_insertTextWithNewlines: could not focus editor");
+      return false;
+    }
+
+    // Give TinyMCE a moment to register the focus on the iframe
+    await page.waitForTimeout(150);
+
+    // Step 2: type each line + Shift+Enter between
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (line.length > 0) {
+        await page.keyboard.type(line, { delay: 5 });
+      }
+      if (i < lines.length - 1) {
+        await page.keyboard.press("Shift+Enter");
+        // TinyMCE may need a beat to commit the soft break before the next line
+        await page.waitForTimeout(50);
+      }
+    }
+
+    // Step 3: fire change events so React / parent form pick up the new value
+    await page.evaluate((textareaId) => {
+      const ed = tinymce.get(textareaId);
+      if (!ed) return;
+      ed.fire("change");
+      ed.fire("keyup");
+      const ta = document.getElementById(textareaId);
+      if (ta) {
+        ta.value = ed.getContent();
+        ta.dispatchEvent(new Event("input", { bubbles: true }));
+        ta.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    }, card.textareaId).catch(() => null);
+
+    // Step 4: post-write verification via canonical reader
+    await page.waitForTimeout(600);
+    const postWriteText = await readEditorTextByTextareaId(page, card.textareaId);
+    if (postWriteText.length === 0) {
+      log.uploader.warn(
+        { textareaId: card.textareaId },
+        "_insertTextWithNewlines: post-write read empty",
+      );
+      return false;
+    }
+
+    log.uploader.info(
+      {
+        textareaId: card.textareaId,
+        lineCount: lines.length,
+        bodyLength: postWriteText.length,
+      },
+      "_insertTextWithNewlines: inserted with line breaks",
+    );
+    return true;
   }
 
   /**
