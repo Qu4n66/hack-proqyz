@@ -6569,23 +6569,8 @@ export class UiQuizUploader {
       }
 
       // --- Non-blank slot: write content ---
-      // 4b: Choose write path based on whether content has bold markers.
-      //     - With `[[b]]...[[/b]]` markers: use segment-based rich-text insert
-      //       (TinyMCE execCommand + insertText) so markers become real bold.
-      //     - Otherwise: convert plain text to HTML and use setContent path.
-      const hasBoldMarkers = /\[\[b\]\]/.test(exp.content) && /\[\[\/b\]\]/.test(exp.content);
-      let writeOk;
-      if (hasBoldMarkers) {
-        const segments = parseRichTextMarkers(exp.content);
-        log.uploader.info(
-          { slot: exp.slot, segments: segments.length, boldCount: segments.filter((s) => s.bold).length },
-          "writing explanation with rich-text segments (bold markers)",
-        );
-        writeOk = await this._insertRichText(page, modal, card, segments);
-      } else {
-        const htmlContent = plainTextToHtml(exp.content);
-        writeOk = await this._setExplanationContent(page, modal, card, htmlContent);
-      }
+      // 4b: Insert content via targeted TinyMCE API
+      const writeOk = await this._setExplanationContent(page, modal, card, exp.content);
       if (!writeOk) {
         log.uploader.error({ slot: exp.slot, cardId: card.id }, "write failed for slot");
         await captureFailure(page, `slot-write-fail-${exp.slot}`).catch(() => {});
@@ -6909,136 +6894,6 @@ export class UiQuizUploader {
   }
 
   /**
-   * Write content into a TinyMCE editor using segment-based rich-text
-   * insertion. Used when `content` contains `[[b]]...[[/b]]` markers
-   * that need to become bold text in the editor.
-   *
-   * Approach: clear the editor, then for each segment use TinyMCE's
-   * native Bold command (via editor.execCommand) to toggle bold state
-   * and the iframe document's `execCommand("insertText")` to insert
-   * text. This goes through TinyMCE's input handling so React state and
-   * the backing textarea stay in sync.
-   *
-   * @param {import("playwright").Page} page
-   * @param {import("playwright").Locator} modal
-   * @param {{textareaId: string, index: number}} card
-   * @param {Array<{text: string, bold: boolean}>} segments
-   * @returns {Promise<boolean>} true if write succeeded (non-empty body)
-   */
-  async _insertRichText(page, modal, card, segments) {
-    if (!card.textareaId) {
-      log.uploader.warn({ cardId: card.id }, "_insertRichText: no textareaId");
-      return false;
-    }
-    if (!segments || segments.length === 0) {
-      log.uploader.warn({ cardId: card.id }, "_insertRichText: no segments");
-      return false;
-    }
-
-    // Concatenate all segment text (markers removed) for expected payload.
-    const plainPayload = segments.map((s) => s.text).join("");
-
-    // Step 1: focus + clear the editor
-    const focused = await page.evaluate((textareaId) => {
-      if (typeof tinymce === "undefined") return false;
-      const ed = tinymce.get(textareaId);
-      if (!ed) return false;
-      ed.focus();
-      ed.setContent("");
-      return true;
-    }, card.textareaId).catch(() => false);
-
-    if (!focused) {
-      log.uploader.warn({ textareaId: card.textareaId }, "_insertRichText: could not focus/clear editor");
-      return false;
-    }
-
-    // Step 2: insert segments one at a time
-    // We send the segments over and execute them in the browser atomically
-    // (the iframe's execCommand must run on the same frame as TinyMCE state).
-    let insertedCount = 0;
-    const ok = await page.evaluate(({ textareaId, segs }) => {
-      try {
-        const ed = tinymce.get(textareaId);
-        if (!ed) return { ok: false, reason: "no editor" };
-
-        // Ensure editor is focused so commands route to it
-        ed.focus();
-
-        const iframeDoc = ed.iframeElement?.contentDocument
-          || ed.iframeElement?.contentWindow?.document;
-        if (!iframeDoc) return { ok: false, reason: "no iframe doc" };
-
-        for (const seg of segs) {
-          if (seg.bold) {
-            // Toggle bold ON, insert text, toggle bold OFF.
-            ed.execCommand("Bold");
-          }
-          // insertText preserves TinyMCE's input pipeline (newlines, etc.).
-          // Use iframe doc's execCommand so the text lands in the editor body.
-          iframeDoc.execCommand("insertText", false, seg.text || "");
-          if (seg.bold) {
-            ed.execCommand("Bold"); // toggle OFF
-          }
-        }
-
-        // Fire change events so React/parent form pick up the new value.
-        ed.fire("change");
-        ed.fire("keyup");
-        const ta = document.getElementById(textareaId);
-        if (ta) {
-          ta.value = ed.getContent();
-          ta.dispatchEvent(new Event("input", { bubbles: true }));
-          ta.dispatchEvent(new Event("change", { bubbles: true }));
-        }
-        return { ok: true };
-      } catch (err) {
-        return { ok: false, reason: err?.message || String(err) };
-      }
-    }, { textareaId: card.textareaId, segs: segments }).catch((err) => ({ ok: false, reason: err.message }));
-
-    if (!ok || !ok.ok) {
-      log.uploader.error(
-        { textareaId: card.textareaId, reason: ok?.reason, segments: segments.length },
-        "_insertRichText: insert failed",
-      );
-      return false;
-    }
-
-    insertedCount = segments.length;
-    log.uploader.info(
-      { textareaId: card.textareaId, segments: insertedCount, payloadLength: plainPayload.length },
-      "_insertRichText: inserted segments",
-    );
-
-    // Step 3: Post-write verification — same canonical reader as the plain path.
-    await page.waitForTimeout(600);
-    const postWriteText = await readEditorTextByTextareaId(page, card.textareaId);
-    if (postWriteText.length === 0) {
-      log.uploader.warn(
-        { textareaId: card.textareaId },
-        "_insertRichText: post-write read empty — editor accepted but did not render",
-      );
-      return false;
-    }
-
-    // Bonus check: marker strings must not appear as literal text in the editor.
-    if (postWriteText.includes("[[b]]") || postWriteText.includes("[[/b]]")) {
-      log.uploader.error(
-        { textareaId: card.textareaId, actualPreview: postWriteText.slice(0, 200) },
-        "_insertRichText: marker strings leaked into editor text",
-      );
-      return false;
-    }
-
-    log.uploader.info(
-      { textareaId: card.textareaId, bodyLength: postWriteText.length },
-      "_insertRichText: post-write DOM body verified",
-    );
-    return true;
-  }
-
-  /**
    * Verify that an explanation card's editor contains the expected content.
    *
    * Reads back via TinyMCE API targeting the specific editor instance,
@@ -7052,26 +6907,14 @@ export class UiQuizUploader {
   async _verifyExplanationContent(page, card, expectedHtml) {
     const actual = await readEditorTextByTextareaId(page, card.textareaId);
 
-    // Strip [[b]] / [[/b]] markers from expected before comparing — the editor
-    // never contains the markers themselves, only the rendered bold text.
-    const expectedStripped = stripRichTextMarkers(expectedHtml || "");
     log.uploader.info({
       textareaId: card.textareaId,
       actualPreview: actual.slice(0, 120),
-      expectedPreview: expectedStripped.replace(/<[^>]+>/g, "").trim().slice(0, 120),
+      expectedPreview: (expectedHtml || "").replace(/<[^>]+>/g, "").trim().slice(0, 120),
     }, "slot verification compare");
 
     if (actual.length === 0) {
       log.uploader.warn({ textareaId: card.textareaId }, "verification: editor content empty");
-      return false;
-    }
-
-    // Marker leak check — markers must never appear in the rendered editor text.
-    if (actual.includes("[[b]]") || actual.includes("[[/b]]")) {
-      log.uploader.error(
-        { textareaId: card.textareaId, actualPreview: actual.slice(0, 200) },
-        "verification: marker strings present in editor text",
-      );
       return false;
     }
 
@@ -7139,28 +6982,10 @@ export class UiQuizUploader {
         log.uploader.info({ slot: exp.slot, blank: true, empty: actual.length === 0 }, "pre-save blank slot check");
       } else {
         // Non-blank slot: content must match
-        // Strip [[b]]/[[/b]] markers first (editor never contains them),
-        // then HTML tags from actual (plain-text→HTML conversion).
-        const normalize = (s) =>
-          stripRichTextMarkers(s || "")
-            .replace(/<[^>]+>/g, "")
-            .replace(/&[a-z]+;/g, " ")
-            .replace(/\s+/g, " ")
-            .trim()
-            .toLowerCase();
+        const normalize = (s) => s.replace(/\s+/g, " ").trim().toLowerCase();
         const actualNorm = normalize(actual);
         const expectedNorm = normalize(exp.content);
         const matches = actualNorm.includes(expectedNorm) || expectedNorm.includes(actualNorm);
-
-        // Marker leak check — markers must never appear in the rendered editor text.
-        if (actual.includes("[[b]]") || actual.includes("[[/b]]")) {
-          mismatches.push({
-            slot: exp.slot,
-            reason: "marker strings leaked into editor text",
-            actual: actual.slice(0, 200),
-          });
-          log.uploader.error({ slot: exp.slot, actualPreview: actual.slice(0, 200) }, "pre-save: marker leak detected");
-        }
 
         if (!matches) {
           mismatches.push({
@@ -7237,20 +7062,13 @@ export class UiQuizUploader {
         log.uploader.info({ slot: exp.slot, blank: true, empty: actual.length === 0 }, "post-save blank check");
       } else {
         // Non-blank slot: must match content
-        // Strip [[b]]/[[/b]] markers from expected — editor never contains them,
-        // only the rendered bold text appears.
-        const normalize = (s) => stripRichTextMarkers(s || "").replace(/\s+/g, " ").trim().toLowerCase();
+        const normalize = (s) => s.replace(/\s+/g, " ").trim().toLowerCase();
         const actualNorm = normalize(actual);
         const expectedNorm = normalize(exp.content);
         const matches = actualNorm.includes(expectedNorm) || expectedNorm.includes(actualNorm);
 
-        // Marker leak check
-        if (actual.includes("[[b]]") || actual.includes("[[/b]]")) {
-          mismatches.push({ slot: exp.slot, reason: "marker strings leaked into editor text", actual: actual.slice(0, 200) });
-        }
-
         log.uploader.info({
-          slot: exp.slot, match, actualPreview: actual.slice(0, 120), expectedPreview: stripRichTextMarkers(exp.content).replace(/<[^>]+>/g, "").trim().slice(0, 120),
+          slot: exp.slot, match, actualPreview: actual.slice(0, 120), expectedPreview: exp.content.replace(/<[^>]+>/g, "").trim().slice(0, 120),
         }, "post-save slot check");
 
         if (!matches) {
@@ -7406,97 +7224,6 @@ export class UiQuizUploader {
 // -----------------------------------------------------------------------------
 // Utilities
 // -----------------------------------------------------------------------------
-
-/**
- * Convert clean text to HTML.
- * - If text already contains HTML tags → return as-is
- * - Otherwise → escape HTML entities and convert \n to <br>
- *
- * @param {string} text
- * @returns {string} HTML
- */
-function plainTextToHtml(text) {
-  if (!text) return "";
-  // If already HTML (has tags), return as-is
-  if (/<[a-z][\s\S]*>/i.test(text)) return text;
-  // Escape HTML entities, then convert \n to <br>
-  const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  return escaped.replace(/\n/g, "<br>");
-}
-
-/**
- * Remove inline rich-text markers from content, returning plain text.
- * Useful for verification paths where we compare against the editor's
- * visible text (markers themselves should never appear in the editor).
- *
- * Currently only strips `[[b]]` / `[[/b]]`.
- *
- * @param {string} text
- * @returns {string}
- */
-export function stripRichTextMarkers(text) {
-  if (!text) return "";
-  return String(text).replace(/\[\[\/?b\]\]/g, "");
-}
-
-/**
- * Parse content with inline bold markers into segments for the uploader.
- *
- * Recognized markers:
- *   `[[b]]text[[/b]]` — text becomes bold
- *
- * Returns an array of `{ text, bold }` segments. Adjacent same-boldness
- * segments are NOT merged — the uploader relies on segment boundaries
- * to know exactly when to toggle bold.
- *
- * Malformed input (e.g. unclosed `[[b]]`) returns the whole string as a
- * single non-bold segment. A warning is logged but execution continues.
- *
- * @param {string} content
- * @returns {Array<{text: string, bold: boolean}>}
- */
-export function parseRichTextMarkers(content) {
-  if (!content) return [];
-  const str = String(content);
-
-  // Quick detection: any open + close marker pair must exist.
-  const openCount = (str.match(/\[\[b\]\]/g) || []).length;
-  const closeCount = (str.match(/\[\[\/b\]\]/g) || []).length;
-  if (openCount === 0 || openCount !== closeCount) {
-    // No markers, or malformed (mismatched/unclosed) — return whole string as plain.
-    if (openCount > 0) {
-      // Log a warning via console so it surfaces in browser logs.
-      console.warn(
-        `parseRichTextMarkers: malformed bold markers (open=${openCount}, close=${closeCount}); treating as plain text`,
-      );
-    }
-    return [{ text: str, bold: false }];
-  }
-
-  const segments = [];
-  // Match either a bold span (capturing text inside) or any non-marker chunk.
-  // The regex uses [\s\S] so \n is preserved within segments.
-  const re = /\[\[b\]\]([\s\S]*?)\[\[\/b\]\]|([\s\S]+?)(?=\[\[b\]\]|$)/g;
-  let m;
-  while ((m = re.exec(str)) !== null) {
-    if (m[1] !== undefined) {
-      // Bold span
-      segments.push({ text: m[1], bold: true });
-    } else if (m[2] !== undefined) {
-      // Normal chunk
-      segments.push({ text: m[2], bold: false });
-    }
-  }
-  // Edge case: leading [[b]] (empty normal segment before any bold)
-  if (str.startsWith("[[b]]")) {
-    segments.unshift({ text: "", bold: false });
-  }
-  // Edge case: trailing [[/b]] (empty normal segment at end)
-  if (str.endsWith("[[/b]]")) {
-    segments.push({ text: "", bold: false });
-  }
-  return segments.length > 0 ? segments : [{ text: str, bold: false }];
-}
 
 /**
  * Canonical editor reader. Returns the normalized visible text from a
