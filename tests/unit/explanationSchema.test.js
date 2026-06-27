@@ -341,7 +341,7 @@ test("normalizeExplanationData handles multiple groups correctly", () => {
 
 test("example fixture parses and normalizes", async () => {
   const raw = await readFile(
-    resolve(fixturesDir, "explanation-example.json"),
+    resolve(fixturesDir, "explanation", "example.json"),
     "utf8",
   );
   const parsed = JSON.parse(raw);

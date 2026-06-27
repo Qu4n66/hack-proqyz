@@ -16,7 +16,7 @@
     "validate-recon": "node scripts/validate-recon.js",
     "validate-fixtures": "node scripts/validate-fixtures.js",
     "smoke": "node tests/e2e/dry-run-smoke.spec.js",
-    "test": "node --test tests/unit",
+    "test": "node --test 'tests/unit/**/*.test.js'",
     "test:e2e": "playwright test",
     "format": "prettier --write \"**/*.{js,json,md}\""
   },
