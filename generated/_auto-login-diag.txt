@@ -1,8 +1,8 @@
-timestamp: 2026-06-15T15:18:34.032Z
+timestamp: 2026-06-27T05:04:35.541Z
 PROQYZ_AUTO_LOGIN: (undefined)
 PROQYZ_LOGIN_EMAIL: (undefined)
 PROQYZ_LOGIN_PASSWORD: (empty/undefined)
-pid: 55174
+pid: 7164
 cwd: /Users/quanb/Documents/vs/project 4
 argv: /opt/homebrew/Cellar/node/26.0.0/bin/node /Users/quanb/Documents/vs/project 4/bin/upload.js /Users/quanb/Documents/vs/project 4/generated/latest-quiz.json --explanation --auto-login --email info.phominh@gmail.com --password Phominh123456@
 envKeys(PROQYZ): (none)

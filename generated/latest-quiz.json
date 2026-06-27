@@ -1,27 +1,35 @@
 {
   "mode": "explanation",
-  "testTitle": "Cam 18 - Reading 4",
+  "testTitle": "Cam 16 - Reading 4",
   "passages": [
     {
-      "passage": 2,
-      "passageTitle": "Reading Passage 2",
+      "passage": 3,
+      "passageTitle": "Reading Passage 3",
       "questionGroups": [
         {
-          "range": "14-16",
-          "questionNumberStart": 14,
-          "questionNumberEnd": 16,
+          "range": "36-40",
+          "questionNumberStart": 36,
+          "questionNumberEnd": 40,
           "explanations": [
             {
-              "questionNumber": 14,
-              "content": "Then, in the early 20th century, progressive thinkers revolted against the notion that inherent ability is destiny."
+              "questionNumber": 36,
+              "content": "It was found that, regardless of whether the film they watched depicted AI in a positive or negative light, simply watching a cinematic vision of our technological future <b>polarised the participants’ attitudes</b>. Optimists became more extreme in their enthusiasm for AI and sceptics became even more guarded. (AI in sci-fi films does not make people change their opinions but increase the divergence of attitude of optimists and sceptics)"
             },
             {
-              "questionNumber": 15,
-              "content": "A major focus of the growth mindset in schools is coaxing students away from seeing failure as an indication of their ability, and towards seeing it as a chance to improve that ability."
+              "questionNumber": 37,
+              "content": "As AI is represented more and more in media and entertainment, it could lead to a society split between those who benefit from AI and those who reject it. (AI in media and entertainment mentioned but the passage does not mention if it will become positive or not)"
             },
             {
-              "questionNumber": 16,
-              "content": "Meanwhile, the former took on only those tasks that would not risk their sense of self worth. This group had inferred that success or failure is due to innate ability, and this ‘fixed mindset’ had led them to fear of failure and lack of effort."
+              "questionNumber": 38,
+              "content": "More pertinently, <b>refusing to accept the advantages offered by AI</b> could <b>place a large group of people at a serious disadvantage</b>."
+            },
+            {
+              "questionNumber": 39,
+              "content": "Simply <b>having previous experience with AI</b> can significantly <b>improve people’s opinions about the technology</b>, as was found in the study mentioned above."
+            },
+            {
+              "questionNumber": 40,
+              "content": "For example, one study showed that <b>when people were allowed the freedom to slightly modify an algorithm</b>, they felt <b>more satisfied</b> with its decisions, <b>more likely to believe it was superior</b> and <b>more likely to use it in the future</b>."
             }
           ]
         }

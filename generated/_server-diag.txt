@@ -280,3 +280,1119 @@
   loginEmail: info.phominh@gmail.com
   hasPassword: true
   bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-15T16:14:36.511Z] RECEIVED from UI:
+  mode: ui-full
+  useAutoLogin: undefined (type: undefined)
+  loginEmail: (empty)
+  hasPassword: false
+  bodyKeys: mode, json
+[2026-06-15T16:14:46.011Z] RECEIVED from UI:
+  mode: ui-full
+  useAutoLogin: undefined (type: undefined)
+  loginEmail: (empty)
+  hasPassword: false
+  bodyKeys: mode, json
+[2026-06-15T16:15:07.895Z] RECEIVED from UI:
+  mode: ui-full
+  useAutoLogin: undefined (type: undefined)
+  loginEmail: (empty)
+  hasPassword: false
+  bodyKeys: mode, json
+[2026-06-15T16:22:23.475Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: false (type: boolean)
+  loginEmail: (empty)
+  hasPassword: false
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T01:51:29.768Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:00:07.676Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:18:40.739Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:19:22.079Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:25:11.875Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:27:24.427Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:30:23.181Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:33:24.685Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:35:25.516Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:38:45.484Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:39:58.730Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:42:06.098Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:43:00.141Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:45:12.199Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:46:23.163Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:50:51.783Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:56:04.178Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:57:06.167Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:58:36.154Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T02:59:20.166Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:01:26.603Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:05:31.591Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:06:52.725Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:07:50.016Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:09:34.646Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:12:04.461Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:13:30.457Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:14:08.409Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:14:35.042Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:16:24.984Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:17:14.880Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:17:54.164Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:19:39.026Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:21:40.616Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:25:33.428Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:28:31.420Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:32:16.276Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:34:23.939Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:35:00.189Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:35:24.622Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:37:49.795Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:38:21.273Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:39:13.329Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:40:08.240Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:47:24.343Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:48:52.491Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:51:57.422Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:56:23.559Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T03:59:35.568Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T04:17:52.564Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T04:22:36.536Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T04:25:38.358Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T04:27:41.193Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T04:29:43.774Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T12:43:35.882Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T13:03:27.759Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T13:14:16.930Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T13:16:50.690Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T13:28:42.323Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T13:38:04.877Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T13:55:08.274Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-16T13:59:12.552Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:05:50.512Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:06:24.718Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:08:01.017Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:16:02.586Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:18:32.207Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:28:47.195Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:37:57.386Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:39:55.950Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:40:32.230Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:43:35.301Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:46:12.914Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:51:32.640Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:55:17.165Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T13:57:35.717Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T14:12:43.795Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T14:13:12.064Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-17T14:13:54.276Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T02:17:43.679Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T02:25:51.928Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T02:26:28.420Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T02:40:01.895Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T02:40:34.696Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T03:16:40.368Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T03:22:35.821Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T03:26:16.168Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T03:42:41.377Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T03:45:22.756Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T03:46:14.763Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T03:54:45.570Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-18T03:56:32.888Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:33:26.652Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:34:27.895Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:35:02.564Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:44:06.168Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:47:24.522Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:51:20.626Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:51:29.242Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:53:26.366Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:56:46.789Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:57:30.405Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T13:59:16.285Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:00:02.579Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:03:02.216Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:04:57.499Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:09:48.951Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:11:24.958Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:17:55.522Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:18:45.064Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:19:27.891Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:20:34.829Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:21:15.282Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:24:28.996Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:25:20.459Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:28:15.368Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:30:43.468Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:32:26.368Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:34:05.026Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:46:12.156Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:52:39.085Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:53:34.477Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T14:57:13.344Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:00:44.459Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:01:12.697Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:02:59.256Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:06:14.475Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:07:15.399Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:11:18.421Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:22:37.436Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:24:46.776Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:25:36.729Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:27:10.976Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:27:39.806Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:29:15.492Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:30:53.687Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:31:40.068Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:32:15.924Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:35:17.024Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:36:41.843Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:39:50.225Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:41:00.965Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:42:01.411Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T15:42:36.040Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-26T16:44:22.193Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T03:54:19.962Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T03:55:31.661Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T03:56:45.229Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T03:57:16.163Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T03:58:44.049Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:03:23.910Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:03:49.759Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:04:14.017Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:05:27.307Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:05:55.842Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:07:05.321Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:07:38.678Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:08:02.217Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:09:13.678Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:09:40.443Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:10:06.344Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:13:02.506Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:13:30.676Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:14:49.153Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:15:14.805Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:15:43.692Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:16:13.381Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:18:13.037Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:18:38.870Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:19:46.687Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:23:26.690Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:23:53.719Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:24:22.921Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:25:01.819Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:27:38.325Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:28:44.716Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:29:21.654Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:30:47.393Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:31:12.567Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:31:37.218Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T04:37:31.865Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T05:04:35.291Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword

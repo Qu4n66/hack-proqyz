@@ -6569,15 +6569,9 @@ export class UiQuizUploader {
       }
 
       // --- Non-blank slot: write content ---
-      // 4b: Choose write path — content with \n needs line-by-line keyboard
-      //     insertion because setContent(html) collapses newlines in TinyMCE.
-      const hasNewlines = /\r?\n/.test(exp.content);
-      let writeOk;
-      if (hasNewlines) {
-        writeOk = await this._insertTextWithNewlines(page, card, exp.content);
-      } else {
-        writeOk = await this._setExplanationContent(page, modal, card, exp.content);
-      }
+      // Always use the HTML path: prepareExplanationHtml() sanitizes allowed tags
+      // and converts \n to <br>, so TinyMCE setContent renders correctly.
+      const writeOk = await this._setExplanationContent(page, modal, card, exp.content);
       if (!writeOk) {
         log.uploader.error({ slot: exp.slot, cardId: card.id }, "write failed for slot");
         await captureFailure(page, `slot-write-fail-${exp.slot}`).catch(() => {});
@@ -6802,7 +6796,10 @@ export class UiQuizUploader {
    * @param {string} html
    * @returns {Promise<boolean>}
    */
-  async _setExplanationContent(page, modal, card, html) {
+  async _setExplanationContent(page, modal, card, content) {
+    // Step 0: sanitize and wrap content for TinyMCE
+    const html = prepareExplanationHtml(content);
+
     // Strategy 1: Targeted TinyMCE API (most reliable)
     if (card.textareaId) {
       const ok = await page.evaluate(({ textareaId, htmlContent }) => {
@@ -6812,8 +6809,10 @@ export class UiQuizUploader {
 
         // Focus the editor so React picks up the change
         ed.focus();
-        ed.setContent(htmlContent);
+        ed.setContent(htmlContent, { format: "html" });
         ed.fire("change");
+        ed.fire("input");
+        ed.save();
 
         // Sync the backing textarea for React state
         const ta = document.getElementById(textareaId);
@@ -7007,17 +7006,30 @@ export class UiQuizUploader {
    * @param {string} expectedHtml
    * @returns {Promise<boolean>}
    */
-  async _verifyExplanationContent(page, card, expectedHtml) {
+  async _verifyExplanationContent(page, card, expectedContent) {
     const actual = await readEditorTextByTextareaId(page, card.textareaId);
+    const actualText = htmlToComparableText(actual);
+    const expectedText = htmlToComparableText(expectedContent);
+    const textMatch = actualText === expectedText;
 
     log.uploader.info({
       textareaId: card.textareaId,
-      actualPreview: actual.slice(0, 120),
-      expectedPreview: (expectedHtml || "").replace(/<[^>]+>/g, "").trim().slice(0, 120),
+      textMatch,
+      actualText: actualText.slice(0, 120),
+      expectedText: expectedText.slice(0, 120),
     }, "slot verification compare");
 
     if (actual.length === 0) {
       log.uploader.warn({ textareaId: card.textareaId }, "verification: editor content empty");
+      return false;
+    }
+
+    if (!textMatch) {
+      log.uploader.warn({
+        textareaId: card.textareaId,
+        expectedRaw: expectedContent.slice(0, 200),
+        actualRaw: actual.slice(0, 200),
+      }, "text mismatch after write; will retry or flag");
       return false;
     }
 
@@ -7074,7 +7086,6 @@ export class UiQuizUploader {
       const actual = await readEditorTextByTextareaId(page, card.textareaId);
 
       if (isBlank) {
-        // Blank slot: editor must be empty
         if (actual.length > 0) {
           mismatches.push({
             slot: exp.slot,
@@ -7084,20 +7095,38 @@ export class UiQuizUploader {
         }
         log.uploader.info({ slot: exp.slot, blank: true, empty: actual.length === 0 }, "pre-save blank slot check");
       } else {
-        // Non-blank slot: content must match
-        const normalize = (s) => s.replace(/\s+/g, " ").trim().toLowerCase();
-        const actualNorm = normalize(actual);
-        const expectedNorm = normalize(exp.content);
-        const matches = actualNorm.includes(expectedNorm) || expectedNorm.includes(actualNorm);
+        // Use normalized text comparison — TinyMCE HTML normalization is expected
+        const actualText = htmlToComparableText(actual);
+        const expectedText = htmlToComparableText(exp.content);
+        const textMatch = actualText === expectedText;
 
-        if (!matches) {
+        if (!textMatch) {
+          log.uploader.error({
+            slot: exp.slot,
+            expectedText: expectedText.slice(0, 200),
+            actualText: actualText.slice(0, 200),
+            expectedRaw: exp.content.slice(0, 200),
+            actualRaw: actual.slice(0, 200),
+          }, "pre-save text mismatch");
           mismatches.push({
             slot: exp.slot,
-            expected: exp.content.slice(0, 200),
-            actual: actual.slice(0, 200),
+            reason: "visible text mismatch",
+            expectedText: expectedText.slice(0, 200),
+            actualText: actualText.slice(0, 200),
+            expectedRaw: exp.content.slice(0, 200),
+            actualRaw: actual.slice(0, 200),
           });
+        } else {
+          log.uploader.info({ slot: exp.slot, textMatch: true }, "[verify] pre-save text matches");
         }
-        log.uploader.info({ slot: exp.slot, match: matches, actualLen: actual.length }, "pre-save slot comparison");
+
+        // Optional formatting check: warn but don't fail
+        if (!isBlank && exp.content) {
+          const { warnings } = checkFormattingTags(exp.content, actual, exp.slot);
+          if (warnings.length > 0) {
+            warnings.forEach((w) => log.uploader.warn({ slot: exp.slot }, w));
+          }
+        }
       }
     }
 
@@ -7164,18 +7193,40 @@ export class UiQuizUploader {
         }
         log.uploader.info({ slot: exp.slot, blank: true, empty: actual.length === 0 }, "post-save blank check");
       } else {
-        // Non-blank slot: must match content
-        const normalize = (s) => s.replace(/\s+/g, " ").trim().toLowerCase();
-        const actualNorm = normalize(actual);
-        const expectedNorm = normalize(exp.content);
-        const matches = actualNorm.includes(expectedNorm) || expectedNorm.includes(actualNorm);
+        // Non-blank slot: use normalized text comparison
+        const actualText = htmlToComparableText(actual);
+        const expectedText = htmlToComparableText(exp.content);
+        const textMatch = actualText === expectedText;
 
         log.uploader.info({
-          slot: exp.slot, match, actualPreview: actual.slice(0, 120), expectedPreview: exp.content.replace(/<[^>]+>/g, "").trim().slice(0, 120),
+          slot: exp.slot,
+          textMatch,
+          actualText: actualText.slice(0, 120),
+          expectedText: expectedText.slice(0, 120),
         }, "post-save slot check");
 
-        if (!matches) {
-          mismatches.push({ slot: exp.slot, expected: exp.content.slice(0, 100), actual: actual.slice(0, 100) });
+        if (!textMatch) {
+          log.uploader.error({
+            slot: exp.slot,
+            expectedText: expectedText.slice(0, 200),
+            actualText: actualText.slice(0, 200),
+            expectedRaw: exp.content.slice(0, 200),
+            actualRaw: actual.slice(0, 200),
+          }, "post-save text mismatch");
+          mismatches.push({
+            slot: exp.slot,
+            reason: "visible text mismatch after save",
+            expectedText: expectedText.slice(0, 200),
+            actualText: actualText.slice(0, 200),
+          });
+        }
+
+        // Optional formatting check: warn but don't fail
+        if (exp.content) {
+          const { warnings } = checkFormattingTags(exp.content, actual, exp.slot);
+          if (warnings.length > 0) {
+            warnings.forEach((w) => log.uploader.warn({ slot: exp.slot }, w));
+          }
         }
       }
     }
@@ -7432,4 +7483,159 @@ function slugId(title) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 60);
+}
+
+// ──────────────────────────────────────────────────────────────
+// Safe HTML helpers for explanation content
+// ──────────────────────────────────────────────────────────────
+
+/**
+ * Strip all HTML tags and normalize whitespace to produce a comparable
+ * plain-text string. This is used for pre-save verification so that
+ * TinyMCE normalization (e.g. <b> → <strong>, <br> → <p>) does not
+ * cause false mismatches.
+ *
+ * @param {unknown} value
+ * @returns {string}
+ */
+function htmlToComparableText(value) {
+  return String(value ?? "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>\s*<p>/gi, "\n")
+    .replace(/<\/?p[^>]*>/gi, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\s+\n/g, "\n")
+    .replace(/\n\s+/g, "\n")
+    .replace(/[ \t]+/g, " ")
+    .trim();
+}
+
+/**
+ * Allowed inline HTML tags that may appear in explanation `content`.
+ * Everything else is stripped.
+ */
+const ALLOWED_HTML_TAGS = new Set(["b", "strong", "i", "em", "br", "p"]);
+
+/**
+ * Prepare explanation content for TinyMCE insertion:
+ *   - Converts to string
+ *   - Preserves allowed inline tags (b, strong, i, em, br)
+ *   - Converts \n into <br>
+ *   - Wraps in <p>...</p> if no block wrapper is present
+ *   - Strips all other HTML
+ *
+ * @param {string} content
+ * @returns {string}
+ */
+function prepareExplanationHtml(content) {
+  const str = String(content ?? "");
+
+  // Step 1: normalize self-closing br (handle both <br> and <br/> and <br />)
+  let normalized = str;
+
+  // Step 2: extract allowed tag pairs and their contents, then strip everything else
+  const result = [];
+  let remaining = normalized;
+
+  // Simple regex-based sanitizer: preserve allowed tags, strip everything else
+  // Process character by character to handle nested/reordered tags
+  // Strategy: replace allowed tags with a placeholder marker, strip disallowed,
+  // then restore. Simpler approach: iterate and build up allowed portions.
+
+  // Use a DOMParser-free approach: regex pass to strip disallowed tags
+  // Allowed: b, /b, strong, /strong, i, /i, em, /em, br, /br, p, /p
+  // All other angle-bracket content is stripped
+
+  // Pass: extract all allowed open/close tags and plain text segments
+  const TAG_RE = /<\/?([a-zA-Z][a-zA-Z0-9]*)(?:\s[^>]*)?\/?>/g;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = TAG_RE.exec(remaining)) !== null) {
+    // Text before this tag
+    if (match.index > lastIndex) {
+      result.push(remaining.slice(lastIndex, match.index));
+    }
+    const tagName = match[1].toLowerCase();
+    if (ALLOWED_HTML_TAGS.has(tagName)) {
+      result.push(match[0]); // keep the original tag
+    }
+    // else: skip (strip disallowed tag)
+    lastIndex = match.index + match[0].length;
+  }
+  // Trailing text
+  if (lastIndex < remaining.length) {
+    result.push(remaining.slice(lastIndex));
+  }
+
+  let sanitized = result.join("");
+
+  // Step 3: convert \n to <br>
+  // Only convert newlines that are NOT already inside a tag (e.g. after </p>)
+  // Replace standalone \n with <br>
+  sanitized = sanitized
+    .replace(/([^>\n])\n(?!<)/g, "$1<br>\n")
+    .replace(/\n+/g, "\n");
+
+  // Step 4: wrap in <p>...</p> if not already wrapped
+  const hasBlockWrapper = /^[\s\n]*<p[\s>]/i.test(sanitized) || /<\/?p[\s>]/i.test(sanitized);
+  if (!hasBlockWrapper) {
+    // Wrap each line/segment — split on \n, wrap each non-empty segment
+    const segments = sanitized.split("\n");
+    const wrapped = segments
+      .map((seg) => {
+        const trimmed = seg.trim();
+        if (!trimmed) return "";
+        return `<p>${trimmed}</p>`;
+      })
+      .filter(Boolean)
+      .join("\n");
+    sanitized = wrapped;
+  } else {
+    // Ensure there's a trailing newline for readability
+    sanitized = sanitized.trim();
+  }
+
+  return sanitized || "";
+}
+
+/**
+ * Check whether the expected formatting tags appear in the actual TinyMCE
+ * HTML. Logs warnings for missing tags but does NOT throw — the pass/fail
+ * decision is based solely on text comparison.
+ *
+ * @param {string} expectedHtml  raw content from JSON
+ * @param {string} actualHtml   what TinyMCE returned
+ * @param {number} slot
+ * @returns {{tagsOk: boolean, warnings: string[]}}
+ */
+function checkFormattingTags(expectedHtml, actualHtml, slot) {
+  const warnings = [];
+  const FORMAT_TAGS = [
+    { tag: "b", label: "<b>" },
+    { tag: "strong", label: "<strong>" },
+    { tag: "i", label: "<i>" },
+    { tag: "em", label: "<em>" },
+  ];
+
+  for (const { tag, label } of FORMAT_TAGS) {
+    const openRe = new RegExp(`<${tag}[\\s>]`, "i");
+    const closeRe = new RegExp(`</${tag}>`, "i");
+    const expectedHasTag = openRe.test(expectedHtml) || closeRe.test(expectedHtml);
+    const actualHasTag = openRe.test(actualHtml) || closeRe.test(actualHtml);
+
+    if (expectedHasTag && !actualHasTag) {
+      const msg = `[verify] q${slot} missing expected ${label} formatting`;
+      warnings.push(msg);
+      log.uploader.warn({ slot, tag: label }, msg);
+    }
+  }
+
+  return { tagsOk: warnings.length === 0, warnings };
 }
