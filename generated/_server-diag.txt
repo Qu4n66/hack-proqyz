@@ -1396,3 +1396,33 @@
   loginEmail: info.phominh@gmail.com
   hasPassword: true
   bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T05:11:33.228Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T05:22:58.725Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T05:23:34.632Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T05:27:39.190Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword
+[2026-06-27T05:34:18.350Z] RECEIVED from UI:
+  mode: explanation
+  useAutoLogin: true (type: boolean)
+  loginEmail: info.phominh@gmail.com
+  hasPassword: true
+  bodyKeys: mode, json, useAutoLogin, loginEmail, loginPassword

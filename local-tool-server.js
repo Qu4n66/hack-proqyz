@@ -215,18 +215,37 @@ async function handleUpload(req, res) {
   res.write("$ node " + maskedArgs.join(" ") + "\n");
   res.write("[saved " + GENERATED_FILE + "]\n\n");
 
+  // Pipe stdout/stderr so we can stream them to the browser AND log to server console.
+  // Use 'ipc' only if needed; default: pipe stdout+stderr, ignore stdin.
   const child = spawn("node", args, {
     cwd: __dirname,
-    stdio: "inherit",
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  // Stream stdout and stderr to the browser response AND server console.
+  child.stdout.on("data", (chunk) => {
+    const line = chunk.toString();
+    console.log(line); // server-side log
+    res.write(line);
+  });
+
+  child.stderr.on("data", (chunk) => {
+    const line = chunk.toString();
+    console.error(line); // server-side log (stderr)
+    res.write(line);
   });
 
   child.on("error", (err) => {
-    res.write("\n[spawn error] " + err.message + "\n");
+    const msg = "\n[spawn error] " + err.message + "\n";
+    console.error(msg);
+    res.write(msg);
     res.end();
   });
 
   child.on("close", (code) => {
-    res.write("\n[exit " + (code ?? "null") + "]\n");
+    const msg = "\n[exit " + (code ?? "null") + "]\n";
+    console.log(msg);
+    res.write(msg);
     res.end();
   });
 }

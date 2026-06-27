@@ -36,6 +36,13 @@ export async function runExplanation(opts) {
   const startedAt = Date.now();
   const dryRun = !!opts.dryRun;
 
+  // Track current step for error reporting
+  let _currentStep = "init";
+  const step = (name) => {
+    _currentStep = name;
+    log.pipeline.info({ step: name }, `[step] ${name}`);
+  };
+
   // 1. Load auto-login config.
   //    Strategy A: read _autoLogin from the raw JSON file (UI injects it).
   //    Strategy B: fallback to env vars (from server spawn or CLI flags).
@@ -123,12 +130,15 @@ export async function runExplanation(opts) {
 
   try {
     // 3. Open quiz — direct URL or search.
+    step("open quiz");
     await uploader.searchAndOpenQuiz(data.testTitle, data.existingQuizUrl);
 
     // 3b. Wait for the quiz edit page to fully render.
+    step("wait quiz edit page");
     await waitForQuizEditPageReady(page, { timeoutMs: 30000 });
 
     // 4. Click the Questions tab.
+    step("click Questions tab");
     await _clickQuestionsTab(page);
     log.pipeline.info("Questions tab clicked; waiting for content to load");
 
@@ -139,37 +149,64 @@ export async function runExplanation(opts) {
     await _dumpQuestionsPageState(page, passageTitle);
 
     // 6. Select the correct passage.
+    step("select passage");
     await _selectPassageInTab(page, passageTitle, passage.passage - 1);
 
     // 7. Wait for question rows to load after passage selection.
+    step("wait question rows");
     await _waitForQuestionRows(page, rangeLabel);
 
     // 8. Verify we're on the Question list.
     await _verifyQuestionListVisible(page, rangeLabel);
 
     // 9. Open the question for edit.
+    step("open question edit");
     await uploader.openQuestionForEdit(rangeLabel, expectedSlots);
     log.pipeline.info(`opened ${rangeLabel}`);
 
     // 10. Fill explanation slots (write + verify).
+    step("fill explanations");
     const fillResult = await uploader.fillExplanationsSlot(group.explanations);
     slotsFilled = fillResult.slotsFilled;
     log.pipeline.info({ filled: fillResult.slotsFilled, verified: fillResult.slotsVerified }, `filled ${fillResult.slotsFilled}/${expectedSlots} slots`);
 
     // 11. Save.
+    step("save changes");
     await uploader.saveQuestionEdit();
     log.pipeline.info(`saved ${rangeLabel}`);
 
     // 12. Close modal.
+    step("close modal");
     await uploader.closeQuestionModalAfterSave();
     log.pipeline.info("closed modal");
 
     log.pipeline.info({ slotsFilled }, "explanation upload complete");
   } catch (err) {
     failure = err;
-    log.pipeline.error({ err: err.message }, "explanation upload failed");
+    log.pipeline.error({
+      step: _currentStep,
+      err: err.message,
+      stack: (err.stack || "").split("\n").slice(0, 5).join("\n"),
+      url: page ? page.url() : "(no page)",
+    }, "explanation upload failed");
     try {
-      await captureFailure(page, `explanation-${data.testTitle}`);
+      if (page) {
+        const screenshotPath = `failures/explanation-fatal-${Date.now()}.png`;
+        const htmlPath = `failures/explanation-fatal-${Date.now()}.html`;
+        await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => {});
+        await page.evaluate((p) => {
+          return import("node:fs").then(({ writeFileSync }) =>
+            writeFileSync(p, document.documentElement.outerHTML, "utf8")
+          );
+        }, htmlPath).catch(() => {});
+        log.pipeline.error({
+          step: _currentStep,
+          url: page.url(),
+          screenshot: screenshotPath,
+          html: htmlPath,
+        }, "fatal failure captured");
+      }
+      await captureFailure(page, `explanation-fatal`);
     } catch {
       /* noop */
     }

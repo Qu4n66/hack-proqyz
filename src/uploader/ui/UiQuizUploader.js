@@ -6549,21 +6549,36 @@ export class UiQuizUploader {
       }
 
       if (isBlank) {
-        // --- Blank slot: verify editor is empty, do NOT write ---
+        // --- Blank slot: clear editor if needed, then verify ---
         const verified = await this._verifyBlankExplanation(page, card);
         if (verified) {
           slotsFilled++;
           slotsVerified++;
           log.uploader.info({ slot: exp.slot }, `blank slot ${exp.slot} verified empty`);
         } else {
-          log.uploader.error(
+          // Editor has old content (from previous attempt) — clear it.
+          log.uploader.warn(
             { slot: exp.slot, cardId: card.id },
-            `blank slot ${exp.slot} verification FAILED — editor not empty`,
+            `blank slot ${exp.slot} has old content — clearing`,
           );
-          await captureFailure(page, `blank-verify-fail-${exp.slot}`).catch(() => {});
-          throw new Error(
-            `Blank explanation slot ${exp.slot} verification failed: editor not empty`,
-          );
+          await this._clearExplanationSlot(page, card);
+          // Re-verify after clearing
+          const reVerified = await this._verifyBlankExplanation(page, card);
+          if (reVerified) {
+            slotsFilled++;
+            slotsVerified++;
+            log.uploader.info({ slot: exp.slot }, `blank slot ${exp.slot} cleared and verified`);
+          } else {
+            // Still not empty after clear — this is a real problem
+            log.uploader.error(
+              { slot: exp.slot, cardId: card.id },
+              `blank slot ${exp.slot} could not be cleared`,
+            );
+            await captureFailure(page, `blank-clear-fail-${exp.slot}`).catch(() => {});
+            throw new Error(
+              `Blank explanation slot ${exp.slot} could not be cleared — editor still has content`,
+            );
+          }
         }
         continue;
       }
@@ -7058,6 +7073,55 @@ export class UiQuizUploader {
   }
 
   /**
+   * Clear the content of an explanation TinyMCE editor.
+   * Used when a "blank" slot has old content from a previous upload attempt.
+   *
+   * @param {import("playwright").Page} page
+   * @param {{textareaId: string, index: number}} card
+   * @returns {Promise<boolean>} true if cleared
+   */
+  async _clearExplanationSlot(page, card) {
+    if (!card.textareaId) return false;
+
+    // Try TinyMCE API first
+    const ok = await page.evaluate((textareaId) => {
+      if (typeof tinymce === "undefined") return false;
+      const ed = tinymce.get(textareaId);
+      if (!ed) return false;
+      ed.focus();
+      ed.setContent("", { format: "html" });
+      ed.fire("change");
+      ed.fire("input");
+      ed.save();
+      const ta = document.getElementById(textareaId);
+      if (ta) {
+        ta.value = "";
+        ta.dispatchEvent(new Event("input", { bubbles: true }));
+        ta.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      return true;
+    }, card.textareaId).catch(() => false);
+
+    if (ok) {
+      log.uploader.info({ textareaId: card.textareaId }, "cleared slot via TinyMCE API");
+      await page.waitForTimeout(300);
+      return true;
+    }
+
+    // Fallback: iframe body
+    try {
+      const frame = page.frameLocator(`iframe.tox-edit-area__iframe`).first();
+      const body = frame.locator("body");
+      await body.evaluate((el) => { el.innerHTML = ""; });
+      log.uploader.info({ index: card.index }, "cleared slot via iframe fallback");
+      return true;
+    } catch {
+      log.uploader.warn({ textareaId: card.textareaId }, "could not clear slot");
+      return false;
+    }
+  }
+
+  /**
    * Pre-save content comparison: re-read every TinyMCE editor and compare
    * against source JSON. For blank slots, verifies editor is empty.
    * For non-blank slots, verifies content matches.
@@ -7087,11 +7151,21 @@ export class UiQuizUploader {
 
       if (isBlank) {
         if (actual.length > 0) {
-          mismatches.push({
-            slot: exp.slot,
-            reason: "blank slot not empty",
-            actual: actual.slice(0, 200),
-          });
+          // Auto-clear blank slots — old content from a previous attempt.
+          log.uploader.warn(
+            { slot: exp.slot },
+            "pre-save: blank slot has content — auto-clearing",
+          );
+          await this._clearExplanationSlot(page, card);
+          await page.waitForTimeout(200);
+          const afterClear = await readEditorTextByTextareaId(page, card.textareaId);
+          if (afterClear.length > 0) {
+            mismatches.push({
+              slot: exp.slot,
+              reason: "blank slot could not be cleared",
+              actual: afterClear.slice(0, 200),
+            });
+          }
         }
         log.uploader.info({ slot: exp.slot, blank: true, empty: actual.length === 0 }, "pre-save blank slot check");
       } else {

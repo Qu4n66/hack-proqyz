@@ -1,35 +1,43 @@
 {
   "mode": "explanation",
-  "testTitle": "Cam 16 - Reading 4",
+  "testTitle": "Cam 13 - Reading 1",
   "passages": [
     {
-      "passage": 3,
-      "passageTitle": "Reading Passage 3",
+      "passage": 1,
+      "passageTitle": "Reading Passage 1",
       "questionGroups": [
         {
-          "range": "36-40",
-          "questionNumberStart": 36,
-          "questionNumberEnd": 40,
+          "range": "1-7",
+          "questionNumberStart": 1,
+          "questionNumberEnd": 7,
           "explanations": [
             {
-              "questionNumber": 36,
-              "content": "It was found that, regardless of whether the film they watched depicted AI in a positive or negative light, simply watching a cinematic vision of our technological future <b>polarised the participants’ attitudes</b>. Optimists became more extreme in their enthusiasm for AI and sceptics became even more guarded. (AI in sci-fi films does not make people change their opinions but increase the divergence of attitude of optimists and sceptics)"
+              "questionNumber": 1,
+              "content": "fastest commercial sailing vessels of all time were clippers, three-masted ships built to transport goods around the world, although some also took passengers. From the 1840s until 1869, when the Suez Canal opened and steam propulsion was replacing sail, clippers dominated world trade."
             },
             {
-              "questionNumber": 37,
-              "content": "As AI is represented more and more in media and entertainment, it could lead to a society split between those who benefit from AI and those who reject it. (AI in media and entertainment mentioned but the passage does not mention if it will become positive or not)"
+              "questionNumber": 2,
+              "content": "an old Scottish name for a short nightdress."
             },
             {
-              "questionNumber": 38,
-              "content": "More pertinently, <b>refusing to accept the advantages offered by AI</b> could <b>place a large group of people at a serious disadvantage</b>."
+              "questionNumber": 3,
+              "content": "put him in a very strong position"
             },
             {
-              "questionNumber": 39,
-              "content": "Simply <b>having previous experience with AI</b> can significantly <b>improve people’s opinions about the technology</b>, as was found in the study mentioned above."
+              "questionNumber": 4,
+              "content": "Willis’s company was active in the tea trade between China and Britain, where speed could bring shipowners both profits and prestige, so Cutty Sark was designed to make the journey more quickly than any other ship. On her maiden voyage, in 1870, she set sail from London, carrying large amounts of goods to China."
             },
             {
-              "questionNumber": 40,
-              "content": "For example, one study showed that <b>when people were allowed the freedom to slightly modify an algorithm</b>, they felt <b>more satisfied</b> with its decisions, <b>more likely to believe it was superior</b> and <b>more likely to use it in the future</b>."
+              "questionNumber": 5,
+              "content": "Cutty Sark reached London a week after Thermopylae."
+            },
+            {
+              "questionNumber": 6,
+              "content": "Steam ships reduced the journey time between Britain and China by approximately two months."
+            },
+            {
+              "questionNumber": 7,
+              "blank": true
             }
           ]
         }
