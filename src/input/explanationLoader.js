@@ -50,6 +50,9 @@ export async function loadExplanationFromJson(filePath) {
   log.input.info(
     {
       testTitle: normalized.testTitle,
+      fullPassage: !!normalized.fullPassage,
+      targetPassage: normalized.targetPassage ?? null,
+      expectedGroupCount: normalized.expectedGroupCount ?? null,
       passages: normalized.passages.length,
       totalSlots,
       hasDirectUrl: !!normalized.existingQuizUrl,

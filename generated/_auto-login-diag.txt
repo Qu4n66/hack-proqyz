@@ -1,8 +1,8 @@
-timestamp: 2026-06-27T05:34:18.589Z
+timestamp: 2026-06-30T09:54:43.539Z
 PROQYZ_AUTO_LOGIN: (undefined)
 PROQYZ_LOGIN_EMAIL: (undefined)
 PROQYZ_LOGIN_PASSWORD: (empty/undefined)
-pid: 8883
-cwd: /Users/quanb/Documents/vs/project 4
-argv: /opt/homebrew/Cellar/node/26.0.0/bin/node /Users/quanb/Documents/vs/project 4/bin/upload.js /Users/quanb/Documents/vs/project 4/generated/latest-quiz.json --explanation --auto-login --email info.phominh@gmail.com --password Phominh123456@
+pid: 72265
+cwd: /Users/quanb/Documents/Hermes_workspace/ABPro
+argv: /Users/quanb/.hermes/node/bin/node /Users/quanb/Documents/Hermes_workspace/ABPro/bin/upload.js /Users/quanb/Documents/Hermes_workspace/ABPro/generated/latest-quiz.json --explanation --auto-login --email info.phominh@gmail.com --password Phominh123456@
 envKeys(PROQYZ): (none)

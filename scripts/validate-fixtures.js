@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 /**
- * Validate every *.json in fixtures/ against the QuizSchema.
+ * Validate every *.json in fixtures/ against the appropriate schema.
+ *
+ * Routes by the JSON's `mode` field:
+ *   - "explanation" → ExplanationDataSchema (explanation uploads)
+ *   - anything else → QuizSchema (quiz creation)
  *
  * Catches broken fixtures before they hit CI. Run with:
  *   node scripts/validate-fixtures.js
@@ -12,6 +16,10 @@ import { fileURLToPath } from "node:url";
 import { QuizSchema } from "../src/domain/schemas.js";
 import { normalizeQuiz } from "../src/domain/normalize.js";
 import { checkInvariants } from "../src/domain/invariants.js";
+import {
+  ExplanationDataSchema,
+  normalizeExplanationData,
+} from "../src/domain/explanationSchema.js";
 
 /** Count questions across passages (reading) or sections (listening). */
 function countQuestions(quiz) {
@@ -24,13 +32,28 @@ function countQuestions(quiz) {
   return 0;
 }
 
+/** Recursively collect all *.json under `dir`. */
+async function collectJsonFiles(dir) {
+  const out = [];
+  const entries = await readdir(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    // Skip the legacy subdirectory — it predates the current schema and
+    // is intentionally not part of CI validation.
+    if (entry.isDirectory() && entry.name === "legacy") continue;
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      out.push(...(await collectJsonFiles(full)));
+    } else if (entry.isFile() && entry.name.endsWith(".json")) {
+      out.push(full);
+    }
+  }
+  return out;
+}
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const fixturesDir = resolve(__dirname, "..", "fixtures");
 
-const entries = await readdir(fixturesDir, { withFileTypes: true });
-const files = entries
-  .filter((e) => e.isFile() && e.name.endsWith(".json"))
-  .map((e) => join(fixturesDir, e.name));
+const files = await collectJsonFiles(fixturesDir);
 
 if (files.length === 0) {
   console.log("No fixture files found in", fixturesDir);
@@ -43,6 +66,34 @@ for (const file of files) {
   try {
     const raw = await readFile(file, "utf8");
     const parsed = JSON.parse(raw);
+
+    if (parsed && parsed.mode === "explanation") {
+      // ─── Explanation-mode fixture ───
+      const result = ExplanationDataSchema.safeParse(parsed);
+      if (!result.success) {
+        hadError = true;
+        console.log("INVALID (explanation)");
+        for (const issue of result.error.issues) {
+          console.log(`    - ${issue.path.join(".") || "(root)"}: ${issue.message}`);
+        }
+        continue;
+      }
+      const normalized = normalizeExplanationData(result.data);
+      let totalSlots = 0;
+      for (const p of normalized.passages) {
+        for (const g of p.questionGroups) totalSlots += g.explanations.length;
+      }
+      console.log(
+        `OK (explanation: ${totalSlots} slots across ${normalized.passages.length} passage(s)` +
+          (normalized.fullPassage
+            ? `, fullPassage target=${normalized.targetPassage} expectedGroups=${normalized.expectedGroupCount}`
+            : "") +
+          `)`,
+      );
+      continue;
+    }
+
+    // ─── Quiz-mode fixture ───
     const result = QuizSchema.safeParse(parsed);
     if (!result.success) {
       hadError = true;

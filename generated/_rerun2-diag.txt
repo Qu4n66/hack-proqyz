@@ -1,0 +1,538 @@
+[upload.js ENV DIAG] timestamp: 2026-06-30T08:50:59.915Z | PROQYZ_AUTO_LOGIN: (undefined) | PROQYZ_LOGIN_EMAIL: (undefined) | PROQYZ_LOGIN_PASSWORD: (empty/undefined) | pid: 69037 | cwd: /Users/quanb/Documents/Hermes_workspace/ABPro | argv: /Users/quanb/.hermes/node/bin/node /Users/quanb/Documents/Hermes_workspace/ABPro/bin/upload.js generated/latest-quiz.json --explanation --auto-login --email quanguyen0607@gmail.com --password 06062007Qu@n | envKeys(PROQYZ): (none)
+[08:50:59.917] [32mINFO[39m: [36mauto-login config loaded from env vars[39m
+    mod: "pipeline"
+    email: "quanguyen0607@gmail.com"
+[08:50:59.917] [32mINFO[39m: [36mloading explanation JSON[39m
+    mod: "input"
+    file: "/Users/quanb/Documents/Hermes_workspace/ABPro/generated/latest-quiz.json"
+[08:50:59.919] [32mINFO[39m: [36mexplanation JSON loaded and validated[39m
+    mod: "input"
+    testTitle: "Cam 18 - Reading 1"
+    fullPassage: true
+    targetPassage: 1
+    expectedGroupCount: 3
+    passages: 1
+    totalSlots: 13
+    hasDirectUrl: false
+[08:51:00.478] [32mINFO[39m: [36mauto-login config check[39m
+    mod: "pipeline"
+    useAutoLogin: true
+    email: "quanguyen0607@gmail.com"
+    hasPassword: true
+[08:51:00.722] [32mINFO[39m: [36mauto login enabled — attempting automatic login[39m
+    mod: "auth"
+[08:51:00.722] [32mINFO[39m: [36mauto login enabled[39m
+    mod: "auth"
+    url: "https://app.proqyz.com/login"
+    email: "quanguyen0607@gmail.com"
+[08:51:02.590] [32mINFO[39m: [36mauto login page loaded[39m
+    mod: "auth"
+[08:51:02.613] [32mINFO[39m: [36memail input found[39m
+    mod: "auth"
+[08:51:02.623] [32mINFO[39m: [36mcredentials filled[39m
+    mod: "auth"
+[08:51:02.627] [32mINFO[39m: [36mpassword input found[39m
+    mod: "auth"
+[08:51:02.654] [32mINFO[39m: [36msubmit button found[39m
+    mod: "auth"
+[08:51:02.681] [32mINFO[39m: [36mlogin submitted[39m
+    mod: "auth"
+[08:51:05.418] [32mINFO[39m: [36mauto login success[39m
+    mod: "auth"
+    url: "https://app.proqyz.com/dashboard"
+[08:51:05.423] [32mINFO[39m: [36msaved storageState[39m
+    mod: "auth"
+    path: "/Users/quanb/Documents/Hermes_workspace/ABPro/storageState.json"
+[08:51:05.423] [32mINFO[39m: [36msaved storageState[39m
+    mod: "auth"
+    path: "/Users/quanb/Documents/Hermes_workspace/ABPro/storageState.json"
+[08:51:05.533] [32mINFO[39m: [36m[step] open quiz[39m
+    mod: "pipeline"
+    step: "open quiz"
+[08:51:05.533] [32mINFO[39m: [36msearching quiz on My Quizzes[39m
+    mod: "uploader"
+    testTitle: "Cam 18 - Reading 1"
+[08:51:07.390] [32mINFO[39m: [36mvisible quiz titles BEFORE search[39m
+    mod: "uploader"
+    count: 14
+    titles: [
+      "--all modules--",
+      "cam 18 - reading 1",
+      "i want 2 test",
+      "i want to test",
+      "cam 17 reading test 01",
+      "ui smoke",
+      "cam 17 - test",
+      "ilovu2",
+      "ilovu",
+      "dog",
+      "1",
+      "my quizzes",
+      "import quiz",
+      "quiz library"
+    ]
+[08:51:07.391] [32mINFO[39m: [36mmatched quiz title in visible list[39m
+    mod: "uploader"
+    testTitle: "Cam 18 - Reading 1"
+    matchedTitle: "cam 18 - reading 1"
+    isExact: true
+[08:51:07.394] [32mINFO[39m: [36medit pencil found[39m
+    mod: "uploader"
+    testTitle: "Cam 18 - Reading 1"
+    matchedTitle: "cam 18 - reading 1"
+    rowSel: ".card"
+    pencilSel: "a[href*=\"edit\"]:not([href*=\"preview\"]):not([href*=\"view\"])"
+[08:51:07.394] [32mINFO[39m: [36mquiz found in visible list (no search needed)[39m
+    mod: "uploader"
+    testTitle: "Cam 18 - Reading 1"
+[08:51:07.951] [32mINFO[39m: [36mquiz edit page opened[39m
+    mod: "uploader"
+    testTitle: "Cam 18 - Reading 1"
+[08:51:07.951] [32mINFO[39m: [36m[step] wait quiz edit page[39m
+    mod: "pipeline"
+    step: "wait quiz edit page"
+[08:51:07.951] [32mINFO[39m: [36mwaiting for quiz edit page to render[39m
+    mod: "pipeline"
+    timeoutMs: 30000
+[08:51:07.959] [32mINFO[39m: [36mquiz edit page ready signal detected[39m
+    mod: "pipeline"
+    url: "https://app.proqyz.com/dashboard/@customer/pro-qyz/quiz/edit/6a2c18faa6e2d07ec678a736"
+    ms: 8
+[08:51:07.959] [32mINFO[39m: [36m[step] select passage[39m
+    mod: "pipeline"
+    step: "select passage"
+[08:51:07.960] [32mINFO[39m: [36mattempting to click Questions tab[39m
+    mod: "pipeline"
+[08:51:07.963] [32mINFO[39m: [36mquiz edit page nav visible[39m
+    mod: "pipeline"
+[08:51:07.976] [32mINFO[39m: [36mtab text readiness[39m
+    mod: "pipeline"
+    tabTextsReady: true
+[08:51:07.980] [32mINFO[39m: [36mtop quiz nav tabs (full metadata)[39m
+    mod: "pipeline"
+    tabs: [
+      {
+        "index": 0,
+        "text": "Basic Edit",
+        "innerText": "Basic Edit",
+        "className": "nav-link text-active-primary ms-0 me-10 py-5 active",
+        "hasActive": true,
+        "type": "button",
+        "href": "",
+        "ariaLabel": "",
+        "title": "",
+        "role": "",
+        "dataAttrs": [],
+        "outerHTML": "<a type=\"button\" class=\"nav-link text-active-primary ms-0 me-10 py-5 active\">Basic Edit</a>"
+      },
+      {
+        "index": 1,
+        "text": "Passages",
+        "innerText": "Passages",
+        "className": "nav-link text-active-primary ms-0 me-10 py-5 ",
+        "hasActive": false,
+        "type": "button",
+        "href": "",
+        "ariaLabel": "",
+        "title": "",
+        "role": "",
+        "dataAttrs": [],
+        "outerHTML": "<a type=\"button\" class=\"nav-link text-active-primary ms-0 me-10 py-5 \">Passages</a>"
+      },
+      {
+        "index": 2,
+        "text": "Questions",
+        "innerText": "Questions",
+        "className": "nav-link text-active-primary ms-0 me-10 py-5 ",
+        "hasActive": false,
+        "type": "button",
+        "href": "",
+        "ariaLabel": "",
+        "title": "",
+        "role": "",
+        "dataAttrs": [],
+        "outerHTML": "<a type=\"button\" class=\"nav-link text-active-primary ms-0 me-10 py-5 \">Questions</a>"
+      }
+    ]
+[08:51:07.981] [32mINFO[39m: [36mclicking Questions tab[39m
+    mod: "pipeline"
+    strategy: "text"
+    selectorIndex: 0
+[08:51:08.503] [32mINFO[39m: [36mafter clicking Questions tab[39m
+    mod: "pipeline"
+    tabs: [
+      {
+        "index": 0,
+        "text": "Basic Edit",
+        "hasActive": false
+      },
+      {
+        "index": 1,
+        "text": "Passages",
+        "hasActive": false
+      },
+      {
+        "index": 2,
+        "text": "Questions",
+        "hasActive": true
+      }
+    ]
+    questionsActive: true
+    pageContentCheck: {
+      "isQuestions": true,
+      "signal": "Questions"
+    }
+[08:51:08.503] [32mINFO[39m: [36mQuestions tab clicked; waiting for content to load[39m
+    mod: "pipeline"
+[08:51:09.308] [32mINFO[39m: [36mQuestions page ready: content signal detected[39m
+    mod: "pipeline"
+[08:51:09.313] [32mINFO[39m: [36mpassage select found[39m
+    mod: "pipeline"
+    passageTitle: "Reading Passage 1"
+    options: [
+      "--SELECT PASSAGE--",
+      "Reading passage 1",
+      "Reading passage 2",
+      "Reading passage 3"
+    ]
+[08:51:10.323] [32mINFO[39m: [36mselected passage in Questions tab[39m
+    mod: "pipeline"
+    passageTitle: "Reading Passage 1"
+    selectedText: "Reading passage 1"
+    selectedValue: "6a2c1919a6e2d07ec678a737"
+[08:51:10.323] [32mINFO[39m: [36m[step] wait for real question groups[39m
+    mod: "pipeline"
+    step: "wait for real question groups"
+[08:51:10.324] [32mINFO[39m: [36m_waitForRealQuestionGroups: at least one real group rendered[39m
+    mod: "pipeline"
+    firstTitle: "Question 1-3"
+    elapsedMs: 1
+[08:51:10.324] [32mINFO[39m: [36m[step] verify question groups[39m
+    mod: "pipeline"
+    step: "verify question groups"
+[08:51:10.326] [32mINFO[39m: [36mgetVisibleQuestionGroups: scan summary[39m
+    mod: "pipeline"
+    candidateCount: 4
+    acceptedCount: 3
+    rejectedCount: 1
+    rejectedSamples: [
+      {
+        "selector": ".d-flex.flex-stack",
+        "reason": "no pencil edit button inside",
+        "textPreview": "Designed bySpacetree\nAbout\nSupport\nPurchase"
+      }
+    ]
+[08:51:10.326] [32mINFO[39m: [36mgetVisibleQuestionGroups: accepted group titles[39m
+    mod: "pipeline"
+    titles: [
+      "Question 1-3",
+      "Question 4-7",
+      "Question 8-13"
+    ]
+[08:51:10.328] [32mINFO[39m: [36mgetVisibleQuestionGroups result[39m
+    mod: "pipeline"
+    groups: [
+      {
+        "title": "Question 1-3",
+        "slotIndex": 1,
+        "hasEditButton": true
+      },
+      {
+        "title": "Question 4-7",
+        "slotIndex": 2,
+        "hasEditButton": true
+      },
+      {
+        "title": "Question 8-13",
+        "slotIndex": 3,
+        "hasEditButton": true
+      }
+    ]
+[08:51:10.328] [32mINFO[39m: [36m[fullPassage] groups read from UI[39m
+    mod: "pipeline"
+    expected: 3
+    found: 3
+    uiTitles: [
+      "Question 1-3",
+      "Question 4-7",
+      "Question 8-13"
+    ]
+[08:51:10.328] [32mINFO[39m: [36m[fullPassage] UI groups match JSON[39m
+    mod: "pipeline"
+    expectedGroupCount: 3
+    uiCount: 3
+[08:51:10.328] [32mINFO[39m: [36m[step] open group 1[39m
+    mod: "pipeline"
+    step: "open group 1"
+[08:51:11.140] [32mINFO[39m: [36m[fullPassage] group 1/3: Question 1-3[39m
+    mod: "pipeline"
+    step: "open"
+[08:51:11.141] [32mINFO[39m: [36m[step] fill group 1[39m
+    mod: "pipeline"
+    step: "fill group 1"
+[08:51:11.144] [32mINFO[39m: [36mopening explanation tab[39m
+    mod: "uploader"
+[08:51:11.692] [32mINFO[39m: [36mexplanation tab opened[39m
+    mod: "uploader"
+[08:51:11.697] [32mINFO[39m: [36mexplanation editors detected[39m
+    mod: "uploader"
+    toxCount: 3
+    iframeCount: 3
+    ceCount: 0
+    taCount: 3
+[08:51:11.699] [32mINFO[39m: [36mexplanation cards found[39m
+    mod: "uploader"
+    cardCount: 3
+    cards: [
+      {
+        "index": 0,
+        "label": "1. Explanation",
+        "textareaId": "tiny-react_77425269611782809471171",
+        "collapsed": false,
+        "cardIndex": 0
+      },
+      {
+        "index": 1,
+        "label": "2. Explanation",
+        "textareaId": "tiny-react_16941656921782809471171",
+        "collapsed": false,
+        "cardIndex": 1
+      },
+      {
+        "index": 2,
+        "label": "3. Explanation",
+        "textareaId": "tiny-react_63004502431782809471171",
+        "collapsed": false,
+        "cardIndex": 2
+      }
+    ]
+[08:51:11.699] [32mINFO[39m: [36mexplanation card inventory[39m
+    mod: "uploader"
+    inventory: [
+      {
+        "index": 0,
+        "label": "1. Explanation",
+        "textareaId": "tiny-react_77425269611782809471171",
+        "collapsed": false,
+        "cardIndex": 0
+      },
+      {
+        "index": 1,
+        "label": "2. Explanation",
+        "textareaId": "tiny-react_16941656921782809471171",
+        "collapsed": false,
+        "cardIndex": 1
+      },
+      {
+        "index": 2,
+        "label": "3. Explanation",
+        "textareaId": "tiny-react_63004502431782809471171",
+        "collapsed": false,
+        "cardIndex": 2
+      }
+    ]
+[08:51:11.699] [32mINFO[39m: [36mfilling slot 1[39m
+    mod: "uploader"
+    slot: 1
+    index: 1
+    total: 3
+    blank: false
+[08:51:11.700] [32mINFO[39m: [36mTinyMCE editor ready[39m
+    mod: "uploader"
+    textareaId: "tiny-react_77425269611782809471171"
+    ms: 1
+[08:51:11.703] [32mINFO[39m: [36mTinyMCE targeted write succeeded[39m
+    mod: "uploader"
+    textareaId: "tiny-react_77425269611782809471171"
+[08:51:12.306] [32mINFO[39m: [36mpost-write DOM body verified[39m
+    mod: "uploader"
+    textareaId: "tiny-react_77425269611782809471171"
+    bodyLength: 283
+[08:51:12.308] [32mINFO[39m: [36mslot verification compare[39m
+    mod: "uploader"
+    textareaId: "tiny-react_77425269611782809471171"
+    textMatch: true
+    actualText: "That is not to suggest everyone should dance their way to work, however healthy and happy it might make us, but rather t"
+    expectedText: "That is not to suggest everyone should dance their way to work, however healthy and happy it might make us, but rather t"
+[08:51:12.308] [32mINFO[39m: [36mverified slot 1[39m
+    mod: "uploader"
+    slot: 1
+[08:51:12.308] [32mINFO[39m: [36mfilling slot 2[39m
+    mod: "uploader"
+    slot: 2
+    index: 2
+    total: 3
+    blank: false
+[08:51:12.310] [32mINFO[39m: [36mTinyMCE editor ready[39m
+    mod: "uploader"
+    textareaId: "tiny-react_16941656921782809471171"
+    ms: 2
+[08:51:12.316] [32mINFO[39m: [36mTinyMCE targeted write succeeded[39m
+    mod: "uploader"
+    textareaId: "tiny-react_16941656921782809471171"
+[08:51:12.919] [32mINFO[39m: [36mpost-write DOM body verified[39m
+    mod: "uploader"
+    textareaId: "tiny-react_16941656921782809471171"
+    bodyLength: 311
+[08:51:12.920] [32mINFO[39m: [36mslot verification compare[39m
+    mod: "uploader"
+    textareaId: "tiny-react_16941656921782809471171"
+    textMatch: true
+    actualText: "Whereas medieval builders improvised and adapted construction through their intimate knowledge of materials and personal"
+    expectedText: "Whereas medieval builders improvised and adapted construction through their intimate knowledge of materials and personal"
+[08:51:12.920] [32mINFO[39m: [36mverified slot 2[39m
+    mod: "uploader"
+    slot: 2
+[08:51:12.920] [32mINFO[39m: [36mfilling slot 3[39m
+    mod: "uploader"
+    slot: 3
+    index: 3
+    total: 3
+    blank: false
+[08:51:12.921] [32mINFO[39m: [36mTinyMCE editor ready[39m
+    mod: "uploader"
+    textareaId: "tiny-react_63004502431782809471171"
+    ms: 1
+[08:51:12.925] [32mINFO[39m: [36mTinyMCE targeted write succeeded[39m
+    mod: "uploader"
+    textareaId: "tiny-react_63004502431782809471171"
+[08:51:13.529] [32mINFO[39m: [36mpost-write DOM body verified[39m
+    mod: "uploader"
+    textareaId: "tiny-react_63004502431782809471171"
+    bodyLength: 101
+[08:51:13.530] [32mINFO[39m: [36mslot verification compare[39m
+    mod: "uploader"
+    textareaId: "tiny-react_63004502431782809471171"
+    textMatch: true
+    actualText: "Yet it shares with engineering the aim of designing patterns of movement within limitations of space."
+    expectedText: "Yet it shares with engineering the aim of designing patterns of movement within limitations of space."
+[08:51:13.530] [32mINFO[39m: [36mverified slot 3[39m
+    mod: "uploader"
+    slot: 3
+[08:51:13.530] [32mINFO[39m: [36mall explanation slots verified[39m
+    mod: "uploader"
+    slotsFilled: 3
+    slotsVerified: 3
+    expected: 3
+[08:51:13.733] [32mINFO[39m: [36m[verify] pre-save text matches[39m
+    mod: "uploader"
+    slot: 1
+    textMatch: true
+[08:51:13.937] [32mINFO[39m: [36m[verify] pre-save text matches[39m
+    mod: "uploader"
+    slot: 2
+    textMatch: true
+[08:51:14.140] [32mINFO[39m: [36m[verify] pre-save text matches[39m
+    mod: "uploader"
+    slot: 3
+    textMatch: true
+[08:51:14.140] [32mINFO[39m: [36mall slots verified against source JSON before save[39m
+    mod: "uploader"
+[08:51:14.140] [32mINFO[39m: [36m[fullPassage] group 1/3: Question 1-3 explanations filled[39m
+    mod: "pipeline"
+    filled: 3
+[08:51:14.140] [32mINFO[39m: [36m[step] save group 1[39m
+    mod: "pipeline"
+    step: "save group 1"
+[08:51:14.214] [31mERROR[39m: [36mFAILURE CAPTURED[39m
+    mod: "uploader"
+    screenshotPath: "/Users/quanb/Documents/Hermes_workspace/ABPro/failures/2026-06-30T08-51-14-141Z-explanation-pre-save.png"
+    htmlPath: "/Users/quanb/Documents/Hermes_workspace/ABPro/failures/2026-06-30T08-51-14-141Z-explanation-pre-save.html"
+[08:51:14.214] [32mINFO[39m: [36mpre-save screenshot captured[39m
+    mod: "uploader"
+[08:51:14.215] [32mINFO[39m: [36mdirty state check before save[39m
+    mod: "uploader"
+    dirtySignal: {
+      "found": false
+    }
+[08:51:14.216] [33mWARN[39m: [36mSave Changes button not visible; trying Finish tab[39m
+    mod: "uploader"
+[08:51:14.773] [32mINFO[39m: [36msave complete, modal still open (will be closed by pipeline)[39m
+    mod: "uploader"
+[08:51:15.274] [32mINFO[39m: [36mquestion edit saved[39m
+    mod: "uploader"
+[08:51:15.274] [32mINFO[39m: [36m[fullPassage] group 1/3: Question 1-3 save clicked[39m
+    mod: "pipeline"
+[08:51:15.274] [32mINFO[39m: [36m[step] close modal 1[39m
+    mod: "pipeline"
+    step: "close modal 1"
+[08:51:15.275] [32mINFO[39m: [36msaveAndCloseQuestionGroupModal: starting[39m
+    mod: "pipeline"
+[08:51:15.499] [32mINFO[39m: [36msaveAndCloseQuestionGroupModal: clicking Save Changes[39m
+    mod: "pipeline"
+[08:51:15.509] [32mINFO[39m: [36msaveAndCloseQuestionGroupModal: waiting for save to complete[39m
+    mod: "pipeline"
+[08:51:16.718] [32mINFO[39m: [36msaveAndCloseQuestionGroupModal: modal-header DOM inspection[39m
+    mod: "pipeline"
+    inspection: {
+      "header": {
+        "tagName": "DIV",
+        "class": "modal-header p-4",
+        "id": "",
+        "role": "",
+        "ariaLabel": "",
+        "title": "",
+        "outerHTML": "<div class=\"modal-header p-4\"><h6 class=\"modal-title\">Edit Reading Question</h6><div class=\"btn-close-add-question-modal btn btn-sm btn-icon btn-active-color-primary\"><i class=\"ki-duotone ki-cross fs-1\"><span class=\"path1\"></span><span class=\"path2\"></span></i></div></div>"
+      },
+      "children": [
+        {
+          "tagName": "H6",
+          "class": "modal-title",
+          "id": "",
+          "role": "",
+          "ariaLabel": "",
+          "title": "",
+          "outerHTML": "<h6 class=\"modal-title\">Edit Reading Question</h6>"
+        },
+        {
+          "tagName": "DIV",
+          "class": "btn-close-add-question-modal btn btn-sm btn-icon btn-active-color-primary",
+          "id": "",
+          "role": "",
+          "ariaLabel": "",
+          "title": "",
+          "outerHTML": "<div class=\"btn-close-add-question-modal btn btn-sm btn-icon btn-active-color-primary\"><i class=\"ki-duotone ki-cross fs-1\"><span class=\"path1\"></span><span class=\"path2\"></span></i></div>"
+        }
+      ],
+      "candidateClose": [
+        {
+          "tagName": "DIV",
+          "class": "btn-close-add-question-modal btn btn-sm btn-icon btn-active-color-primary",
+          "id": "",
+          "role": "",
+          "ariaLabel": "",
+          "title": "",
+          "outerHTML": "<div class=\"btn-close-add-question-modal btn btn-sm btn-icon btn-active-color-primary\"><i class=\"ki-duotone ki-cross fs-1\"><span class=\"path1\"></span><span class=\"path2\"></span></i></div>"
+        },
+        {
+          "tagName": "I",
+          "class": "ki-duotone ki-cross fs-1",
+          "id": "",
+          "role": "",
+          "ariaLabel": "",
+          "title": "",
+          "outerHTML": "<i class=\"ki-duotone ki-cross fs-1\"><span class=\"path1\"></span><span class=\"path2\"></span></i>"
+        }
+      ]
+    }
+[08:51:16.718] [31mERROR[39m: [36mexplanation upload failed[39m
+    mod: "pipeline"
+    step: "close modal 1"
+    stack: "TypeError: editModalElement.locator is not a function\n    at saveAndCloseQuestionGroupModal (file:///Users/quanb/Documents/Hermes_workspace/ABPro/src/pipeline/runExplanation.js:1879:22)\n    at async runExplanation (file:///Users/quanb/Documents/Hermes_workspace/ABPro/src/pipeline/runExplanation.js:171:9)\n    at async main (file:///Users/quanb/Documents/Hermes_workspace/ABPro/bin/upload.js:314:5)"
+    url: "https://app.proqyz.com/dashboard/@customer/pro-qyz/quiz/edit/6a2c18faa6e2d07ec678a736"
+    err: "editModalElement.locator is not a function"
+[08:51:16.776] [31mERROR[39m: [36mfatal failure captured[39m
+    mod: "pipeline"
+    step: "close modal 1"
+    url: "https://app.proqyz.com/dashboard/@customer/pro-qyz/quiz/edit/6a2c18faa6e2d07ec678a736"
+    screenshot: "failures/explanation-fatal-1782809476718.png"
+    html: "failures/explanation-fatal-1782809476718.html"
+    err: "editModalElement.locator is not a function"
+[08:51:16.814] [31mERROR[39m: [36mFAILURE CAPTURED[39m
+    mod: "uploader"
+    screenshotPath: "/Users/quanb/Documents/Hermes_workspace/ABPro/failures/2026-06-30T08-51-16-776Z-explanation-fatal-close-modal-1.png"
+    htmlPath: "/Users/quanb/Documents/Hermes_workspace/ABPro/failures/2026-06-30T08-51-16-776Z-explanation-fatal-close-modal-1.html"
+[08:51:16.887] [32mINFO[39m: [36m[FAIL] Cam 18 - Reading 1  3/13 questions  (16971ms)[39m
+    mod: "pipeline"
+[08:51:16.887] [31mERROR[39m: [36m        error: editModalElement.locator is not a function[39m
+    mod: "pipeline"

@@ -31,6 +31,7 @@ import { detectEditor, writeToEditor, writePlain } from "./editorStrategies.js";
 import { selectCorrectOption, selectCorrectCheckboxes } from "./radioStrategy.js";
 import { defaultOptionsToSelectValue } from "../../domain/schemas.js";
 import { captureFailure } from "./screenshots.js";
+import { htmlToComparableText, prepareExplanationHtml, compareHtmlText } from "./explanationHtml.js";
 
 /**
  * Replace generic {answer} placeholders in grouped fill_up content
@@ -7561,123 +7562,10 @@ function slugId(title) {
 
 // ──────────────────────────────────────────────────────────────
 // Safe HTML helpers for explanation content
+//
+// htmlToComparableText, prepareExplanationHtml, and compareHtmlText live
+// in `./explanationHtml.js` so they can be imported by tests directly.
 // ──────────────────────────────────────────────────────────────
-
-/**
- * Strip all HTML tags and normalize whitespace to produce a comparable
- * plain-text string. This is used for pre-save verification so that
- * TinyMCE normalization (e.g. <b> → <strong>, <br> → <p>) does not
- * cause false mismatches.
- *
- * @param {unknown} value
- * @returns {string}
- */
-function htmlToComparableText(value) {
-  return String(value ?? "")
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<\/p>\s*<p>/gi, "\n")
-    .replace(/<\/?p[^>]*>/gi, "")
-    .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;/gi, "'")
-    .replace(/\s+\n/g, "\n")
-    .replace(/\n\s+/g, "\n")
-    .replace(/[ \t]+/g, " ")
-    .trim();
-}
-
-/**
- * Allowed inline HTML tags that may appear in explanation `content`.
- * Everything else is stripped.
- */
-const ALLOWED_HTML_TAGS = new Set(["b", "strong", "i", "em", "br", "p"]);
-
-/**
- * Prepare explanation content for TinyMCE insertion:
- *   - Converts to string
- *   - Preserves allowed inline tags (b, strong, i, em, br)
- *   - Converts \n into <br>
- *   - Wraps in <p>...</p> if no block wrapper is present
- *   - Strips all other HTML
- *
- * @param {string} content
- * @returns {string}
- */
-function prepareExplanationHtml(content) {
-  const str = String(content ?? "");
-
-  // Step 1: normalize self-closing br (handle both <br> and <br/> and <br />)
-  let normalized = str;
-
-  // Step 2: extract allowed tag pairs and their contents, then strip everything else
-  const result = [];
-  let remaining = normalized;
-
-  // Simple regex-based sanitizer: preserve allowed tags, strip everything else
-  // Process character by character to handle nested/reordered tags
-  // Strategy: replace allowed tags with a placeholder marker, strip disallowed,
-  // then restore. Simpler approach: iterate and build up allowed portions.
-
-  // Use a DOMParser-free approach: regex pass to strip disallowed tags
-  // Allowed: b, /b, strong, /strong, i, /i, em, /em, br, /br, p, /p
-  // All other angle-bracket content is stripped
-
-  // Pass: extract all allowed open/close tags and plain text segments
-  const TAG_RE = /<\/?([a-zA-Z][a-zA-Z0-9]*)(?:\s[^>]*)?\/?>/g;
-  let lastIndex = 0;
-  let match;
-
-  while ((match = TAG_RE.exec(remaining)) !== null) {
-    // Text before this tag
-    if (match.index > lastIndex) {
-      result.push(remaining.slice(lastIndex, match.index));
-    }
-    const tagName = match[1].toLowerCase();
-    if (ALLOWED_HTML_TAGS.has(tagName)) {
-      result.push(match[0]); // keep the original tag
-    }
-    // else: skip (strip disallowed tag)
-    lastIndex = match.index + match[0].length;
-  }
-  // Trailing text
-  if (lastIndex < remaining.length) {
-    result.push(remaining.slice(lastIndex));
-  }
-
-  let sanitized = result.join("");
-
-  // Step 3: convert \n to <br>
-  // Only convert newlines that are NOT already inside a tag (e.g. after </p>)
-  // Replace standalone \n with <br>
-  sanitized = sanitized
-    .replace(/([^>\n])\n(?!<)/g, "$1<br>\n")
-    .replace(/\n+/g, "\n");
-
-  // Step 4: wrap in <p>...</p> if not already wrapped
-  const hasBlockWrapper = /^[\s\n]*<p[\s>]/i.test(sanitized) || /<\/?p[\s>]/i.test(sanitized);
-  if (!hasBlockWrapper) {
-    // Wrap each line/segment — split on \n, wrap each non-empty segment
-    const segments = sanitized.split("\n");
-    const wrapped = segments
-      .map((seg) => {
-        const trimmed = seg.trim();
-        if (!trimmed) return "";
-        return `<p>${trimmed}</p>`;
-      })
-      .filter(Boolean)
-      .join("\n");
-    sanitized = wrapped;
-  } else {
-    // Ensure there's a trailing newline for readability
-    sanitized = sanitized.trim();
-  }
-
-  return sanitized || "";
-}
 
 /**
  * Check whether the expected formatting tags appear in the actual TinyMCE

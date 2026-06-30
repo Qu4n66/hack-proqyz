@@ -1,0 +1,63 @@
+{
+  "mode": "explanation",
+  "testTitle": "Cam 18 - Reading 1",
+  "quizType": "reading",
+  "fullPassage": true,
+  "targetPassage": 1,
+  "expectedGroupCount": 3,
+  "passages": [
+    {
+      "passage": 1,
+      "passageTitle": "Reading Passage 1",
+      "questionGroups": [
+        {
+          "groupTitle": "Question 1-3",
+          "range": "1-3",
+          "questionNumberStart": 1,
+          "questionNumberEnd": 3,
+          "slotIndex": 1,
+          "explanations": [
+            {
+              "questionNumber": 1,
+              "content": "Plain explanation."
+            },
+            {
+              "questionNumber": 2,
+              "content": "Explanation with <b>bold</b> and <i>italic</i>."
+            },
+            {
+              "questionNumber": 3,
+              "content": "Line one.\nLine two."
+            }
+          ]
+        },
+        {
+          "groupTitle": "Question 4-7",
+          "range": "4-7",
+          "questionNumberStart": 4,
+          "questionNumberEnd": 7,
+          "slotIndex": 2,
+          "explanations": [
+            {
+              "questionNumber": 4,
+              "content": "Answer explanation for question 4."
+            }
+          ]
+        },
+        {
+          "groupTitle": "Question 8-13",
+          "range": "8-13",
+          "questionNumberStart": 8,
+          "questionNumberEnd": 13,
+          "slotIndex": 3,
+          "explanations": [
+            {
+              "questionNumber": 8,
+              "content": "Answer explanation for question 8."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

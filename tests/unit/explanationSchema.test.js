@@ -13,6 +13,7 @@ import {
   ExplanationDataSchema,
   ExplanationGroupSchema,
   normalizeExplanationData,
+  getTargetPassageGroups,
 } from "../../src/domain/explanationSchema.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -479,4 +480,231 @@ test("blank=true takes precedence over content in same slot", () => {
   assert.equal(normalized.passages[0].questionGroups[0].explanations[0].content, "");
   assert.equal(normalized.passages[0].questionGroups[0].explanations[1].blank, false);
   assert.equal(normalized.passages[0].questionGroups[0].explanations[1].content, "<p>Q37 content</p>");
+});
+
+// ---------------------------------------------------------------------------
+// Full-passage mode (master.md Parts 5–11)
+// ---------------------------------------------------------------------------
+
+function makeValidFullPassage() {
+  return {
+    mode: "explanation",
+    testTitle: "Cam 18 - Reading 1",
+    quizType: "reading",
+    fullPassage: true,
+    targetPassage: 1,
+    expectedGroupCount: 3,
+    passages: [
+      {
+        passage: 1,
+        passageTitle: "Reading Passage 1",
+        questionGroups: [
+          {
+            groupTitle: "Question 1-3",
+            range: "1-3",
+            questionNumberStart: 1,
+            questionNumberEnd: 3,
+            slotIndex: 1,
+            explanations: [
+              { questionNumber: 1, content: "Plain explanation." },
+              { questionNumber: 2, content: "Explanation with <b>bold</b> and <i>italic</i>." },
+              { questionNumber: 3, content: "Line one.\nLine two." },
+            ],
+          },
+          {
+            groupTitle: "Question 4-7",
+            range: "4-7",
+            questionNumberStart: 4,
+            questionNumberEnd: 7,
+            slotIndex: 2,
+            explanations: [
+              { questionNumber: 4, content: "Answer explanation for question 4." },
+            ],
+          },
+          {
+            groupTitle: "Question 8-13",
+            range: "8-13",
+            questionNumberStart: 8,
+            questionNumberEnd: 13,
+            slotIndex: 3,
+            explanations: [
+              { questionNumber: 8, content: "Answer explanation for question 8." },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+}
+
+test("fullPassage: valid full-passage JSON parses", () => {
+  const result = ExplanationDataSchema.safeParse(makeValidFullPassage());
+  assert.equal(result.success, true, `expected success, got ${JSON.stringify(result.success ? null : result.error.issues)}`);
+});
+
+test("fullPassage: targetPassage is required", () => {
+  const data = makeValidFullPassage();
+  delete data.targetPassage;
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("fullPassage: expectedGroupCount is required", () => {
+  const data = makeValidFullPassage();
+  delete data.expectedGroupCount;
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("fullPassage: targetPassage must match a passage in passages[]", () => {
+  const data = makeValidFullPassage();
+  data.targetPassage = 99;
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("fullPassage: expectedGroupCount must match questionGroups.length", () => {
+  const data = makeValidFullPassage();
+  data.expectedGroupCount = 2; // actual is 3
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("fullPassage: every group must have slotIndex", () => {
+  const data = makeValidFullPassage();
+  delete data.passages[0].questionGroups[1].slotIndex;
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("fullPassage: every group must have groupTitle", () => {
+  const data = makeValidFullPassage();
+  delete data.passages[0].questionGroups[2].groupTitle;
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("fullPassage: quizType must be 'reading' or 'listening'", () => {
+  const data = makeValidFullPassage();
+  data.quizType = "writing";
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("fullPassage: explanations questionNumbers must be inside range", () => {
+  const data = makeValidFullPassage();
+  data.passages[0].questionGroups[0].explanations[0].questionNumber = 99; // out of 1-3
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("fullPassage: range string must match questionNumberStart/End", () => {
+  const data = makeValidFullPassage();
+  data.passages[0].questionGroups[0].range = "1-5"; // mismatches 1-3
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("fullPassage: questionNumberStart > questionNumberEnd rejected", () => {
+  const data = makeValidFullPassage();
+  data.passages[0].questionGroups[0].questionNumberStart = 3;
+  data.passages[0].questionGroups[0].questionNumberEnd = 1;
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("fullPassage: questionNumberStart <= questionNumberEnd passes", () => {
+  const data = makeValidFullPassage();
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, true);
+});
+
+test("fullPassage: slotIndex >= 1 required", () => {
+  const data = makeValidFullPassage();
+  data.passages[0].questionGroups[0].slotIndex = 0;
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, false);
+});
+
+test("single-group mode still works without fullPassage", () => {
+  const data = makeValidExplanation();
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, true);
+});
+
+test("fullPassage=false still works as single-group", () => {
+  const data = makeValidExplanation();
+  data.fullPassage = false;
+  const result = ExplanationDataSchema.safeParse(data);
+  assert.equal(result.success, true);
+});
+
+test("fullPassage: normalizeExplanationData sorts groups by slotIndex", () => {
+  const data = makeValidFullPassage();
+  const original = data.passages[0].questionGroups.slice();
+  data.passages[0].questionGroups = [original[2], original[0], original[1]];
+  const result = ExplanationDataSchema.parse(data);
+  const normalized = normalizeExplanationData(result);
+
+  const groups = normalized.passages[0].questionGroups;
+  assert.equal(groups[0].groupTitle, "Question 1-3");
+  assert.equal(groups[0].slotIndex, 1);
+  assert.equal(groups[1].groupTitle, "Question 4-7");
+  assert.equal(groups[1].slotIndex, 2);
+  assert.equal(groups[2].groupTitle, "Question 8-13");
+  assert.equal(groups[2].slotIndex, 3);
+});
+
+test("fullPassage: normalizeExplanationData defaults missing slotIndex from JSON position", () => {
+  const data = makeValidFullPassage();
+  delete data.passages[0].questionGroups[0].slotIndex;
+  // Schema requires slotIndex only in fullPassage mode; remove fullPassage.
+  data.fullPassage = false;
+  delete data.targetPassage;
+  delete data.expectedGroupCount;
+  const result = ExplanationDataSchema.parse(data);
+  const normalized = normalizeExplanationData(result);
+
+  assert.equal(normalized.passages[0].questionGroups[0].slotIndex, 1);
+  assert.equal(normalized.passages[0].questionGroups[1].slotIndex, 2);
+});
+
+test("fullPassage: getTargetPassageGroups returns the targeted passage", () => {
+  const result = ExplanationDataSchema.parse(makeValidFullPassage());
+  const normalized = normalizeExplanationData(result);
+  const { passage, groups } = getTargetPassageGroups(normalized);
+  assert.equal(passage.passage, 1);
+  assert.equal(groups.length, 3);
+});
+
+test("fullPassage: getTargetPassageGroups throws when fullPassage is false", () => {
+  const result = ExplanationDataSchema.parse(makeValidExplanation());
+  const normalized = normalizeExplanationData(result);
+  assert.throws(() => getTargetPassageGroups(normalized), /fullPassage=true/);
+});
+
+test("fullPassage: full-passage example fixture parses and normalizes", async () => {
+  const raw = await readFile(
+    resolve(fixturesDir, "explanation", "full-passage-example.json"),
+    "utf8",
+  );
+  const parsed = JSON.parse(raw);
+  const result = ExplanationDataSchema.safeParse(parsed);
+  assert.equal(result.success, true, `fixture should validate, got ${JSON.stringify(result.success ? null : result.error.issues)}`);
+
+  const normalized = normalizeExplanationData(result.data);
+  assert.equal(normalized.mode, "explanation");
+  assert.equal(normalized.testTitle, "Cam 18 - Reading 1");
+  assert.equal(normalized.fullPassage, true);
+  assert.equal(normalized.targetPassage, 1);
+  assert.equal(normalized.expectedGroupCount, 3);
+  assert.equal(normalized.passages.length, 1);
+  assert.equal(normalized.passages[0].questionGroups.length, 3);
+  assert.equal(normalized.passages[0].questionGroups[0].groupTitle, "Question 1-3");
+  assert.equal(normalized.passages[0].questionGroups[0].slotIndex, 1);
+
+  const { passage, groups } = getTargetPassageGroups(normalized);
+  assert.equal(passage.passage, 1);
+  assert.equal(groups[0].explanations[0].content, "Plain explanation.");
+  assert.equal(groups[0].explanations[1].content, "Explanation with <b>bold</b> and <i>italic</i>.");
 });

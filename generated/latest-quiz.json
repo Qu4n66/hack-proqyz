@@ -1,43 +1,95 @@
 {
   "mode": "explanation",
-  "testTitle": "Cam 13 - Reading 1",
+  "quizType": "reading",
+  "testTitle": "AT5 - Test 6",
+  "fullPassage": true,
+  "targetPassage": 3,
+  "expectedGroupCount": 3,
   "passages": [
     {
-      "passage": 1,
-      "passageTitle": "Reading Passage 1",
+      "passage": 3,
+      "passageTitle": "Reading Passage 3",
       "questionGroups": [
         {
-          "range": "1-7",
-          "questionNumberStart": 1,
-          "questionNumberEnd": 7,
+          "groupTitle": "Question 27-31",
+          "range": "27-31",
+          "questionNumberStart": 27,
+          "questionNumberEnd": 31,
+          "slotIndex": 1,
           "explanations": [
             {
-              "questionNumber": 1,
-              "content": "fastest commercial sailing vessels of all time were clippers, three-masted ships built to transport goods around the world, although some also took passengers. From the 1840s until 1869, when the Suez Canal opened and steam propulsion was replacing sail, clippers dominated world trade."
+              "questionNumber": 27,
+              "content": "If you did not have within you at this moment the pattern of reactions that we call \"the ability to read.\" you would sce here only meaningless black marks on paper."
             },
             {
-              "questionNumber": 2,
-              "content": "an old Scottish name for a short nightdress."
+              "questionNumber": 28,
+              "content": "If, as the result of all these influences that make us what we are, our semantie habits are reasonably similar to those of most people around us, we are regarded as \"normal,\" or perhaps \"dull.\" If our semantic habits are noticeably different from those of others, we are regarded as \"individualistic\" or \"original,\" or, if the differences are disapproved of or viewed with alarm. as \"crazy.\""
             },
             {
-              "questionNumber": 3,
-              "content": "put him in a very strong position"
+              "questionNumber": 29,
+              "content": "Defining words with more words, in short, gets us at once into what mathematicians call an \"infinite regress\" … Yet-and here we come to another common reaction pattern-people often act as if words can be explained fully with more words"
             },
             {
-              "questionNumber": 4,
-              "content": "Willis’s company was active in the tea trade between China and Britain, where speed could bring shipowners both profits and prestige, so Cutty Sark was designed to make the journey more quickly than any other ship. On her maiden voyage, in 1870, she set sail from London, carrying large amounts of goods to China."
+              "questionNumber": 30,
+              "content": "Louis Armstrong is said to have replied, \"Man, when you got to ask what it is, you'llnever get to know.” proving himself to be an intuitive semanticist as well as a great trumpet player."
             },
             {
-              "questionNumber": 5,
-              "content": "Cutty Sark reached London a week after Thermopylae."
+              "questionNumber": 31,
+              "content": "personnel manager studying an application blank …  This is an instance of \"meaning\" at work—but it is not a meaning that can be found in dictionaries."
+            }
+          ]
+        },
+        {
+          "groupTitle": "Question 32-35",
+          "range": "32-35",
+          "questionNumberStart": 32,
+          "questionNumberEnd": 35,
+          "slotIndex": 2,
+          "explanations": [
+            {
+              "questionNumber": 32,
+              "content": "you could prove it by taking a foot rule … what operations could you perform to demonstrate its accuracy or inaccuracy?"
             },
             {
-              "questionNumber": 6,
-              "content": "Steam ships reduced the journey time between Britain and China by approximately two months."
+              "questionNumber": 33,
+              "content": "they use and the language other people use in communicating to them."
             },
             {
-              "questionNumber": 7,
-              "blank": true
+              "questionNumber": 34,
+              "content": "When we react to a flag, we are not reacting simply to a piece of cloth, but to the meaning with which it has been symbolically endowed."
+            },
+            {
+              "questionNumber": 35,
+              "content": "If I were to tell a shockingly obscene story in Arabic or Hindustani or Swahili before an audience that understood only English, no one would blush or be angry: the story would be neither shocking nor obscene-indeed, it would not even be a story."
+            }
+          ]
+        },
+        {
+          "groupTitle": "Question 36-40",
+          "range": "36-40",
+          "questionNumberStart": 36,
+          "questionNumberEnd": 40,
+          "slotIndex": 3,
+          "explanations": [
+            {
+              "questionNumber": 36,
+              "content": "If, as the result of all these influences that make us what we are, our semantie habits are reasonably similar to those of most people around us, we are regarded as \"normal,\" or perhaps \"dull.\" If our semantic habits are noticeably different from those of others, we are regarded as \"individualistic\" or \"original,\" or, if the differences are disapproved of or viewed with alarm. as \"crazy.\""
+            },
+            {
+              "questionNumber": 37,
+              "content": "in a dictionary. If one stops to think for a moment, it is clear that to define a word, as a dictionary does, is simply to explain the word with more words"
+            },
+            {
+              "questionNumber": 38,
+              "content": "\"The true meaning of a term is to be found by observing what a man does with it, not by what he says about it.\""
+            },
+            {
+              "questionNumber": 39,
+              "content": "If I were to tell a shockingly obscene story in Arabic or Hindustani or Swahili before an audience that understood only English, no one would blush or be angry: the story would be neither shocking nor obscene-indeed, it would not even be a story."
+            },
+            {
+              "questionNumber": 40,
+              "content": "dollar bill is not in the bill, but in our social agreement 1o accept it as a symbol of value. If that agreement were to break down through the collapse of our govemment, the dollar bill would become only a scrap of paper. We do not understand a dollar bill by staring at it long and hard. We understand it by observing how people act with respeet to it."
             }
           ]
         }

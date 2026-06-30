@@ -2,7 +2,25 @@
   "permissions": {
     "allow": [
       "Bash(node *)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8000/)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8000/)",
+      "Bash(npm test *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git log *)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:8000/)",
+      "Bash(tee generated/_rerun-diag.txt)",
+      "Bash(python3 *)",
+      "Bash(tee generated/_rerun2-diag.txt)",
+      "Bash(tee generated/_rerun3-diag.txt)",
+      "Bash(curl -sI http://localhost:8000)",
+      "Bash(lsof -nP -iTCP:8000 -sTCP:LISTEN)",
+      "Bash(curl -s -o /dev/null -w \"GET / → HTTP %{http_code}\\\\n\" http://localhost:8000/)",
+      "Bash(curl -s -o /dev/null -w \"GET /localInput.html → HTTP %{http_code}\\\\n\" http://localhost:8000/localInput.html)",
+      "Bash(curl -s -o /dev/null -w \"GET /explanationInput.html → HTTP %{http_code}\\\\n\" http://localhost:8000/explanationInput.html)",
+      "Bash(curl -s http://localhost:8000/)",
+      "Bash(curl -s -o /dev/null -w \"GET /src/input/localInput.html → HTTP %{http_code}\\\\n\" http://localhost:8000/src/input/localInput.html)",
+      "Bash(curl -s -o /dev/null -w \"GET /src/input/explanationInput.html → HTTP %{http_code}\\\\n\" http://localhost:8000/src/input/explanationInput.html)"
     ]
   }
 }
